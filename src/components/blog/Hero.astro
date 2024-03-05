@@ -33,7 +33,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 		</div>
 	)
 }
-{data.draft ? <span class="text-base text-red-500">(Draft)</span> : null}
+{data.draft ? <span class="text-base text-red-500">(Rascunho)</span> : null}
 <h1 class="title mb-3 sm:mb-1">
 	{data.title}
 </h1>
@@ -45,7 +45,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 	{
 		data.updatedDate && (
 			<span class="rounded-lg bg-quote/10 p-1 text-quote">
-				Last Updated:
+				Atualizado:
 				<FormattedDate class="ms-1" date={data.updatedDate} dateTimeOptions={dateTimeOptions} />
 			</span>
 		)
