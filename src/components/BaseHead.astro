@@ -1,8 +1,7 @@
 ---
 import type { SiteMeta } from "@/types";
-
 import { siteConfig } from "@/site-config";
-
+import { ViewTransitions } from 'astro:transitions';
 import "../styles/global.css";
 
 type Props = SiteMeta;
@@ -31,6 +30,9 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 <meta content={siteTitle} name="title" />
 <meta content={description} name="description" />
 <meta content={siteConfig.author} name="author" />
+
+{/* Transitions */}
+<ViewTransitions />
 
 {/* Theme Colour */}
 <meta content="" name="theme-color" />
