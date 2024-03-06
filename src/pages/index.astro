@@ -10,7 +10,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 
 const techs: { desc: string; href: string; title: string }[] = [
 	{
-		desc: "Crie Build fast websites, faster.",
+		desc: "Build fast websites, faster.",
 		href: "https://astro.build",
 		title: "Astro",
 	},
@@ -74,14 +74,14 @@ const techs: { desc: string; href: string; title: string }[] = [
 		</ul>
 	</section>
 	<section class="mt-16">
-		<h2 class="title mb-4 text-xl"><abbr title="do grego τέχνη — 'técnica, arte, ofício' e -λογία — 'estudo'">Tecnologias</abbr> que eu uso</h2>
+		<h2 class="title mb-4 text-xl"><abbr title="do grego τέχνη — 'técnica, arte, ofício' e -λογία — 'estudo'" style="cursor: pointer;">Tecnologias</abbr> que eu uso</h2>
 		<dl class="space-y-4">
 			{
 				techs.map(({ desc, href, title }) => (
 					<div class="flex flex-col gap-2 md:flex-row">
 						<dt>
 							<span class="flex">
-								<a class="cactus-link" href={href} rel="noopener noreferrer" target="_blank">
+								<a class="link" href={href} rel="noopener noreferrer" target="_blank">
 									{title}
 								</a>
 								:

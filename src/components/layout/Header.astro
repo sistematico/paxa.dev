@@ -8,11 +8,7 @@ const url = new URL(Astro.request.url);
 
 <header class="group relative mb-28 flex items-center sm:ps-[4.5rem]" id="main-header">
 	<div class="flex sm:flex-col">
-		<a
-			aria-current={url.pathname === "/" ? "page" : false}
-			class="inline-flex items-center sm:relative sm:inline-block pasha"
-			href="/"
-		>
+		<a aria-current={url.pathname === "/" ? "page" : false}	class="inline-flex items-center sm:relative sm:inline-block pasha" href="/">
 			<img
 				class="me-3 h-10 w-10 sm:absolute sm:start-[-5rem] sm:top-[-.5rem] sm:me-0 sm:h-20 sm:w-20"
 				src="/img/nav.webp"
@@ -29,7 +25,7 @@ const url = new URL(Astro.request.url);
 				menuLinks.map((link) => (
 					<a
 						aria-current={url.pathname === link.path ? "page" : false}
-						class={url.pathname === link.path ? "px-4 py-4 sm:py-0 underline navlinks" : "px-4 py-4 sm:py-0 sm:hover:underline navlinks"}
+						class={url.pathname === link.path ? "px-4 py-4 sm:py-0 active" : "px-4 py-4 sm:py-0"}
 						data-astro-prefetch
 						href={link.path}
 					>
@@ -108,13 +104,11 @@ const url = new URL(Astro.request.url);
 </script>
 
 <style>
-  .active { color: red; }
-
 	.pasha img {
-  	-webkit-filter: grayscale(100%) blur(.3rem);
-  	-moz-filter: grayscale(100%) blur(.3rem);
-  	filter: grayscale(100%) blur(.3rem);
-  	transition: all 1s ease;
+  	-webkit-filter: sepia(60%) blur(.1rem);
+  	-moz-filter: sepia(60%) blur(.1rem);
+  	filter: sepia(60%) blur(.1rem);
+  	transition: all 350ms ease-in-out;
 	}
 
 	.pasha:hover img {

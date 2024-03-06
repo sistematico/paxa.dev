@@ -10,7 +10,6 @@ const meta = {
 	description: "Sobre o profissional",
 	title: "Sobre",
 };
-		
 
 const features = [
 	{
@@ -58,7 +57,7 @@ const features = [
 					// 				</div>
 					// 			</div>
 					// 		</div>
-							
+
 					// 		<div class="flex-1 p-4">
 					// 			<div class="block bg-white overflow-hidden border-2 h-full">
 					// 				<div class="p-4">
@@ -82,7 +81,6 @@ const features = [
 					// </div>
 
 
-					<div class="relative">
 						<div class="flex gap-4 items-start">
 							<div class="mt-1 bg-black rounded p-2 w-8 h-8 shrink-0">
 								<Icon class="text-white" name={item.icon} />
@@ -91,12 +89,12 @@ const features = [
 								<h3 class="font-semibold text-lg">{item.title}</h3>{" "}
 								<p class="text-slate-500 mt-2 leading-relaxed">{item.description}</p>
 								<p>
-									<a class="after:absolute after:inset-0" href={item.url}>demo</a>
-									<a class="after:absolute after:inset-0" href={item.repo}>repo</a>
+									<a href={item.url}>demo</a>
+									<a href={item.repo}>repo</a>
 								</p>
 							</div>
 						</div>
-					</div>
+
 				))
 			}
 		</div>
