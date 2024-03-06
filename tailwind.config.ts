@@ -55,7 +55,7 @@ export default {
 				DEFAULT: {
 					css: {
 						a: {
-							"@apply cactus-link no-underline": "",
+							"@apply no-underline": "",
 						},
 						strong: {
 							fontWeight: "700",

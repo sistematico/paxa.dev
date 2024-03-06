@@ -13,7 +13,8 @@
 	}
 }
 
-a:not(.unstyled,.pasha,.tags,nav a) {
+// a:not(.unstyled,.pasha,.tags,nav a) {
+a:not(.unstyled,.pasha,.tags,nav > a) {
 	position: relative;
 	display: inline;
 	transition: 0.2s;
