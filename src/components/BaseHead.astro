@@ -3,6 +3,7 @@ import type { SiteMeta } from "@/types";
 import { siteConfig } from "@/site-config";
 import { ViewTransitions } from 'astro:transitions';
 import "../styles/global.css";
+import "../styles/links.scss";
 
 type Props = SiteMeta;
 
@@ -20,7 +21,7 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 <title>{siteTitle}</title>
 
 {/* Icons / Favicon */}
-<link href="/favicon.ico" rel="icon" sizes="any" />
+<link href="/img/favicon/favicon.ico" rel="icon" sizes="any" />
 <link href="/icon.svg" rel="icon" type="image/svg+xml" />
 <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
 <link href="/manifest.webmanifest" rel="manifest" />

@@ -1,6 +1,5 @@
 ---
 import { menuLinks } from "@/site-config";
-
 import Search from "../Search.astro";
 import ThemeToggle from "../ThemeToggle.astro";
 
@@ -11,7 +10,7 @@ const url = new URL(Astro.request.url);
 	<div class="flex sm:flex-col">
 		<a
 			aria-current={url.pathname === "/" ? "page" : false}
-			class="inline-flex items-center grayscale hover:filter-none sm:relative sm:inline-block"
+			class="inline-flex items-center sm:relative sm:inline-block pasha"
 			href="/"
 		>
 			<img
@@ -22,7 +21,7 @@ const url = new URL(Astro.request.url);
 			<span class="text-xl font-bold sm:text-2xl">Paxá</span>
 		</a>
 		<nav
-			aria-label="Main menu"
+			aria-label="Menu Principal"
 			class="absolute -inset-x-4 top-14 hidden flex-col items-end gap-y-4 rounded-md bg-bgColor/[.85] py-4 text-accent shadow backdrop-blur group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:-ms-4 sm:mt-1 sm:flex sm:flex-row sm:items-center sm:divide-x sm:divide-dashed sm:divide-accent sm:rounded-none sm:bg-transparent sm:py-0 sm:shadow-none sm:backdrop-blur-none"
 			id="navigation-menu"
 		>
@@ -30,7 +29,7 @@ const url = new URL(Astro.request.url);
 				menuLinks.map((link) => (
 					<a
 						aria-current={url.pathname === link.path ? "page" : false}
-						class={url.pathname === link.path ? "px-4 py-4 sm:py-0 underline" : "px-4 py-4 sm:py-0 sm:hover:underline"}
+						class={url.pathname === link.path ? "px-4 py-4 sm:py-0 underline navlinks" : "px-4 py-4 sm:py-0 sm:hover:underline navlinks"}
 						data-astro-prefetch
 						href={link.path}
 					>
@@ -46,7 +45,7 @@ const url = new URL(Astro.request.url);
 		<button
 			aria-expanded="false"
 			aria-haspopup="menu"
-			aria-label="Open main menu"
+			aria-label="Abrir menu principal"
 			class="group relative ms-4 h-7 w-7 sm:invisible sm:hidden"
 			id="toggle-navigation-menu"
 			type="button"
@@ -62,8 +61,7 @@ const url = new URL(Astro.request.url);
 				viewBox="0 0 24 24"
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"
-				></path>
+				<path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"></path>
 			</svg>
 			<svg
 				aria-hidden="true"
@@ -111,4 +109,15 @@ const url = new URL(Astro.request.url);
 
 <style>
   .active { color: red; }
+
+	.pasha img {
+  	-webkit-filter: grayscale(100%) blur(.3rem);
+  	-moz-filter: grayscale(100%) blur(.3rem);
+  	filter: grayscale(100%) blur(.3rem);
+  	transition: all 1s ease;
+	}
+
+	.pasha:hover img {
+  	filter: none !important;
+	}
 </style>

@@ -33,8 +33,8 @@ export const menuLinks: Array<{ title: string; path: string }> = [
 		path: "/",
 	},
 	{
-		title: "Sobre",
-		path: "/sobre/",
+		title: "Projetos",
+		path: "/projetos/",
 	},
 	{
 		title: "Blog",
@@ -59,15 +59,12 @@ export const expressiveCodeOptions: AstroExpressiveCodeOptions = {
 	},
 	useThemedScrollbars: false,
 	styleOverrides: {
-		frames: {
-			frameBoxShadowCssValue: "none",
-		},
+		frames: { frameBoxShadowCssValue: "none" },
 		uiLineHeight: "inherit",
 		codeFontSize: "0.875rem",
 		codeLineHeight: "1.7142857rem",
 		borderRadius: "4px",
 		codePaddingInline: "1rem",
-		codeFontFamily:
-			'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;',
-	},
+		codeFontFamily:	'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;'
+	}
 };
