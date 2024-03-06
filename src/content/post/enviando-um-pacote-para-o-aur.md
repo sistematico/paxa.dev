@@ -1,14 +1,11 @@
 ---
 title: "Enviando um pacote para o AUR"
-description: "Como empacotar um programa e enviar ao Arch Linux User Repository"
+# description: "Como empacotar um programa e enviar ao Arch Linux User Repository"
+description: "Neste breve tutorial explicarei como enviar um pacote para o AUR, usando os novos padrões com o Git."
 publishDate: "05 Jun 2016"
 tags: ["arch linux", "aur", "git"]
 draft: false
 ---
-
-Neste breve tutorial explicarei como enviar um pacote para o AUR, usando os novos padrões com o Git.
-
-<!-- mais -->
 
 ### Configure suas credenciais.
 
@@ -82,6 +79,6 @@ Aqui um pequeno helper para automatizar alguns passos deste processo: https://gi
 Boa sorte e bom empacotamento!
 
 Fontes & Referências:
-* <https://wiki.archlinux.org/index.php/Arch_User_Repository>
-* <https://wiki.archlinux.org/index.php/SSH_keys>
-* <http://rogerdudler.github.io/git-guide/index.pt_BR.html>
+* https://wiki.archlinux.org/index.php/Arch_User_Repository
+* https://wiki.archlinux.org/index.php/SSH_keys
+* http://rogerdudler.github.io/git-guide/index.pt_BR.html
