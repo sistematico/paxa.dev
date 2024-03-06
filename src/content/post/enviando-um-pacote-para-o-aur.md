@@ -77,8 +77,7 @@ git commit -m "Meu primeiro pacote no AUR"
 git push origin master
 ```
 
-Aqui um pequeno helper para automatizar alguns passos deste processo:
-{% gist 196107621c492f9db5b774cf0b64255e %}
+Aqui um pequeno helper para automatizar alguns passos deste processo: https://gist.github.com/sistematico/196107621c492f9db5b774cf0b64255e
 
 Boa sorte e bom empacotamento!
 
