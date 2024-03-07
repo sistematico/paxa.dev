@@ -1,0 +1,106 @@
+.link-favicon {
+  z-index: 2;
+  display: none;
+  opacity: 0;
+  transition: 0.2s opacity;
+  padding-left: 0.25rem;
+  padding-right: 0.1rem;
+}
+
+.link-favicon img {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin: 0 !important;
+}
+
+a:not(.unstyled, .pasha, .tags, nav > a) {
+  position: relative;
+  display: inline;
+  transition: 0.2s;
+  border-style: solid;
+  border-bottom-width: 1px;
+  border-image: radial-gradient(rgba(17, 153, 142, 0.4), rgba(35, 231, 94, 0.4)) 15;
+}
+
+a:not(.unstyled, .pasha, .tags, nav > a)[target=_blank]:hover + .link-favicon {
+  display: inline;
+  opacity: 1;
+  animation: fadeInUp 0.2s ease-in-out;
+}
+
+a:not(.unstyled, .pasha, .tags, nav > a):before, a:not(.unstyled, .pasha, .tags, nav > a):after {
+  position: absolute;
+  height: 3px;
+  bottom: -2px;
+  content: " ";
+  display: block;
+  width: 10px;
+  opacity: 0;
+  transition: 0.4s;
+  z-index: -1;
+}
+
+a:not(.unstyled, .pasha, .tags, nav > a):before {
+  background-image: linear-gradient(90deg, #11998e, #38ef7d);
+  left: 0;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+a:not(.unstyled, .pasha, .tags, nav > a):after {
+  background-image: linear-gradient(270deg, #11998e, #38ef7d);
+  right: 0;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+a:not(.unstyled, .pasha, .tags, nav > a):hover, a:not(.unstyled, .pasha, .tags, nav > a).active {
+  transform: translateY(-1px);
+  animation: text-glow 1.5s alternate infinite ease-in-out;
+}
+
+a:not(.unstyled, .pasha, .tags, nav > a):hover:after, a:not(.unstyled, .pasha, .tags, nav > a):hover:before, a:not(.unstyled, .pasha, .tags, nav > a).active:after, a:not(.unstyled, .pasha, .tags, nav > a).active:before {
+  opacity: 1;
+  width: 50%;
+}
+
+a:not(.unstyled, .pasha, .tags, nav > a).router-link-active {
+  font-weight: bold;
+  background: linear-gradient(45deg, #11998e, #23e75e);
+  background-clip: text;
+}
+
+a:not(.unstyled, .pasha, .tags, nav > a).router-link-active:after, a:not(.unstyled, .pasha, .tags, nav > a).router-link-active:before {
+  opacity: 0;
+}
+
+@keyframes text-glow {
+  0% {
+    filter: drop-shadow(0 0 2px rgba(56, 239, 125, 0.5));
+  }
+  to {
+    filter: drop-shadow(0 1px 8px #38ef7d);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}

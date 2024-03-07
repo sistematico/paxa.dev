@@ -57,7 +57,7 @@ export const expressiveCodeOptions: AstroExpressiveCodeOptions = {
 		// return default selector
 		return `[data-theme="${theme.name}"]`;
 	},
-	useThemedScrollbars: false,
+	useThemedScrollbars: true,
 	styleOverrides: {
 		frames: { frameBoxShadowCssValue: "none" },
 		uiLineHeight: "inherit",
