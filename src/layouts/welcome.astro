@@ -1,0 +1,21 @@
+---
+import BaseHead from "@/components/BaseHead.astro"
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title="Paxá" />
+  </head>
+  <body class="bg-gray-100">
+    <div class="w-full p-4">
+      <main class="w-full flex flex-col h-screen content-center justify-center">
+        <div class="w-full sm:w-1/2 lg:w-1/3 bg-gray-50 rounded-xl m-auto">
+          <div class="bg-white rounded shadow px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <slot />
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

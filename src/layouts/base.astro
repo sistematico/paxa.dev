@@ -1,0 +1,23 @@
+---
+import BaseHead from "@/components/BaseHead.astro"
+
+import { config } from '../site.config';
+
+const background = config.bg
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title="Paxá" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style define:vars={{ background }}>
+  body {
+    background-color: var(--background);
+  }
+</style>
