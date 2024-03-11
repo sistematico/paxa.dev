@@ -5,30 +5,55 @@ import MainLayout from '../layouts/MainLayout.astro';
 <MainLayout>
 	<img class="pasha float-right max-h-32 md:max-h-64" src="/img/pasha.png" alt="Paxá">
 	<h1 class="text-3xl">🫡 Olá!</h1>
-	<p>Maybe we can live without libraries, people like you and me. ...</p>
-
-	<p>
-		Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-		template serves as a lightweight, minimally-styled starting point for anyone looking to build
-		a personal website, blog, or portfolio with Astro.
-	</p>
-	<p>Here are a few ideas on how to get started with the template:</p>
-	<ul>
-		<li>Edit this page in <code>src/pages/index.astro</code></li>
-		<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-		<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-		<li>Check out the included blog posts in <code>src/pages/blog/</code></li>
-		<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
+	<p>Meu nome é Lucas, sou desenvolvedor web com 25 anos de experiência profissional.</p>
+	<p>Algumas das coisas que posso fazer por você:</p>
+	<ul class="list-disc text-lg px-6">
+		<li>Websites</li>
+		<li>Sistemas</li>
+		<li>Identidade visual</li>
 	</ul>
-	<p>
-		Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-			>read the docs
-		</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-	</p>
-	<p>
-		Looking for a blog template with a bit more personality? Check out <a
-			href="https://github.com/Charca/astro-blog-template"
-			>astro-blog-template
-		</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-	</p>
+	<p>Se tem a necessidade de um projeto, <a href="https://wa.me/5567998552020" target="_blank">entre em contato</a> comigo.</p>
 </MainLayout>
+
+<style>
+a {
+  position: relative;
+  color: #0063e4;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: bold;
+  padding: .5em .08em;
+  /* margin-top: -0.5em; */
+  margin-top: .5em;
+	margin-left: -.1em;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+a:before, a:after {
+  position: absolute;
+  content: "";
+  border-bottom: 3px solid #0063e4;
+  border-radius: 1em;
+  bottom: 0.3em;
+  transition: transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+a:before {
+  width: 1em;
+  transform-origin: left;
+}
+
+a:after {
+  width: 82%;
+  left: 1em;
+  transform: translateX(110%);
+}
+
+a:hover:before {
+  transform: scaleX(0.3);
+}
+
+a:hover:after {
+  transform: translateX(0);
+}
+</style>

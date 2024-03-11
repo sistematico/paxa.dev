@@ -12,6 +12,10 @@ html {
   background-color: #17181C;
 }
 
+p {
+  margin: 1em 0;
+}
+
 img.pasha {
   transition: all .7s ease;
 }

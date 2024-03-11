@@ -1,9 +1,14 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import Card from '../components/Card.astro';
+import projetos from '../data/projects.json';
 ---
 
 <MainLayout>
-	<img class="pasha float-right max-h-32 md:max-h-64" src="/img/pasha.png" alt="Paxá">
-	<h1 class="text-3xl">Projetos</h1>
-	<p>Em breve</p>
+	<div class="w-full">
+		<h1 class="text-3xl">Projetos</h1>
+			{projetos.map((p) => (
+				<Card name={p.name} desc={p.desc} url={p.url} short={p.short} />
+			))}
+	</div>
 </MainLayout>
