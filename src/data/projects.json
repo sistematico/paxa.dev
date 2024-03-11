@@ -1,0 +1,20 @@
+[
+  { 
+    "name": "FIPE", 
+    "desc": "Tabela FIPE",
+    "url": "https://sistematico.github.io/fipe",
+    "short": "fipe"
+  },
+  { 
+    "name": "Feriado", 
+    "desc": "WebApp para mostrar o feriado mais próximo",
+    "url": "https://sistematico.github.io/feriado",
+    "short": "feriado"
+  },
+  { 
+    "name": "Moon Phase", 
+    "desc": "Um pequeno aplicativo Web para mostrar a fase da lua atual no hemisfério sul",
+    "url": "https://sistematico.github.io/moon-phase",
+    "short": "moon-phase"
+  }
+]

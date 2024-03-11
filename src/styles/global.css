@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "Nunito";
+  src: url("/fonts/nunito/Nunito-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  font-family: "Nunito", "Proxima Nova", system-ui, sans-serif;
+  color: rgb(193, 195, 200);
+  background-color: #17181C;
+}
+
+p {
+  margin: 1em 0;
+}
+
+img.pasha {
+  transition: all .7s ease;
+}
+
+img.pasha:hover {
+  filter: invert(1);
+}

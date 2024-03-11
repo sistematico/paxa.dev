@@ -6,7 +6,10 @@
 			"detail": "astro dev",
 			"type": "npm",
 			"script": "dev",
-			"problemMatcher": []
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "never",
+			}
 		}
 	]
 }

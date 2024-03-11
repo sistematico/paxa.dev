@@ -1,7 +1,59 @@
 ---
-import WelcomeLayout from '@layouts/welcome.astro';
+import MainLayout from '../layouts/MainLayout.astro';
 ---
 
-<WelcomeLayout>
-	<h1 class="text-2xl text-red-900">Astro</h1>
-</WelcomeLayout>
+<MainLayout>
+	<img class="pasha float-right max-h-32 md:max-h-64" src="/img/pasha.png" alt="Paxá">
+	<h1 class="text-3xl">🫡 Olá!</h1>
+	<p>Meu nome é Lucas, sou desenvolvedor web com 25 anos de experiência profissional.</p>
+	<p>Algumas das coisas que posso fazer por você:</p>
+	<ul class="list-disc text-lg px-6">
+		<li>Websites</li>
+		<li>Sistemas</li>
+		<li>Identidade visual</li>
+	</ul>
+	<p>Se tem a necessidade de um projeto, <a href="https://wa.me/5567998552020" target="_blank">entre em contato</a> comigo.</p>
+</MainLayout>
+
+<style>
+a {
+  position: relative;
+  color: #0063e4;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: bold;
+  padding: .5em .08em;
+  /* margin-top: -0.5em; */
+  margin-top: .5em;
+	margin-left: -.1em;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+a:before, a:after {
+  position: absolute;
+  content: "";
+  border-bottom: 3px solid #0063e4;
+  border-radius: 1em;
+  bottom: 0.3em;
+  transition: transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+a:before {
+  width: 1em;
+  transform-origin: left;
+}
+
+a:after {
+  width: 82%;
+  left: 1em;
+  transform: translateX(110%);
+}
+
+a:hover:before {
+  transform: scaleX(0.3);
+}
+
+a:hover:after {
+  transform: translateX(0);
+}
+</style>
