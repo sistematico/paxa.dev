@@ -11,3 +11,11 @@ html {
   color: rgb(193, 195, 200);
   background-color: #17181C;
 }
+
+img.pasha {
+  transition: all .7s ease;
+}
+
+img.pasha:hover {
+  filter: invert(1);
+}
