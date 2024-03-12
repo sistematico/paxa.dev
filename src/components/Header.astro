@@ -4,10 +4,10 @@ import Social from './SocialLinks.astro';
 import { SITE_TITLE } from '../consts';
 ---
 
-<header class="bg-[#23262f] sticky top-0 w-full">
+<header class="sticky top-0 w-full">
 	<nav class="container mx-auto">
 		<a class="flex items-center" href="/">
-			<img class="object-scale-down h-14 pasha" src="/img/nav.webp" alt="Paxá">
+			<img class="object-scale-down h-14 pasha" src="/img/paxa.svg" alt="Paxá">
 			<h3 class="text-3xl lowercase hidden md:inline">{SITE_TITLE}</h3>
 		</a>
 		<div class="internal-links">
@@ -21,11 +21,17 @@ import { SITE_TITLE } from '../consts';
 
 <style>
 	header {
-		/* padding: 0 1em; */
-		background: rgb(35, 38, 47);
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-		border-bottom: 1px solid hsl(224, 10%, 10%);
+  	border-bottom: 1px solid transparent;
+  	background-color: transparent;
+  	-webkit-backdrop-filter: blur(16px);
+  	backdrop-filter: blur(16px);
 	}
+
+		/* padding: 0 1em; */
+		/* background: rgb(35, 38, 47);
+		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		border-bottom: 1px solid hsl(224, 10%, 10%); */
+	/* } */
 
 	h2 {
 		margin: 0;

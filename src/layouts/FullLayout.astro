@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <div class="w-full">
+    <main role="main" class="w-full flex flex-col h-screen content-center justify-center">
+        <!-- <div class="w-full md:w-3/4 bg-gray-500 rounded-xl m-auto"> -->
+          <slot />
+        <!-- </div> -->
+    </main>
+  </div>
+<BaseLayout />
+
+<style>
+  html { 
+    background: url(/img/bg/wolfgang-hasselmann-Fd01B6nNPbo-unsplash.jpg) no-repeat center center fixed; 
+    /* -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover; */
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+  }
+
+  @media (orientation: landscape) {
+    html {
+      background: url(/img/bg/wolfgang-hasselmann-pVr6wvUneMk-unsplash.jpg) no-repeat center center fixed; 
+    }
+  }
+
+  @media (orientation: portrait) {
+    html {
+      background: url(/img/bg/wolfgang-hasselmann-Fd01B6nNPbo-unsplash.jpg) no-repeat center center fixed; 
+    }
+  }
+</style>

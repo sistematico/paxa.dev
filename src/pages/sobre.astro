@@ -1,0 +1,64 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout>
+	<img class="pasha float-right max-h-32 md:max-h-64" src="/img/pasha.png" alt="Paxá">
+	<h1 class="text-3xl">Olá!</h1>
+  <h2>Direto ao Ponto: Revolucionando o Mundo Digital</h2>
+  <p>Sou um profissional experiente no desenvolvimento web e administração de sistemas, apaixonado por criar soluções digitais que impulsionam o sucesso dos negócios. Com mais de 25 anos de experiência em programação PHP e profundo conhecimento de sistemas Linux, tenho uma compreensão abrangente do cenário tecnológico.</p>
+  <h2>Especialista em Desenvolvimento Web</h2>
+  <p>Crio sites e aplicativos web responsivos e de alto desempenho que atendem aos requisitos exatos de meus clientes. Seja eCommerce, portais corporativos ou plataformas personalizadas, tenho as habilidades e o conhecimento para dar vida às suas ideias digitais.</p>
+  <h2>Mestre em Administração de Sistemas Linux</h2>
+  <p>Gerencio e mantenho infraestruturas de sistemas Linux com eficiência, garantindo segurança, desempenho e disponibilidade ideais. De servidores web a sistemas de banco de dados, tenho experiência comprovada em otimizar e proteger ambientes de missão crítica.</p>
+  <h2>Criatividade na Ponta dos Dedos</h2>
+  <p>Além de minhas habilidades técnicas, sou um designer apaixonado com um olho aguçado para detalhes. Crio marcas e identidades visuais atraentes que ressoam com os valores e a visão da sua empresa. De logotipos a materiais de marketing, minha abordagem criativa garante uma comunicação eficaz e impactante.</p>
+  <h2>Soluções de Marketing Abrangentes</h2>
+  <p>Entendo o poder do marketing digital e forneço soluções personalizadas para impulsionar o crescimento dos negócios. Crio conteúdo envolvente, gerencio campanhas de mídia social e implemento estratégias de SEO para maximizar o alcance e a conversão.</p>
+  <h2>Parceiro Confiável para o Seu Sucesso</h2>
+  <p>Estou comprometido em fornecer soluções inovadoras e orientadas a resultados que atendam às necessidades exclusivas de cada cliente. Acredito na construção de parcerias de longo prazo baseadas em confiança, comunicação aberta e um compromisso compartilhado com o sucesso.</p>
+	<p>Se tem a necessidade de um projeto, <a href="https://wa.me/5567998552020" target="_blank">entre em contato</a> comigo.</p>
+</MainLayout>
+
+<style>
+a {
+  position: relative;
+  color: #0063e4;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: bold;
+  padding: .5em .08em;
+  /* margin-top: -0.5em; */
+  margin-top: .5em;
+	margin-left: -.1em;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+a:before, a:after {
+  position: absolute;
+  content: "";
+  border-bottom: 3px solid #0063e4;
+  border-radius: 1em;
+  bottom: 0.3em;
+  transition: transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+a:before {
+  width: 1em;
+  transform-origin: left;
+}
+
+a:after {
+  width: 82%;
+  left: 1em;
+  transform: translateX(110%);
+}
+
+a:hover:before {
+  transform: scaleX(0.3);
+}
+
+a:hover:after {
+  transform: translateX(0);
+}
+</style>
