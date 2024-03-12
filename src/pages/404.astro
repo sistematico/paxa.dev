@@ -1,5 +1,5 @@
 ---
-import PageLayout from "@/layouts/Base.astro";
+import MainLayout from '../layouts/MainLayout.astro';
 
 const meta = {
 	description: "Oops! Parece que a página que você procura não foi encontrada!",
@@ -7,10 +7,11 @@ const meta = {
 };
 ---
 
-<PageLayout meta={meta}>
+<!-- <MainLayout meta={meta}> -->
+<MainLayout>
 	<h1 class="title mb-6">Erro 404 | A página não foi encontrada</h1>
 	<p class="mb-8">Use os links do menu para navegar pelo site</p>
 	<div class="my-4 grid justify-center">
 		<img alt="Bebê chorando ao lado de um PC"	loading="eager"	src="/img/404.jpg" />
 	</div>
-</PageLayout>
+</MainLayout>

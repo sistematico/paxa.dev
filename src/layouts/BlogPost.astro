@@ -1,69 +1,152 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import BlogHero from "@/components/blog/Hero.astro";
-import TOC from "@/components/blog/TOC.astro";
-import WebMentions from "@/components/blog/webmentions/index.astro";
-import BaseLayout from "./Base.astro";
+import type { CollectionEntry } from 'astro:content';
+import MainLayout from '../layouts/MainLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 
-interface Props {
-	post: CollectionEntry<"post">;
-}
+type Props = CollectionEntry<'blog'>['data'];
 
-const { post } = Astro.props;
-const {	data: { description, ogImage, publishDate, title, updatedDate }, slug } = post;
-const socialImage = ogImage ?? `/og-image/${slug}.png`;
-const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
-const { headings } = await post.render();
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
-<BaseLayout meta={{ articleDate, description, ogImage: socialImage, title }}>
-	<div class="gap-x-10 lg:flex lg:items-start">
-		{!!headings.length && <TOC headings={headings} />}
-		<article class="flex-grow break-words" data-pagefind-body>
-			<div id="blog-hero"><BlogHero content={post} /></div>
-			<div
-				class="prose prose-sm prose-cactus mt-12 prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-accent prose-headings:before:content-['#'] prose-th:before:content-none"
-			>
-				<slot />
-				<WebMentions />
+<MainLayout>
+	<article>
+		<div class="my-5">
+			<a 
+  			href="/blog"
+  			class="inline-block rounded bg-indigo-600 hover:bg-indigo-800 px-6 pb-2 pt-2.5 text-xs font-medium uppercase text-white shadow-md transition duration-500 ease-in-out focus:ring-0">
+  			Voltar
+			</a>
+		</div>
+		<!-- <div class="hero-image">
+			{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
+		</div> -->
+		<div class="prose">
+			<div class="title">
+				<div class="date">
+					Postado
+					<FormattedDate date={pubDate} />
+					{
+						updatedDate && (
+							<div class="last-updated-on">
+								Última atualização em <FormattedDate date={updatedDate} />
+							</div>
+						)
+					}
+				</div>
+				<h1>{title}</h1>
+				<hr />
 			</div>
-		</article>
-	</div>
-	<button
-		aria-label="Back to Top"
-		class="z-90 fixed bottom-8 end-4 flex h-10 w-10 translate-y-28 items-center justify-center rounded-full border-2 border-transparent bg-zinc-200 text-3xl opacity-0 transition-all duration-300 hover:border-zinc-400 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 dark:bg-zinc-700 sm:end-8 sm:h-12 sm:w-12"
-		data-show="false"
-		id="to-top-btn"
-		><svg
-			aria-hidden="true"
-			class="h-6 w-6"
-			fill="none"
-			focusable="false"
-			stroke="currentColor"
-			stroke-width="2"
-			viewBox="0 0 24 24"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<path d="M4.5 15.75l7.5-7.5 7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
-		</svg>
-	</button>
-</BaseLayout>
+			<slot />
+		</div>
+	</article>
+</MainLayout>
 
-<script>
-	const scrollBtn = document.getElementById("to-top-btn") as HTMLButtonElement;
-	const targetHeader = document.getElementById("blog-hero") as HTMLDivElement;
+<style>
+main {
+	width: 720px;
+	max-width: calc(100% - 2em);
+	margin: auto;
+	padding: 3em 1em;
+}
 
-	function callback(entries: IntersectionObserverEntry[]) {
-		entries.forEach((entry) => {
-			// only show the scroll to top button when the heading is out of view
-			scrollBtn.dataset.show = (!entry.isIntersecting).toString();
-		});
-	}
+h1, h2, h3, h4, h5, h6 {
+	margin: 0 0 0.5rem 0;
+	line-height: 1.2;
+}
 
-	scrollBtn.addEventListener("click", () => {
-		document.documentElement.scrollTo({ behavior: "smooth", top: 0 });
-	});
+h1 {
+	font-size: 3.052em;
+}
 
-	const observer = new IntersectionObserver(callback);
-	observer.observe(targetHeader);
-</script>
+h2 {
+	font-size: 2.441em;
+}
+
+h3 {
+	font-size: 1.953em;
+}
+
+h4 {
+	font-size: 1.563em;
+}
+
+h5 {
+	font-size: 1.25em;
+}
+
+strong, b {
+	font-weight: 700;
+}
+
+p {
+	margin-bottom: 1em;
+}
+
+.prose p {
+	margin-bottom: 2em;
+}
+
+textarea {
+	width: 100%;
+	font-size: 16px;
+}
+
+input {
+	font-size: 16px;
+}
+
+table {
+	width: 100%;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 8px;
+}
+
+code {
+	padding: 2px 5px;
+	background-color: #23262F;
+	border-radius: 2px;
+}
+
+pre {
+	padding: 1.5em;
+	border-radius: 8px;
+}
+
+pre > code {
+	all: unset;
+}
+
+blockquote {
+	border-left: 4px solid var(--accent);
+	padding: 0 0 0 20px;
+	margin: 0px;
+	font-size: 1.333em;
+}
+
+hr {
+	border: none;
+	border-top: 1px solid rgb(var(--gray-light));
+}
+
+.sr-only {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
+	clip: rect(1px 1px 1px 1px);
+	/* maybe deprecated but we need to support legacy browsers */
+	clip: rect(1px, 1px, 1px, 1px);
+	/* modern browsers, clip-path works inwards from each corner */
+	clip-path: inset(50%);
+	/* added line to stop words getting smushed together (as they go onto seperate lines and some screen readers do not understand line feeds as a space */
+	white-space: nowrap;
+}	
+</style>

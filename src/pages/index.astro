@@ -1,96 +1,59 @@
 ---
-import SocialList from "@/components/SocialList.astro";
-import PostPreview from "@/components/blog/PostPreview.astro";
-import PageLayout from "@/layouts/Base.astro";
-import { getAllPosts, sortMDByDate } from "@/utils";
-
-const MAX_POSTS = 10;
-const allPosts = await getAllPosts();
-const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
-
-const techs: { desc: string; href: string; title: string }[] = [
-	{
-		desc: "Build fast websites, faster.",
-		href: "https://astro.build",
-		title: "Astro",
-	},
-	{
-		desc: "Rapidly build modern websites without ever leaving your HTML.",
-		href: "https://tailwindcss.com",
-		title: "Tailwind CSS",
-	},
-	{
-		desc: "Simple and easy-to-use markup language.",
-		href: "https://www.markdownguide.org/",
-		title: "Markdown",
-	},
-	{
-		desc: "Markdown for the component era.",
-		href: "https://mdxjs.com/",
-		title: "MDX",
-	},
-	{
-		desc: "Generating png Open Graph images for blog posts.",
-		href: "https://github.com/vercel/satori",
-		title: "Satori",
-	},
-	{
-		desc: "A fully static search library.",
-		href: "https://pagefind.app/",
-		title: "Pagefind",
-	},
-	{
-		desc: "An easy to use Icon component for Astro.",
-		href: "https://github.com/natemoo-re/astro-icon#readme",
-		title: "Astro Icon",
-	},
-	{
-		desc: "Highly customisable source code & syntax highlighter",
-		href: "https://expressive-code.com/",
-		title: "Expressive Code",
-	},
-];
+import MainLayout from '../layouts/MainLayout.astro';
 ---
 
-<PageLayout meta={{ title: "Home" }}>
-	<section>
-		<h1 class="title mb-6">Olá!</h1>
-		<p class="mb-4">
-			Posso desenvolver seu site, sistema ou sua identidade visual.<br />
-			Não hesite em entrar em contato e solicitar um orçamento sem compromisso.<br />
-		</p>
-		<SocialList />
-	</section>
-	<section aria-label="Blog post list" class="mt-16">
-		<h2 class="title mb-4 text-xl">Postagens</h2>
-		<ul class="space-y-4">
-			{
-				allPostsByDate.map((p) => (
-					<li class="flex flex-col gap-x-2 sm:flex-row">
-						<PostPreview post={p} />
-					</li>
-				))
-			}
-		</ul>
-	</section>
-	<section class="mt-16">
-		<h2 class="title mb-4 text-xl"><abbr title="do grego τέχνη — 'técnica, arte, ofício' e -λογία — 'estudo'" style="cursor: pointer;">Tecnologias</abbr> que eu uso</h2>
-		<dl class="space-y-4">
-			{
-				techs.map(({ desc, href, title }) => (
-					<div class="flex flex-col gap-2 md:flex-row">
-						<dt>
-							<span class="flex">
-								<a class="link" href={href} rel="noopener noreferrer" target="_blank">
-									{title}
-								</a>
-								:
-							</span>
-						</dt>
-						<dd>{desc}</dd>
-					</div>
-				))
-			}
-		</dl>
-	</section>
-</PageLayout>
+<MainLayout>
+	<img class="pasha float-right max-h-32 md:max-h-64" src="/img/pasha.png" alt="Paxá">
+	<h1 class="text-3xl">🫡 Olá!</h1>
+	<p>Meu nome é Lucas, sou desenvolvedor web com 25 anos de experiência profissional.</p>
+	<p>Algumas das coisas que posso fazer por você:</p>
+	<ul class="list-disc text-lg px-6">
+		<li>Websites</li>
+		<li>Sistemas</li>
+		<li>Identidade visual</li>
+	</ul>
+	<p>Se tem a necessidade de um projeto, <a href="https://wa.me/5567998552020" target="_blank">entre em contato</a> comigo.</p>
+</MainLayout>
+
+<style>
+a {
+  position: relative;
+  color: #0063e4;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: bold;
+  padding: .5em .08em;
+  /* margin-top: -0.5em; */
+  margin-top: .5em;
+	margin-left: -.1em;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+a:before, a:after {
+  position: absolute;
+  content: "";
+  border-bottom: 3px solid #0063e4;
+  border-radius: 1em;
+  bottom: 0.3em;
+  transition: transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+a:before {
+  width: 1em;
+  transform-origin: left;
+}
+
+a:after {
+  width: 82%;
+  left: 1em;
+  transform: translateX(110%);
+}
+
+a:hover:before {
+  transform: scaleX(0.3);
+}
+
+a:hover:after {
+  transform: translateX(0);
+}
+</style>

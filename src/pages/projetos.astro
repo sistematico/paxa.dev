@@ -1,75 +1,14 @@
 ---
-// import aboutImg from "@/assets/about-astro.png";
-// @ts-ignore
-import { Icon } from "astro-icon/components";
-// @ts-ignore
-import PageLayout from "@/layouts/Base.astro";
-// import { Image } from "astro:assets";
-
-const meta = {
-	description: "Sobre o profissional",
-	title: "Sobre",
-};
-
-const features = [
-	{
-		title: "FIPE",
-		description: "Exemplo de uso a API da tabela FIPE usando o Vue.js",
-		icon: "bx:bxs-briefcase",
-		url: "https://sistematico.github.io/fipe",
-		repo: "https://github.com/sistematico/fipe"
-	},
-	{
-		title: "Feriados",
-		description: "API de Feriados",
-		icon: "bx:bxs-window-alt",
-		url: "https://sistematico.github.io/feriados",
-		repo: "https://github.com/sistematico/feriados"
-	},
-];
+import MainLayout from '../layouts/MainLayout.astro';
+import Card from '../components/Card.astro';
+import projetos from '../data/projects.json';
 ---
 
-<PageLayout meta={meta}>
-	<div class="space-y-6">
-		<h1 class="title mb-6">Projetos</h1>
-		<p class="mb-4">Alguns projetos que participo.</p>
-		<!-- <div class="grid sm:grid-cols-1 md:grid-cols-2 mt-16 gap-16"> -->
-			<!-- <div class="flex items-stretch sm:grid-cols-1 md:grid-cols-2"></div> -->
-			<div class="grid gap-2 sm:grid-cols-1 md:grid-cols-2">
-				{
-					features.map((item) => (
-						<div class="flex-1">
-							<div class="block bg-zinc-800/[.55] hover:bg-zinc-900/[.75]  overflow-hidden border-2 border-zinc-700/[.55] h-full">
-								<div class="p-4">
-									<h2 class="mt-2 mb-2 font-bold text-2xl">{item.title}</h2>
-									<div class="mb-4 flex flex-wrap">
-										<a class="mr-2" href={item.repo}>repo</a>
-										<a href={item.url}>demo</a>
-									</div>
-									<p class="text-md text-justify">{item.description}</p>
-								</div>
-								<div class="flex flex-wrap items-center p-2">
-									<p class="px-1 py-2 tracking-wide text-xs mr-2 mb-0">Tag #1</p>
-									<p class="px-1 py-2 tracking-wide text-xs mr-2 mb-0">Tag #2</p>
-								</div>
-							</div>
-						</div>
-						// <div class="flex gap-4 items-start">
-						// 	<div class="mt-1 bg-black rounded p-2 w-8 h-8 shrink-0">
-						// 		<Icon class="text-white" name={item.icon} />
-						// 	</div>
-						// 	<div>
-						// 		<h3 class="font-semibold text-lg">{item.title}</h3>{" "}
-						// 		<p class="text-slate-500 mt-2 leading-relaxed">{item.description}</p>
-						// 		<p>
-						// 			<a href={item.url}>demo</a>
-						// 			<a class="links" href={item.repo}>repo</a>
-						// 		</p>
-						// 	</div>
-						// </div>
-					))
-				}
-			</div>
-		<!-- </div> -->
+<MainLayout>
+	<div class="w-full">
+		<h1 class="text-3xl">Projetos</h1>
+			{projetos.map((p) => (
+				<Card name={p.name} desc={p.desc} url={p.url} short={p.short} />
+			))}
 	</div>
-</PageLayout>
+</MainLayout>

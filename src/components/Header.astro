@@ -1,0 +1,59 @@
+---
+import HeaderLink from './HeaderLink.astro';
+import Social from './SocialLinks.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<header class="bg-[#23262f] sticky top-0 w-full">
+	<nav class="container mx-auto">
+		<a class="flex items-center" href="/">
+			<img class="object-scale-down h-14 pasha" src="/img/nav.webp" alt="Paxá">
+			<h3 class="text-3xl lowercase hidden md:inline">{SITE_TITLE}</h3>
+		</a>
+		<div class="internal-links">
+			<HeaderLink href="/">Início</HeaderLink>
+			<HeaderLink href="/projetos">Projetos</HeaderLink>
+			<HeaderLink href="/blog">Blog</HeaderLink>
+		</div>
+		<Social />
+	</nav>
+</header>
+
+<style>
+	header {
+		/* padding: 0 1em; */
+		background: rgb(35, 38, 47);
+		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		border-bottom: 1px solid hsl(224, 10%, 10%);
+	}
+
+	h2 {
+		margin: 0;
+		font-size: 1em;
+	}
+
+	h2 a,
+	h2 a.active {
+		text-decoration: none;
+	}
+
+	nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.internal-links a {
+		padding: 0 0.5em;
+	}
+
+	nav a {
+		border-bottom: 4px solid transparent;
+		text-decoration: none;
+	}
+
+	nav a.active {
+		text-decoration: none;
+		border-bottom-color: var(--accent);
+	}
+</style>
