@@ -5,7 +5,6 @@
     "baseUrl": ".",
 		"paths": {
       "@consts": ["consts.ts"],
-      "@config": ["site.config.ts"],
       "@layouts/*": ["src/layouts/*"],
       "@components/*": ["src/components/*"],
       "@assets/*": ["src/assets/*"],
