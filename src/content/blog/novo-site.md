@@ -1,7 +1,7 @@
 ---
 title: 'Um novo site!'
 description: ''
-pubDate: 'Mar 08 2016'
+publishDate: 'Mar 08 2016'
 heroImage: '/blog-placeholder-3.jpg'
 tags:
   - 'novidades'

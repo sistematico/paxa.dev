@@ -1,4 +1,4 @@
-a:not(.unstyled, .pasha, .tags, nav > a, .internal-links a, .social-links a) {
+.glow {
   position: relative;
   display: inline;
   transition: 0.2s;
@@ -7,8 +7,8 @@ a:not(.unstyled, .pasha, .tags, nav > a, .internal-links a, .social-links a) {
   border-image: radial-gradient(rgba(17, 153, 142, 0.4), rgba(35, 231, 94, 0.4)) 15;
 }
 
-a:not(.unstyled, .pasha, .tags, nav > a):before, 
-a:not(.unstyled, .pasha, .tags, nav > a):after {
+.glow:before, 
+.glow:after {
   position: absolute;
   height: 3px;
   bottom: -2px;
@@ -20,29 +20,29 @@ a:not(.unstyled, .pasha, .tags, nav > a):after {
   z-index: -1;
 }
 
-a:not(.unstyled, .pasha, .tags, nav > a):before {
+/* a:not(.unstyled, .pasha, .tags, nav > a):before {
   background-image: linear-gradient(90deg, #11998e, #38ef7d);
   left: 0;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
-}
+} */
 
-a:not(.unstyled, .pasha, .tags, nav > a):after {
+/* a:not(.unstyled, .pasha, .tags, nav > a):after {
   background-image: linear-gradient(270deg, #11998e, #38ef7d);
   right: 0;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
-}
+} */
 
-a:not(.unstyled, .pasha, .tags, nav > a):hover, a:not(.unstyled, .pasha, .tags, nav > a).active {
+.glow:hover, .glow.active {
   transform: translateY(-1px);
   animation: text-glow 1.5s alternate infinite ease-in-out;
 }
 
-a:not(.unstyled, .pasha, .tags, nav > a):hover:after, a:not(.unstyled, .pasha, .tags, nav > a):hover:before, a:not(.unstyled, .pasha, .tags, nav > a).active:after, a:not(.unstyled, .pasha, .tags, nav > a).active:before {
+/* a:not(.unstyled, .pasha, .tags, nav > a):hover:after, a:not(.unstyled, .pasha, .tags, nav > a):hover:before, a:not(.unstyled, .pasha, .tags, nav > a).active:after, a:not(.unstyled, .pasha, .tags, nav > a).active:before {
   opacity: 1;
   width: 50%;
-}
+} */
 
 @keyframes text-glow {
   0% {
@@ -64,7 +64,7 @@ a:not(.unstyled, .pasha, .tags, nav > a):hover:after, a:not(.unstyled, .pasha, .
   }
 }
 
-@keyframes fadeOutDown {
+/* @keyframes fadeOutDown {
   from {
     opacity: 1;
   }
@@ -72,4 +72,4 @@ a:not(.unstyled, .pasha, .tags, nav > a):hover:after, a:not(.unstyled, .pasha, .
     opacity: 0;
     transform: translateY(0.5rem);
   }
-}
+} */

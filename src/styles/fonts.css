@@ -23,8 +23,16 @@
 }
 
 @font-face {
-  font-family: 'Alex Brush';
-  src: url('/fonts/alex_brush/AlexBrush.woff2') format('woff2'), url('/fonts/alex_brush/AlexBrush.woff') format('woff');
+  font-family: 'Madimi One';
+  src: url('/fonts/madimi_one/MadimiOne.woff2') format('woff2'), url('/fonts/madimi_one/MadimiOne.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Merienda';
+  src: url('/fonts/merienda/Merienda.woff2') format('woff2'), url('/fonts/merienda/Merienda.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
