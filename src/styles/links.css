@@ -1,35 +1,14 @@
-.link-favicon {
-  z-index: 2;
-  display: none;
-  opacity: 0;
-  transition: 0.2s opacity;
-  padding-left: 0.25rem;
-  padding-right: 0.1rem;
-}
-
-.link-favicon img {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin: 0 !important;
-}
-
-a:not(.unstyled, .pasha, .tags, nav > a) {
+a:not(.unstyled, .pasha, .tags, nav > a, .internal-links a, .social-links a) {
   position: relative;
   display: inline;
   transition: 0.2s;
   border-style: solid;
-  border-bottom-width: 1px;
+  border-bottom-width: 2px;
   border-image: radial-gradient(rgba(17, 153, 142, 0.4), rgba(35, 231, 94, 0.4)) 15;
 }
 
-a:not(.unstyled, .pasha, .tags, nav > a)[target=_blank]:hover + .link-favicon {
-  display: inline;
-  opacity: 1;
-  animation: fadeInUp 0.2s ease-in-out;
-}
-
-a:not(.unstyled, .pasha, .tags, nav > a):before, a:not(.unstyled, .pasha, .tags, nav > a):after {
+a:not(.unstyled, .pasha, .tags, nav > a):before, 
+a:not(.unstyled, .pasha, .tags, nav > a):after {
   position: absolute;
   height: 3px;
   bottom: -2px;
@@ -63,16 +42,6 @@ a:not(.unstyled, .pasha, .tags, nav > a):hover, a:not(.unstyled, .pasha, .tags, 
 a:not(.unstyled, .pasha, .tags, nav > a):hover:after, a:not(.unstyled, .pasha, .tags, nav > a):hover:before, a:not(.unstyled, .pasha, .tags, nav > a).active:after, a:not(.unstyled, .pasha, .tags, nav > a).active:before {
   opacity: 1;
   width: 50%;
-}
-
-a:not(.unstyled, .pasha, .tags, nav > a).router-link-active {
-  font-weight: bold;
-  background: linear-gradient(45deg, #11998e, #23e75e);
-  background-clip: text;
-}
-
-a:not(.unstyled, .pasha, .tags, nav > a).router-link-active:after, a:not(.unstyled, .pasha, .tags, nav > a).router-link-active:before {
-  opacity: 0;
 }
 
 @keyframes text-glow {
