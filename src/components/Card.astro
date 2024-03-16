@@ -1,54 +1,86 @@
 ---
-const { name, desc, short, url } = Astro.props;
+interface Props {
+	title: string;
+	body: string;
+	href: string;
+  short: string;
+}
+
+const { title, body, href, short } = Astro.props; 
+
+// const { name, desc, short, url } = Astro.props;
 
 const response = await fetch(`http://api.github.com/repos/sistematico/${short}`);
 const data = await response.json();
 // const randomUser = data.results[0];
 ---
 
-<div class="max-w-2xl mx-auto bg-indigo-600 shadow-lg rounded-lg mb-3">
-  <div class="px-6 py-5">
-    <div class="flex items-start">
-      <svg class="fill-current flex-shrink-0 mr-5" width="30" height="30" viewBox="0 0 30 30">
-        <path class="text-indigo-300" d="m16 14.883 14-7L14.447.106a1 1 0 0 0-.895 0L0 6.883l16 8Z" />
-        <path class="text-indigo-200" d="M16 14.619v15l13.447-6.724A.998.998 0 0 0 30 22V7.619l-14 7Z" />
-        <path class="text-indigo-500" d="m16 14.619-16-8V21c0 .379.214.725.553.895L16 29.619v-15Z" />
-      </svg>
-      <div class="flex-grow truncate">
-        <div class="w-full sm:flex justify-between items-center mb-3">
-          <h2 class="text-2xl leading-snug font-extrabold text-gray-50 truncate mb-1 sm:mb-0">{name}</h2>
-          <div class="flex-shrink-0 flex items-center space-x-3 sm:ml-2">
-            <button class="flex items-center text-left text-sm font-medium text-indigo-100 hover:text-white group focus:outline-none focus-visible:border-b focus-visible:border-indigo-100">
-              <svg class="w-4 h-4 flex-shrink-0 mr-2 fill-current text-gray-300 group-hover:text-gray-200" viewBox="0 0 16 16">
-                <path d="M14.682 2.318A4.485 4.485 0 0 0 11.5 1 4.377 4.377 0 0 0 8 2.707 4.383 4.383 0 0 0 4.5 1a4.5 4.5 0 0 0-3.182 7.682L8 15l6.682-6.318a4.5 4.5 0 0 0 0-6.364Zm-1.4 4.933L8 12.247l-5.285-5A2.5 2.5 0 0 1 4.5 3c1.437 0 2.312.681 3.5 2.625C9.187 3.681 10.062 3 11.5 3a2.5 2.5 0 0 1 1.785 4.251h-.003Z" />
-              </svg>
-              <span>{data.stargazers_count} <span class="sr-only">likes</span></span>
-            </button>
-            <!-- <button class="flex items-center text-left text-sm font-medium text-indigo-100 hover:text-white group focus:outline-none focus-visible:border-b focus-visible:border-indigo-100">
-              <svg class="w-4 h-4 flex-shrink-0 mr-2 fill-current text-gray-300 group-hover:text-gray-200" viewBox="0 0 16 16">
-                <path d="M8 0C3.6 0 0 3.1 0 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7Zm4 10.8v2.3L8.9 12H8c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8Z" />
-              </svg>
-              <span>64 <span class="sr-only">comments</span></span>
-            </button> -->
-          </div>
-        </div>
-        <!-- Card body -->
-        <div class="flex items-end justify-between whitespace-normal">
-          <div class="max-w-md text-indigo-100">
-            <p class="mb-2">{desc}</p>
-          </div>
-          <a 
-            href={url} 
-            class="flex-shrink-0 flex items-center justify-center px-3 py-2 text-indigo-200 bg-indigo-900 rounded transition duration-500 ml-2"
-            target="_blank"
-          >
-            <span class="block font-bold">
-              <span class="sr-only">Read more</span> 
-              Visitar
-            </span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<li class="link-card">
+	<a href={href} target="_blank">
+		<h2>
+			{title}
+			<span>&rarr;</span>
+		</h2>
+		<p>
+			{body}
+		</p>
+	</a>
+</li>
+
+<style>
+	:root {
+		--accent: 136, 58, 234;
+		--accent-light: 224, 204, 250;
+		--accent-dark: 49, 10, 101;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+	}
+
+	.link-card {
+		list-style: none;
+		display: flex;
+		padding: 1px;
+		background-color: #23262d;
+		background-image: none;
+		background-size: 400%;
+		border-radius: 7px;
+		background-position: 100%;
+		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+	}
+
+	.link-card > a {
+		width: 100%;
+		text-decoration: none;
+		line-height: 1.4;
+		padding: calc(1.5rem - 1px);
+		border-radius: 8px;
+		color: white;
+		background-color: #23262d;
+		opacity: 0.8;
+	}
+
+	h2 {
+		margin: 0;
+		font-size: 1.25rem;
+		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	p {
+		margin-top: 0.5rem;
+		margin-bottom: 0;
+	}
+
+	.link-card:is(:hover, :focus-within) {
+		background-position: 0;
+		background-image: var(--accent-gradient);
+	}
+
+	.link-card:is(:hover, :focus-within) h2 {
+		color: rgb(var(--accent-light));
+	}
+</style>

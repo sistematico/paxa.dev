@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const posts = (await getCollection('posts')).sort((a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf());
+---
+
+<MainLayout>
+	<h1 class="text-3xl my-2">Postagens</h1>	
+	{
+		posts.map((post) => (
+			<a href={`/posts/${post.slug}/`}>
+				<div class="flex items-center py-2">
+					<div class="pr-4 bg-blue-500 p-2 rounded-lg text-center">
+						<FormattedDate date={post.data.publishDate} />
+					</div>
+					<div class="ml-4">
+						<div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{post.data.title}</div>
+					</div>
+				</div>
+			</a>
+		))
+	}
+</MainLayout>
+

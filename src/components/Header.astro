@@ -5,18 +5,20 @@ import { SITE_TITLE } from '../consts';
 ---
 
 <header class="sticky top-0 w-full">
-	<nav class="container mx-auto">
-		<a class="flex items-center" href="/">
-			<img class="object-scale-down h-10 me-2 pasha" src="/img/paxa.svg" alt="Paxá">
-			<h3 class="text-3xl lowercase hidden md:inline">{SITE_TITLE}</h3>
-		</a>
-		<div class="internal-links">
-			<HeaderLink href="/">Início</HeaderLink>
-			<HeaderLink href="/projetos">Projetos</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-		</div>
-		<Social />
-	</nav>
+	<div class="border-b-4 border-indigo-400/[.4] py-3">
+		<nav class="container mx-auto">
+			<a class="flex items-center" href="/">
+				<img class="object-scale-down h-10 me-2 pasha" src="/img/paxa.svg" alt="Paxá">
+				<h3 class="text-3xl lowercase hidden md:inline">{SITE_TITLE}</h3>
+			</a>
+			<div class="internal-links">
+				<HeaderLink href="/">Início</HeaderLink>
+				<HeaderLink href="/projetos">Projetos</HeaderLink>
+				<HeaderLink href="/posts">Blog</HeaderLink>
+			</div>
+			<Social />
+		</nav>
+	</div>
 </header>
 
 <style>

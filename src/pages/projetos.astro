@@ -5,10 +5,12 @@ import projetos from '../data/projects.json';
 ---
 
 <MainLayout>
-	<div class="w-full">
-		<h1 class="text-3xl">Projetos</h1>
-			{projetos.map((p) => (
-				<Card name={p.name} desc={p.desc} url={p.url} short={p.short} />
-			))}
+	<h1 class="text-3xl my-3">Projetos</h1>
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+		{
+			projetos.map((p) => (
+				<Card title={p.name} body={p.desc} href={p.url} short={p.short} />
+			))
+		}
 	</div>
 </MainLayout>

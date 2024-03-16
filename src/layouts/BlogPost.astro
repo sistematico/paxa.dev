@@ -3,20 +3,13 @@ import type { CollectionEntry } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'posts'>['data'];
 
 const { title, description, publishDate, updatedDate, heroImage } = Astro.props;
 ---
 
 <MainLayout>
 	<article>
-		<div class="my-5">
-			<a 
-  			href="/blog"
-  			class="inline-block rounded bg-indigo-600 hover:bg-indigo-800 px-6 pb-2 pt-2.5 text-xs font-medium uppercase text-white shadow-md transition duration-500 ease-in-out focus:ring-0">
-  			Voltar
-			</a>
-		</div>
 		<!-- <div class="hero-image">
 			{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
 		</div> -->
@@ -37,6 +30,13 @@ const { title, description, publishDate, updatedDate, heroImage } = Astro.props;
 				<hr />
 			</div>
 			<slot />
+		</div>
+		<div class="my-5">
+			<a 
+  			href="/posts"
+  			class="inline-block rounded bg-indigo-600 hover:bg-indigo-800 px-6 pb-2 pt-2.5 text-xs font-medium uppercase text-white shadow-md transition duration-500 ease-in-out focus:ring-0">
+  			Voltar
+			</a>
 		</div>
 	</article>
 </MainLayout>
