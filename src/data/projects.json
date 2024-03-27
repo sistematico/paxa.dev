@@ -16,5 +16,11 @@
     "desc": "Um pequeno aplicativo Web para mostrar a fase da lua atual no hemisfério sul",
     "url": "https://sistematico.github.io/moon-phase",
     "short": "moon-phase"
+  },
+  { 
+    "name": "Bio", 
+    "desc": "WebApp para calcular o biorritmo com base na data de nascimento",
+    "url": "https://sistematico.github.io/bio",
+    "short": "bio"
   }
 ]
