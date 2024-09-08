@@ -5,5 +5,6 @@
       <slot />
     </main>
     <footer class="mt-auto"></footer>
+    <div class="bg"></div>
   </div>
 </template>
