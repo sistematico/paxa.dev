@@ -27,8 +27,11 @@ import Icon from '@/components/icon.vue'
         <a href="https://wa.me/5567998552020?text=Tenho%20interesse%20em%20um%20website" target="_blank">
           <Icon name="whatsapp" />
         </a>
-        <a href="https://wa.me/5567998552020?text=Tenho%20interesse%20em%20um%20website" target="_blank">
+        <a href="https://t.me/sistematico" target="_blank">
           <Icon name="telegram" />
+        </a>
+        <a href="mailto:sistematico@gmail.com">
+          <Icon name="alt-email" />
         </a>
       </p>
       <!-- <button class="btn btn-primary btn-lg" type="button">OK</button> -->
@@ -43,5 +46,9 @@ a:nth-of-type(2):hover {
 
 a:nth-of-type(3):hover {
   color: #7FBBB3;
+}
+
+a:nth-of-type(4):hover {
+  color: #DBBC7F;
 }
 </style>
