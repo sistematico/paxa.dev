@@ -2,7 +2,7 @@
 
 $enable-gradients: true;
 $enable-shadows: true;
-$offcanvas-box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
+// $offcanvas-box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
 
 @import "bootstrap/scss/functions";
 
@@ -11,11 +11,11 @@ $body-bg: #fff;
 $border-radius: .4rem;
 $success: #7952b3;
 
-
 @import "bootstrap/scss/bootstrap";
 
 html, body, #app {
   height: 100%;
+  margin: 0;
 }
 
 body {
@@ -47,11 +47,11 @@ body {
   border-bottom-color: rgba(255, 255, 255, .25);
 }
 
-.nav-masthead .nav-link+.nav-link {
-  margin-left: 1rem;
-}
+// .nav-masthead .nav-link+.nav-link {
+//   margin-left: 1rem;
+// }
 
-.nav-masthead .active {
-  color: #fff;
-  border-bottom-color: #fff;
-}
+// .nav-masthead .active {
+//   color: #fff;
+//   border-bottom-color: #fff;
+// }
