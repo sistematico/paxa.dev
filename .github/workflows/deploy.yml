@@ -1,48 +1,24 @@
-name: Github Pages
+name: Deploy
 
-on:
-  push:
-    branches: ['main']
-
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: 'pages'
-  cancel-in-progress: true
+on: [push]
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: '1.1.26'
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Build
-        run: bun run build
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist'
-          
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    - name: Add Bun to PATH
+      shell: bash
+      run: |
+        echo "/home/nginx/.bun/bin" >> $GITHUB_PATH
+    - name: Deploy using SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASS }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd ${{ secrets.PROJECT_PATH }}
+          git pull origin main
+          bun install
+          bun run build
