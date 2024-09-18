@@ -1,7 +1,7 @@
 @import "fonts";
 
-$enable-gradients: true;
-$enable-shadows: true;
+// $enable-gradients: true;
+// $enable-shadows: true;
 // $offcanvas-box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
 
 @import "bootstrap/scss/functions";
@@ -10,6 +10,8 @@ $body-color: #333;
 $body-bg: #fff;
 $border-radius: .4rem;
 $success: #7952b3;
+$warning: #DBBC7F;
+// $primary: #7952b3;
 
 @import "bootstrap/scss/bootstrap";
 @import "custom";
@@ -70,3 +72,21 @@ body {
 svg {
   transition: all 300ms ease-in-out;
 }
+
+.custom-tooltip {
+  --bs-tooltip-bg: var(--bd-violet-bg);
+  --bs-tooltip-color: var(--bs-white);
+}
+
+// @media only screen and (max-width: 600px) {
+//   body {
+//     font-size: .2em;
+//   }
+// }
+
+@media (max-width: 768px) {
+  body {
+    font-size: .9rem;
+  }
+}
+
