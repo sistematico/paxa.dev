@@ -1,0 +1,5 @@
+{
+	"domain": "somdomato.com",
+	"certUrl": "https://acme-v02.api.letsencrypt.org/acme/cert/03fa40ede746b6bb99585192f6bd35ed9fc1",
+	"certStableUrl": "https://acme-v02.api.letsencrypt.org/acme/cert/03fa40ede746b6bb99585192f6bd35ed9fc1"
+}
