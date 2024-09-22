@@ -20,20 +20,29 @@ import Icon from '@/components/icon.vue'
           de sistemas, garantindo soluções robustas, estáveis e seguras.
           <br />
           <br />
+          Publiquei diversos artigos, tutoriais e snippets no meu blog, todos voltados para o desenvolvimento web.<br />
+          Eles abordam desde conceitos básicos até técnicas mais avançadas, e podem ser uma boa fonte de aprendizado ou inspiração para quem está imerso nesse universo.
+          <br /> 
+          Sinta-se à vontade para explorar, acredito que encontrará algo útil para aprimorar suas habilidades.
+          <br />
+          <br />
           Vamos juntos construir soluções inovadoras e impactantes!
           <br />
-          <a href="mailto:sistematico@gmail.com">Entre em contato</a>
+          Entre em contato via <a href="mailto:sistematico@gmail.com">e-mail</a> ou <a href="https://t.me/sistematico" target="_blank">Telegram</a>.
           <br />
           <br />
           Paxá<br />
           Full-Stack Web Developer
           <br />
           <div class="social">
-            <a href="https://wa.me/5567998552020?text=Tenho%20interesse%20em%20um%20website" class="unstyled" target="_blank">
+            <!-- <a href="https://wa.me/5567998552020?text=Tenho%20interesse%20em%20um%20website" class="unstyled" target="_blank">
               <Icon name="whatsapp" />
-            </a>
+            </a> -->
             <a href="https://t.me/sistematico" class="unstyled" target="_blank">
               <Icon name="telegram" />
+            </a>
+            <a href="https://github.com/sistematico" class="unstyled" target="_blank">
+              <Icon name="github" />
             </a>
             <a href="mailto:sistematico@gmail.com" class="unstyled">
               <Icon name="alt-email" />
@@ -42,7 +51,7 @@ import Icon from '@/components/icon.vue'
         </p>
       </div>
     </div>
-    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <!-- <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
       <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -50,16 +59,20 @@ import Icon from '@/components/icon.vue'
       <div class="offcanvas-body">
         <p>Try scrolling the rest of the page to see this option in action.</p>
       </div>
-    </div>
+    </div> -->
   </Base>
 </template>
 <style>
-.social a:nth-of-type(2):hover {
+.social a:nth-of-type(1):hover {
   color: #A7C080;
 }
 
-.social a:nth-of-type(3):hover {
+.social a:nth-of-type(2):hover {
   color: #7FBBB3;
+}
+
+.social a:nth-of-type(3):hover {
+  color: #a8a8a8;
 }
 
 .social a:nth-of-type(4):hover {
