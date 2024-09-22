@@ -12,7 +12,12 @@ import Icon from '@/components/icon.vue'
         </div>
         <h1 class="display-5 fw-bold">Paxá</h1>
         <p class="col-md-12 fs-4">
-          Olá! Meu nome é Lucas, sou especialista em <a href="javascript:void(0)" v-tooltip title="Superset JavaScript criado pela Microsoft.">TypeScript</a>, uso frameworks como Vue.js, Astro, React e runtimes como
+          Olá! Meu nome é Lucas, sou especialista em <a href="javascript:void(0)" v-tooltip title="Superset JavaScript criado pela Microsoft.">TypeScript</a>, 
+          uso frameworks como 
+          <a href="javascript:void(0)" v-popover data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-bs-title="Vue.js" data-bs-content="Visite o site do <a href='https://vuejs.org' target='_blank'>Vue.js</a> para saber mais." data-bs-html="true">Vue.js</a>, 
+          <a href="javascript:void(0)" v-popover data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-bs-title="Astro" data-bs-content="Visite o site do <a href='https://astro.build' target='_blank'>Astro</a> para saber mais." data-bs-html="true">Astro</a>, 
+          <a href="javascript:void(0)" v-popover data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-bs-title="React" data-bs-content="Visite o site do <a href='https://react.dev' target='_blank'>React</a> para saber mais." data-bs-html="true">React</a>, 
+          React e runtimes como
           Bun e Node.js para criar aplicações web de visual refinado e alta performance.
           <br />
           <br />
@@ -20,7 +25,7 @@ import Icon from '@/components/icon.vue'
           de sistemas, garantindo soluções robustas, estáveis e seguras.
           <br />
           <br />
-          Publiquei diversos artigos, tutoriais e snippets no meu blog, todos voltados para o desenvolvimento web.<br />
+          Publiquei diversos artigos, tutoriais e <a href="https://blog.paxa.dev/snippets">snippets</a> no meu <a href="https://blog.paxa.dev">blog</a>, todos voltados para o desenvolvimento web.<br />
           Eles abordam desde conceitos básicos até técnicas mais avançadas, e podem ser uma boa fonte de aprendizado ou inspiração para quem está imerso nesse universo.
           <br /> 
           Sinta-se à vontade para explorar, acredito que encontrará algo útil para aprimorar suas habilidades.
@@ -64,15 +69,17 @@ import Icon from '@/components/icon.vue'
 </template>
 <style>
 .social a:nth-of-type(1):hover {
-  color: #A7C080;
+  /* color: #A7C080; */
+  color: #24A1DE;
 }
 
 .social a:nth-of-type(2):hover {
-  color: #7FBBB3;
+  /* color: #a8a8a8; */
+  color: #fafafa;
 }
 
 .social a:nth-of-type(3):hover {
-  color: #a8a8a8;
+  color: #7FBBB3;  
 }
 
 .social a:nth-of-type(4):hover {
