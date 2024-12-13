@@ -3,6 +3,12 @@ import { CustomMDX } from '../../components/mdx'
 import { formatDate, getBlogPosts } from '../../posts/utils'
 import { baseUrl } from '../../sitemap'
 
+interface PageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
 export async function generateStaticParams() {
   let posts = await getBlogPosts()
 
@@ -11,8 +17,10 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = (await getBlogPosts()).find((post) => post.slug === params.slug)
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  const posts = await getBlogPosts();
+  const post = posts.find((post) => post.slug === slug);
   if (!post) return
 
   let {
@@ -49,8 +57,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function Blog({ params }: { params: { slug: string } }) {
-  const post = (await getBlogPosts()).find((post) => post.slug === params.slug)
+export default async function Blog({ params }: PageProps) {
+  // const post = (await getBlogPosts()).find((post) => post.slug === params.slug)
+  const { slug } = await params;
+  const posts = await getBlogPosts();
+  const post = posts.find((post) => post.slug === slug);
+
   if (!post) notFound()
 
   return (
