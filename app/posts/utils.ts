@@ -49,9 +49,15 @@ function getMDXData(dir: string) {
   })
 }
 
+const BLOG_POSTS = getMDXData(path.join(process.cwd(), 'app', 'posts', 'content'))
+
 export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'posts', 'content'))
+  return BLOG_POSTS
 }
+
+// export function getBlogPosts() {
+//   return getMDXData(path.join(process.cwd(), 'app', 'posts', 'content'))
+// }
 
 export function formatDate(date: string, includeRelative = false) {
   let currentDate = new Date()
