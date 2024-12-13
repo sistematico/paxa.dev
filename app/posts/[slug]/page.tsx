@@ -12,10 +12,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  let post = await getBlogPosts().find((post) => post.slug === params.slug)
-  if (!post) {
-    return
-  }
+  const post = (await getBlogPosts()).find((post) => post.slug === params.slug)
+  if (!post) return
 
   let {
     title,
@@ -52,11 +50,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function Blog({ params }: { params: { slug: string } }) {
-  let post = await getBlogPosts().find((post) => post.slug === params.slug)
-
-  if (!post) {
-    notFound()
-  }
+  const post = (await getBlogPosts()).find((post) => post.slug === params.slug)
+  if (!post) notFound()
 
   return (
     <section>
@@ -74,7 +69,7 @@ export default async function Blog({ params }: { params: { slug: string } }) {
             image: post.metadata.image
               ? `${baseUrl}${post.metadata.image}`
               : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-            url: `${baseUrl}/blog/${post.slug}`,
+            url: `${baseUrl}/posts/${post.slug}`,
             author: {
               '@type': 'Person',
               name: 'My Portfolio',
