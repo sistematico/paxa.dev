@@ -1,6 +1,7 @@
 import { getBlogPosts } from './posts/utils'
 
 export const baseUrl = 'https://paxa.dev'
+export const dynamic = 'force-static'
 
 export default async function sitemap() {
   let blogs = getBlogPosts().map((post) => ({
