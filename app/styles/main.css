@@ -61,7 +61,7 @@ h6 {
   @apply text-lg font-medium tracking-tight mt-6 mb-2;
 }
 
-a:not(.anchor):not(.logo):not(.social a) {
+a:not(.anchor):not(.logo):not(.social a):not(.projetos) {
   @apply text-blue-600 dark:text-blue-400 underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
 }
 

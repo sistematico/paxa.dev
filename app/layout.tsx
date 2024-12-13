@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "./components/nav";
 import { Footer } from "./components/footer";
+import { Providers } from "./providers";
 import "./styles/main.css";
 
 const geistSans = Geist({
@@ -17,7 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Paxá",
   description: "Full-stack developer, designer, and writer.",
-  icons: "https://paxa.dev/images/favicon.png"
+  icons: {
+    icon: "/images/favicon.png"
+  }
 };
 
 export default function RootLayout({
@@ -26,15 +29,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex items-center justify-center mx-auto h-full`}
       >
-        <main className="flex flex-col flex-auto min-w-0 max-w-[640px] w-full my-10">
-          <Navbar />
-          {children}
-          <Footer />
-        </main>
+        <Providers>
+          <main className="flex flex-col flex-auto min-w-0 max-w-[640px] w-full my-10">
+            <Navbar />
+            {children}
+            <Footer />
+          </main>
+        </Providers>
       </body>
     </html>
   );

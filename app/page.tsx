@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { socialLinks } from "./config";
 
 export default function Home() {
   return (
@@ -7,7 +6,7 @@ export default function Home() {
       <a href="/" target="_blank">
         <Image
           src="/images/logo.svg"
-          alt="Profile photo"
+          alt="Paxá"
           className="block lg:mt-5 mt-0 lg:mb-5 mb-10 mx-auto sm:float-right sm:ml-5 sm:mb-5 hover:grayscale-0"
           unoptimized
           width={160}
@@ -15,55 +14,17 @@ export default function Home() {
           priority
         />
       </a>
-
-      <h1 className="mb-8 text-2xl font-medium tracking-tight">
-        Portfolio, made simple!
-      </h1>
-
       <div className="prose prose-neutral dark:prose-invert">
         <p>
-          A clean, fast, and lightweight portfolio template built with Next.js,
-          Vercel, and Tailwind CSS for optimal performance.
+          Meu nome é Lucas, sou especialista em TypeScript, uso frameworks como Vue.js, Astro, React, Next.js e runtimes como Bun e Node.js para criar aplicações web de visual refinado e alta performance.
         </p>
         <p>
-          Nextfolio includes all the essentials for a stunning portfolio: SEO,
-          MDX support, RSS, Atom, & JSON feeds, analytics, tweet & YouTube
-          embeds, KaTeX integration, and{" "}
-          <a
-            target="_blank"
-            href="https://github.com/1msirius/Nextfolio?tab=readme-ov-file#features"
-          >
-            more
-          </a>
-          .
+          Sou usuário de Linux desde 1999 e tenho vasta experiência em administração de sistemas, garantindo soluções robustas, estáveis e seguras.
         </p>
         <p>
-          Nextfolio is{" "}
-          <a href={socialLinks.github} target="_blank">
-            open-source
-          </a>{" "}
-          and fully customizable, making it easy to add more features.
-        </p>
-        <p>
-          <a
-            href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2F1msirius%2FNextfolio"
-            target="_blank"
-          >
-            Deploy
-          </a>{" "}
-          your Nextfolio site with Vercel in minutes and follow the set up
-          instructions in the{" "}
-          <a href="/blog/getting-started">Getting Started</a> post.
-        </p>
-        <p>
-          Built and maintained by{" "}
-          <a href="https://imsirius.xyz/" target="_blank">
-            Sirius
-          </a>
-          .
+          Vamos juntos construir soluções inovadoras e impactantes!
         </p>
       </div>
     </section>
-
   );
 }

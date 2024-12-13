@@ -49,7 +49,7 @@ function getMDXData(dir: string) {
   })
 }
 
-const BLOG_POSTS = getMDXData(path.join(process.cwd(), 'app', 'posts', 'content'))
+const BLOG_POSTS = getMDXData(path.join(process.cwd(), 'content'))
 
 export function getBlogPosts() {
   return BLOG_POSTS

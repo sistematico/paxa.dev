@@ -1,6 +1,15 @@
+# Paxá
+
+<p align="center">
+  <img src="./public/images/logo.svg" width="256" height="256" alt="Paxá" />
+</p>
+
+
+[![Deploy](https://github.com/sistematico/paxa.dev/actions/workflows/deploy.yml/badge.svg)](https://github.com/sistematico/paxa.dev/actions/workflows/deploy.yml)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Iniciando
 
 First, run the development server:
 
