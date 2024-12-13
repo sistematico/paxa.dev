@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <Image
       className="dark:invert"
-      src="/next.svg"
+      src="/images/logo.svg"
       alt="Next.js logo"
       width={180}
       height={38}
