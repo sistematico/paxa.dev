@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-import "./globals.css";
+import "../styles/main.css";
 
 const nunito = Nunito({
   variable: "--font-nunito-sans",
@@ -10,6 +10,20 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   title: "Paxá",
   description: "Desenvolvedor Web",
+  openGraph: {
+    title: "Paxá",
+    description: "Desenvolvedor Web",
+    url: "https://paxa.dev",
+    siteName: "Paxá",
+    images: [
+      {
+        url: "https://paxa.dev/images/favicon.png",
+        width: 256,
+        height: 256,
+        alt: "Paxá - Desenvolvedor Web",
+      },
+    ],
+  }
 };
 
 export default function RootLayout({
@@ -19,6 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" sizes="any" />
+      </head>
       <body
         className={`${nunito.variable} antialiased min-h-screen`}
       >
