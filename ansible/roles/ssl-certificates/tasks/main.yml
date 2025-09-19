@@ -1,21 +1,29 @@
 ---
-- name: Install snapd
+- name: Install EPEL repository (RedHat/CentOS)
   ansible.builtin.package:
-    name: snapd
+    name: epel-release
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Install certbot and python3-certbot-nginx
+  ansible.builtin.package:
+    name:
+      - certbot
+      - python3-certbot-nginx
     state: present
 
-- name: Install certbot via snap
-  community.general.snap:
-    name: certbot
-    classic: true
-    state: present
+# - name: Install cron package
+#   ansible.builtin.package:
+#     name: "{{ 'cronie' if ansible_os_family == 'RedHat' else 'cron' }}"
+#     state: present
+#   when: install_cron
 
-- name: Create symlink for certbot
-  ansible.builtin.file:
-    src: /snap/bin/certbot
-    dest: /usr/bin/certbot
-    state: link
-    force: true
+# - name: Ensure cron service is running
+#   ansible.builtin.service:
+#     name: "{{ 'crond' if ansible_os_family == 'RedHat' else 'cron' }}"
+#     state: started
+#     enabled: true
+#   when: install_cron
 
 - name: Check if certificate already exists
   ansible.builtin.stat:
@@ -45,16 +53,16 @@
   when: not cert_exists.stat.exists or ssl_certificate_force_renewal
   notify: restart nginx
 
-- name: Set up automatic certificate renewal
-  ansible.builtin.cron:
-    name: "Certbot automatic renewal"
-    job: "certbot renew --quiet --no-self-upgrade --post-hook 'systemctl reload nginx'"
-    minute: "0"
-    hour: "12"
-    day: "*"
-    month: "*"
-    weekday: "*"
-  when: certbot_auto_renew
+# - name: Set up automatic certificate renewal
+#   ansible.builtin.cron:
+#     name: "Certbot automatic renewal"
+#     job: "certbot renew --quiet --no-self-upgrade --post-hook 'systemctl reload nginx'"
+#     minute: "0"
+#     hour: "12"
+#     day: "*"
+#     month: "*"
+#     weekday: "*"
+#   when: certbot_auto_renew
 
 - name: Create SSL configuration snippet
   ansible.builtin.template:

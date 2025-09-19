@@ -6,7 +6,7 @@ domain_subdomains:
   - "pages"
 
 # SSL Certificate configuration
-ssl_certificate_email: "admin@paxa.dev"
+ssl_certificate_email: "sistematico@gmail.com"
 ssl_certificate_staging: false
 ssl_certificate_force_renewal: false
 certbot_auto_renew: true

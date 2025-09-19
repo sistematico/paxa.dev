@@ -4,6 +4,7 @@ ssl_certificate_email: "admin@{{ domain_name }}"
 ssl_certificate_staging: false
 ssl_certificate_force_renewal: false
 certbot_auto_renew: true
+install_cron: true
 
 # Default domain configuration (should be overridden in group_vars or host_vars)
 domain_name: "example.com"

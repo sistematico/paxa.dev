@@ -18,7 +18,7 @@
     sudo /usr/bin/systemctl restart|stop|start|status auth.lucasbrum.dev,
     sem necessidade de senha
   community.general.sudoers:
-    name: agrocomm
+    name: paxa
     user: nginx
     commands:
       - /usr/bin/systemctl stop paxa.dev.service

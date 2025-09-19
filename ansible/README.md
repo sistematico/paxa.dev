@@ -74,11 +74,12 @@ Você pode criar arquivos específicos:
 ## Funcionalidades
 
 ### Role ssl-certificates
-- ✅ Instala Certbot via snap
+- ✅ Instala Certbot via package manager (apt/yum/dnf)
 - ✅ Gera certificados SSL automaticamente
 - ✅ Configura renovação automática
 - ✅ Suporte a staging para testes
 - ✅ Configura parâmetros SSL seguros no Nginx
+- ✅ Suporte a múltiplas distribuições Linux
 
 ### Role nginx (atualizada)
 - ✅ Configuração dinâmica baseada em variáveis
@@ -123,7 +124,9 @@ ssl_certificate_force_renewal: true
 
 ### Verificar logs do Certbot
 ```bash
-sudo journalctl -u snap.certbot.renew.service
+sudo journalctl -u certbot
+# ou
+sudo tail -f /var/log/letsencrypt/letsencrypt.log
 ```
 
 ### Verificar configuração do Nginx
