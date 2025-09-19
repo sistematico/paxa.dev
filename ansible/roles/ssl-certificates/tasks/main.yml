@@ -1,0 +1,64 @@
+---
+- name: Install snapd
+  ansible.builtin.package:
+    name: snapd
+    state: present
+
+- name: Install certbot via snap
+  community.general.snap:
+    name: certbot
+    classic: true
+    state: present
+
+- name: Create symlink for certbot
+  ansible.builtin.file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    state: link
+    force: true
+
+- name: Check if certificate already exists
+  ansible.builtin.stat:
+    path: "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
+  register: cert_exists
+
+- name: Stop nginx temporarily for certificate generation
+  ansible.builtin.service:
+    name: nginx
+    state: stopped
+  when: not cert_exists.stat.exists
+  notify: start nginx
+
+- name: Generate SSL certificate for main domain
+  ansible.builtin.command:
+    cmd: >
+      certbot certonly
+      --standalone
+      --non-interactive
+      --agree-tos
+      --email {{ ssl_certificate_email }}
+      {% if ssl_certificate_staging %}--staging{% endif %}
+      -d {{ domain_name }}
+      {% for subdomain in domain_subdomains %}
+      -d {{ subdomain }}.{{ domain_name }}
+      {% endfor %}
+  when: not cert_exists.stat.exists or ssl_certificate_force_renewal
+  notify: restart nginx
+
+- name: Set up automatic certificate renewal
+  ansible.builtin.cron:
+    name: "Certbot automatic renewal"
+    job: "certbot renew --quiet --no-self-upgrade --post-hook 'systemctl reload nginx'"
+    minute: "0"
+    hour: "12"
+    day: "*"
+    month: "*"
+    weekday: "*"
+  when: certbot_auto_renew
+
+- name: Create SSL configuration snippet
+  ansible.builtin.template:
+    src: ssl-params.conf.j2
+    dest: /etc/nginx/conf.d/ssl-params.conf
+    mode: '0644'
+  notify: restart nginx

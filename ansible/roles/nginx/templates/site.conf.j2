@@ -1,0 +1,75 @@
+# HTTP to HTTPS redirect
+server {
+    listen 80;
+    listen [::]:80;
+    server_name *.{{ domain_name }} {{ domain_name }};
+    return 301 https://$host$request_uri;
+}
+
+# WWW to non-WWW redirect
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    ssl_certificate         /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+    ssl_certificate_key     /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+
+    server_name www.{{ domain_name }};
+    return 301 https://{{ domain_name }}$request_uri;
+
+    include conf.d/ssl-params.conf;
+}
+
+{% if 'pages' in domain_subdomains %}
+# Pages subdomain proxy
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    ssl_certificate         /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+    ssl_certificate_key     /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+
+    server_name pages.{{ domain_name }};
+
+    include conf.d/ssl-params.conf;
+
+    location / {
+        proxy_set_header Host {{ github_pages_host }};
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://{{ github_pages_host }}{{ github_pages_path }};
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+{% endif %}
+
+# Main application server
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    ssl_certificate         /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+    ssl_certificate_key     /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+
+    server_name *.{{ domain_name }} {{ domain_name }};
+    proxy_intercept_errors on;
+
+    include conf.d/ssl-params.conf;
+    include conf.d/px-errors.conf;
+
+    location / {
+        proxy_pass http://localhost:{{ app_port }};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+
+        # Security Headers
+        add_header          Access-Control-Max-Age "3600" always;
+        add_header          X-Frame-Options deny;
+        proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    include conf.d/deny.conf;
+}

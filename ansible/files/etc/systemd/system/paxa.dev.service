@@ -1,0 +1,32 @@
+[Unit]
+Description=Paxa Next.js Service
+After=network.target
+
+[Service]
+Type=simple
+User=nginx
+Environment=NODE_ENV=production
+WorkingDirectory=/var/www/paxa.dev
+ExecStart=/home/nginx/.bun/bin/bun run start
+ExecStop=/usr/bin/kill -TERM $MAINPID
+Restart=always
+RestartSec=10s
+#StartLimitIntervalSec=60
+#StartLimitBurst=3
+
+# Limites de memória mais conservadores
+#MemoryAccounting=true
+#MemoryHigh=800M
+#MemoryMax=900M
+
+# Limites para WebSocket
+LimitNOFILE=65535
+LimitNPROC=2048
+
+# Segurança
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

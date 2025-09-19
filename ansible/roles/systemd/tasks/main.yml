@@ -1,0 +1,35 @@
+- name: Alterar as unidades do systemd
+  ansible.builtin.copy:
+    src: etc/systemd/system/paxa.dev.service
+    dest: /etc/systemd/system/paxa.dev.service
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+
+- name: Creates /etc/sudoers.d directory
+  ansible.builtin.file:
+    path: /etc/sudoers.d
+    state: directory
+    mode: "0750"
+
+- name: >-
+    Habilitar o usuario nginx para rodar:
+    sudo /usr/bin/systemctl restart|stop|start|status auth.lucasbrum.dev,
+    sem necessidade de senha
+  community.general.sudoers:
+    name: agrocomm
+    user: nginx
+    commands:
+      - /usr/bin/systemctl stop paxa.dev.service
+      - /usr/bin/systemctl start paxa.dev.service
+      - /usr/bin/systemctl restart paxa.dev.service
+      - /usr/bin/systemctl status paxa.dev.service
+    nopassword: true
+
+- name: Reiniciar as unidades do systemd
+  ansible.builtin.systemd:
+    name: paxa.dev.service
+    state: restarted
+    enabled: true
+    daemon_reload: true

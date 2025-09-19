@@ -1,0 +1,43 @@
+- name: Install required packages
+  ansible.builtin.package:
+    name:
+      - nginx
+    state: present
+
+- name: Ensure group nginx exists
+  ansible.builtin.group:
+    name: nginx
+    state: present
+
+- name: Change nginx permissions
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: nginx
+    group: nginx
+  loop:
+    - /var/log/nginx
+    - /var/lib/nginx
+
+- name: Creates /etc/nginx/sites.d directory
+  ansible.builtin.file:
+    path: /etc/nginx/sites.d
+    state: directory
+    mode: "0755"
+
+- name: Copy nginx snippets
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/nginx/conf.d/{{ item | basename }}"
+    mode: "0644"
+    force: true
+  with_fileglob:
+    - "files/etc/nginx/conf.d/*"
+  notify: restart nginx
+
+- name: Configure main site from template
+  ansible.builtin.template:
+    src: site.conf.j2
+    dest: "/etc/nginx/sites.d/10-{{ domain_name }}.conf"
+    mode: "0644"
+    force: true
+  notify: restart nginx

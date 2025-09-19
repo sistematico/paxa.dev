@@ -1,0 +1,22 @@
+---
+# Site configuration
+domain_name: "paxa.dev"
+domain_subdomains:
+  - "www"
+  - "pages"
+
+# SSL Certificate configuration
+ssl_certificate_email: "admin@paxa.dev"
+ssl_certificate_staging: false
+ssl_certificate_force_renewal: false
+certbot_auto_renew: true
+
+# Application configuration
+app_port: 3033
+github_pages_host: "sistematico.github.io"
+github_pages_path: "/startpages"
+
+# Nginx SSL settings
+nginx_ssl_protocols: "TLSv1.2 TLSv1.3"
+nginx_ssl_ciphers: "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
+nginx_ssl_prefer_server_ciphers: "off"
