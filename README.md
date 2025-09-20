@@ -1,30 +1,26 @@
 # Paxá
 
 <p align="center">
-  <img src="./public/images/logo.svg" width="256" height="256" alt="Paxá" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./public/images/logo.svg">
+    <img width="256" height="256" alt="Paxá" src="./public/images/logo-light.svg">
+  </picture>
 </p>
 
 [![Deploy](https://github.com/sistematico/paxa.dev/actions/workflows/deploy.yml/badge.svg)](https://github.com/sistematico/paxa.dev/actions/workflows/deploy.yml)
 [![Biome](https://github.com/sistematico/paxa.dev/actions/workflows/biome.yml/badge.svg)](https://github.com/sistematico/paxa.dev/actions/workflows/biome.yml)
 
+Este site usa o [Next.js](https://nextjs.org) projeto iniciado com o [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Começando
 
-## Getting Started
-
-First, run the development server:
+Roda o servidor de desenvolvimento:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) no seu navegador e veja o resultado.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

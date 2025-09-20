@@ -1,17 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import {
-  Play,
-  Pause,
-  SkipBack,
-  SkipForward,
-  Volume2,
-  VolumeX,
-  Shuffle,
-  Repeat,
-  Music,
-} from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Music } from "lucide-react";
 
 interface Track {
   id: number;
@@ -36,8 +26,6 @@ export default function AudioPlayer({
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
-  const [isShuffled, setIsShuffled] = useState(false);
-  const [repeatMode, setRepeatMode] = useState<"none" | "one" | "all">("none");
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressRef = useRef<HTMLButtonElement>(null);
@@ -45,35 +33,13 @@ export default function AudioPlayer({
   const currentTrack = tracks[currentTrackIndex];
 
   const handleNext = useCallback(() => {
-    if (repeatMode === "one") {
-      // Repetir música atual
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.play();
-      }
+    const newIndex = currentTrackIndex + 1;
+    if (newIndex >= tracks.length) {
+      setIsPlaying(false);
       return;
     }
-
-    let newIndex: number;
-    if (isShuffled) {
-      // Modo shuffle
-      do {
-        newIndex = Math.floor(Math.random() * tracks.length);
-      } while (newIndex === currentTrackIndex && tracks.length > 1);
-    } else {
-      // Modo sequencial
-      newIndex = currentTrackIndex + 1;
-      if (newIndex >= tracks.length) {
-        if (repeatMode === "all") {
-          newIndex = 0;
-        } else {
-          setIsPlaying(false);
-          return;
-        }
-      }
-    }
     setCurrentTrackIndex(newIndex);
-  }, [repeatMode, isShuffled, tracks.length, currentTrackIndex]);
+  }, [tracks.length, currentTrackIndex]);
 
   // Inicializar áudio quando o track muda
   useEffect(() => {
@@ -189,132 +155,94 @@ export default function AudioPlayer({
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="bg-gray-900 rounded-xl p-5 shadow-2xl max-w-md mx-auto">
+    <div className="bg-gray-800/50 rounded-lg p-3 backdrop-blur-sm border border-gray-700/30 max-w-xl mx-auto">
       <audio ref={audioRef} preload="metadata">
         <track kind="captions" label="Sem legendas disponíveis" />
       </audio>
 
-      {/* Track Info */}
-      <div className="flex items-center justify-between gap-4 mb-6">
-        <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-          <Music className="w-8 h-8 text-white" />
+      {/* Single Line Layout */}
+      <div className="flex items-center gap-3">
+        {/* Track Info */}
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <div className="w-8 h-8 bg-gray-600 rounded-md flex items-center justify-center flex-shrink-0">
+            <Music className="w-4 h-4 text-gray-300" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-gray-200 text-sm font-medium truncate">
+              {currentTrack?.title || "Sem música"}
+            </div>
+            <div className="text-gray-400 text-xs truncate">
+              {currentTrack?.artist || "Artista desconhecido"}
+            </div>
+          </div>
         </div>
-        <div>
-          <h3 className="text-white font-semibold text-lg mb-1 truncate">
-            {currentTrack?.title || "Sem música"}
-          </h3>
-          <p className="text-gray-400 text-sm truncate">
-            {currentTrack?.artist || "Artista desconhecido"}
-          </p>
-        </div>
-      </div>
 
-      {/* Progress Bar */}
-      <div className="mb-6">
-        <button
-          type="button"
-          ref={progressRef}
-          className="w-full h-2 bg-gray-700 rounded-full cursor-pointer mb-2 relative overflow-hidden block"
-          onClick={handleProgressClick}
-          onKeyDown={handleProgressKeyDown}
-          aria-label="Controle de progresso"
-        >
-          <div
-            className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-300"
-            style={{ width: `${progressPercentage}%` }}
-          />
-          <div
-            className="absolute top-1/2 w-4 h-4 bg-white rounded-full shadow-lg transform -translate-y-1/2 transition-all duration-300"
-            style={{ left: `calc(${progressPercentage}% - 8px)` }}
-          />
-        </button>
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
-        </div>
-      </div>
-
-      {/* Main Controls */}
-      <div className="flex items-center justify-center space-x-6 mb-6">
-        <button
-          type="button"
-          onClick={handlePrevious}
-          className="text-gray-400 hover:text-white transition-colors duration-200"
-          disabled={tracks.length === 0}
-          aria-label="Música anterior"
-        >
-          <SkipBack className="w-6 h-6" />
-        </button>
-
-        <button
-          type="button"
-          onClick={togglePlay}
-          className="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-          disabled={tracks.length === 0}
-          aria-label={isPlaying ? "Pausar" : "Reproduzir"}
-        >
-          {isPlaying ? (
-            <Pause className="w-6 h-6" />
-          ) : (
-            <Play className="w-6 h-6 ml-1" />
-          )}
-        </button>
-
-        <button
-          type="button"
-          onClick={handleNext}
-          className="text-gray-400 hover:text-white transition-colors duration-200"
-          disabled={tracks.length === 0}
-          aria-label="Próxima música"
-        >
-          <SkipForward className="w-6 h-6" />
-        </button>
-      </div>
-
-      {/* Secondary Controls */}
-      <div className="flex items-center justify-between">
-        {/* Shuffle & Repeat */}
-        <div className="flex space-x-3">
+        {/* Controls */}
+        <div className="flex items-center gap-2 flex-shrink-0">
           <button
             type="button"
-            onClick={() => setIsShuffled(!isShuffled)}
-            className={`text-sm transition-colors duration-200 ${
-              isShuffled ? "text-blue-400" : "text-gray-400 hover:text-white"
-            }`}
-            aria-label={
-              isShuffled ? "Desativar modo aleatório" : "Ativar modo aleatório"
-            }
+            onClick={handlePrevious}
+            className="text-gray-400 hover:text-gray-200 transition-colors p-1"
+            disabled={tracks.length === 0}
+            aria-label="Música anterior"
           >
-            <Shuffle className="w-4 h-4" />
+            <SkipBack className="w-4 h-4" />
           </button>
+
           <button
             type="button"
-            onClick={() => {
-              const modes: ("none" | "one" | "all")[] = ["none", "one", "all"];
-              const currentIndex = modes.indexOf(repeatMode);
-              const nextIndex = (currentIndex + 1) % modes.length;
-              setRepeatMode(modes[nextIndex]);
-            }}
-            className={`text-sm transition-colors duration-200 relative ${
-              repeatMode !== "none"
-                ? "text-blue-400"
-                : "text-gray-400 hover:text-white"
-            }`}
-            aria-label={`Modo de repetição: ${repeatMode}`}
+            onClick={togglePlay}
+            className="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-full flex items-center justify-center text-gray-200 transition-colors"
+            disabled={tracks.length === 0}
+            aria-label={isPlaying ? "Pausar" : "Reproduzir"}
           >
-            <Repeat className="w-4 h-4" />
-            {repeatMode === "one" && (
-              <span className="absolute -top-1 -right-1 text-xs">1</span>
+            {isPlaying ? (
+              <Pause className="w-3.5 h-3.5" />
+            ) : (
+              <Play className="w-3.5 h-3.5 ml-0.5" />
             )}
           </button>
+
+          <button
+            type="button"
+            onClick={handleNext}
+            className="text-gray-400 hover:text-gray-200 transition-colors p-1"
+            disabled={tracks.length === 0}
+            aria-label="Próxima música"
+          >
+            <SkipForward className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Volume Control */}
-        <div className="flex items-center space-x-2">
+        {/* Progress */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <span className="text-xs text-gray-400 min-w-8 text-right">
+            {formatTime(currentTime)}
+          </span>
+          <button
+            type="button"
+            ref={progressRef}
+            className="w-20 h-1 bg-gray-600 rounded-full cursor-pointer relative overflow-hidden block"
+            onClick={handleProgressClick}
+            onKeyDown={handleProgressKeyDown}
+            aria-label="Controle de progresso"
+          >
+            <div
+              className="h-full bg-gray-400 rounded-full transition-all duration-300"
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </button>
+          <span className="text-xs text-gray-400 min-w-8">
+            {formatTime(duration)}
+          </span>
+        </div>
+
+        {/* Volume */}
+        <div className="flex items-center gap-1 flex-shrink-0">
           <button
             type="button"
             onClick={toggleMute}
-            className="text-gray-400 hover:text-white transition-colors duration-200"
+            className="text-gray-400 hover:text-gray-200 transition-colors p-1"
             aria-label={isMuted ? "Ativar som" : "Silenciar"}
           >
             {isMuted ? (
@@ -330,7 +258,7 @@ export default function AudioPlayer({
             step="0.1"
             value={isMuted ? 0 : volume}
             onChange={handleVolumeChange}
-            className="w-16 h-1 bg-gray-700 rounded-full appearance-none cursor-pointer slider"
+            className="w-12 h-1 bg-gray-600 rounded-full appearance-none cursor-pointer slider"
             aria-label="Controle de volume"
           />
         </div>
@@ -339,17 +267,17 @@ export default function AudioPlayer({
       <style jsx>{`
         .slider::-webkit-slider-thumb {
           appearance: none;
-          width: 12px;
-          height: 12px;
+          width: 8px;
+          height: 8px;
           border-radius: 50%;
-          background: linear-gradient(to right, #3b82f6, #8b5cf6);
+          background: #9ca3af;
           cursor: pointer;
         }
         .slider::-moz-range-thumb {
-          width: 12px;
-          height: 12px;
+          width: 8px;
+          height: 8px;
           border-radius: 50%;
-          background: linear-gradient(to right, #3b82f6, #8b5cf6);
+          background: #9ca3af;
           cursor: pointer;
           border: none;
         }

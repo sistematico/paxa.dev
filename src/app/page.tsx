@@ -27,7 +27,7 @@ export default function Home() {
           
           <TextSwitcher />
           
-          <div className="mt-8 pt-4">
+          <div>
             <a
               href="mailto:"
               className="synthwave-glow inline-block text-xl"
