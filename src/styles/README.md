@@ -11,7 +11,9 @@ src/styles/
 │   └── synthwave.css           # Efeitos visuais SynthWave
 └── components/
     ├── text-switcher.css       # Estilos do componente TextSwitcher
-    └── tts.css                 # Estilos do Text-to-Speech
+    ├── navbar.css              # Estilos da barra de navegação
+    ├── inline-menu.css         # Estilos do menu inline
+    └── audio-player.css        # Estilos do player de áudio
 ```
 
 ## Arquivos
@@ -38,13 +40,27 @@ src/styles/
 - Transições e estados ativos
 - Animação `shimmer`
 
-### 🗣️ `components/tts.css`
-**Responsabilidade:** Estilos do sistema Text-to-Speech
-- Controles de reprodução (`.tts-controls`, `.tts-control-btn`)
-- Destacamento de palavras (`.tts-word`, `.tts-active`, `.tts-spoken`)
-- Painel de configurações de voz (`.voice-controls-panel`)
-- Animações de palavra (`word-glow`, `word-wave`)
-- Sliders e controles customizados
+### 🎵 `components/audio-player.css`
+**Responsabilidade:** Estilos do player de áudio
+- Controles de reprodução (`.audio-control-btn`, `.audio-play-btn`)
+- Barras de progresso (`.audio-progress-bg`, `.audio-progress-fill`)
+- Informações da faixa (`.audio-track-title`, `.audio-track-artist`)
+- Controles de volume (`.audio-volume-slider`)
+- Adaptação para temas claro/escuro
+
+### 🧭 `components/navbar.css`
+**Responsabilidade:** Estilos da barra de navegação
+- Layout responsivo da navbar
+- Botões de controle e menu mobile
+- Estilos de hover e transições
+- Adaptação para diferentes temas
+
+### 📱 `components/inline-menu.css`
+**Responsabilidade:** Estilos do menu inline integrado
+- Botões de controle sóbrios
+- Posicionamento flexível
+- Efeitos de hover minimalistas
+- Design responsivo
 
 ## Vantagens da Modularização
 
@@ -83,7 +99,7 @@ src/styles/
 
 ## Convenções
 
-- **Prefixos de classe:** Use prefixos descritivos (`tts-`, `synthwave-`, `mode-`)
+- **Prefixos de classe:** Use prefixos descritivos (`audio-`, `synthwave-`, `mode-`)
 - **Nomenclatura:** Use kebab-case para classes CSS
 - **Comentários:** Organize seções com comentários descritivos
 - **Ordem:** Mantenha a ordem lógica (layout → aparência → interações)

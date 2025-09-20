@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "../styles/main.css";
+import { ThemeProvider } from "../contexts/ThemeContext";
+import { FontSizeProvider } from "../contexts/FontSizeContext";
 
 const nunito = Nunito({
   variable: "--font-nunito-sans",
@@ -32,18 +34,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" sizes="any" />
       </head>
-      <body
-        className={`${nunito.variable} antialiased min-h-screen`}
-      >
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <main className="w-full max-w-4xl mx-auto">
-            {children}
-          </main>
-        </div>
+      <body className={`${nunito.variable} antialiased min-h-screen`}>
+        <ThemeProvider>
+          <FontSizeProvider>
+            <div className="min-h-screen flex items-center justify-center p-4">
+              <main className="w-full max-w-4xl mx-auto">
+                {children}
+              </main>
+            </div>
+          </FontSizeProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

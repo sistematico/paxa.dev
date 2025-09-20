@@ -2,11 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import AudioPlayer from "@/components/AudioPlayer";
 import TextSwitcher from "@/components/TextSwitcher";
+import InlineMenu from "@/components/InlineMenu";
 import { tracks } from "@/config";
 
 export default function Home() {
   return (
-    <div className="p-5 bg-[#252529] rounded-md border border-black/30">
+    <div className="main-container">
       <section className="relative mb-12">
         <div className="mb-8 sm:mb-6">
           <Link href="/">
@@ -20,27 +21,16 @@ export default function Home() {
               priority
             />
           </Link>
+          <InlineMenu />
         </div>
         
-        <div className="prose prose-neutral dark:prose-invert sm:pr-44">
-          <h1 className="text-4xl font-bold mb-6">Paxá</h1>
-          
+        <div className="prose-neutral dark:prose-invert mb-5">
+          <h1 className="text-4xl font-bold">Paxá</h1>
           <TextSwitcher />
-          
-          <div>
-            <a
-              href="mailto:"
-              className="synthwave-glow inline-block text-xl"
-            >
-              Entre em contato
-            </a>
-          </div>
         </div>
         
-        <div className="clear-both"></div>
-      </section>
-
-      <section className="pt-8 border-t border-white/10">
+        {/* <div className="clear-both"></div> */}
+        
         <AudioPlayer tracks={tracks} autoPlay={false} />
       </section>
     </div>

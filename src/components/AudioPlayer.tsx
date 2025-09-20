@@ -155,7 +155,7 @@ export default function AudioPlayer({
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="bg-gray-800/50 rounded-lg p-3 backdrop-blur-sm border border-gray-700/30 max-w-xl mx-auto">
+    <div className="audio-player rounded-lg p-3 max-w-md mx-auto">
       <audio ref={audioRef} preload="metadata">
         <track kind="captions" label="Sem legendas disponíveis" />
       </audio>
@@ -164,14 +164,14 @@ export default function AudioPlayer({
       <div className="flex items-center gap-3">
         {/* Track Info */}
         <div className="flex items-center gap-2 min-w-0 flex-1">
-          <div className="w-8 h-8 bg-gray-600 rounded-md flex items-center justify-center flex-shrink-0">
-            <Music className="w-4 h-4 text-gray-300" />
+          <div className="audio-track-icon w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0">
+            <Music className="w-4 h-4" />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-gray-200 text-sm font-medium truncate">
+            <div className="audio-track-title text-sm font-medium truncate">
               {currentTrack?.title || "Sem música"}
             </div>
-            <div className="text-gray-400 text-xs truncate">
+            <div className="audio-track-artist text-xs truncate">
               {currentTrack?.artist || "Artista desconhecido"}
             </div>
           </div>
@@ -182,7 +182,7 @@ export default function AudioPlayer({
           <button
             type="button"
             onClick={handlePrevious}
-            className="text-gray-400 hover:text-gray-200 transition-colors p-1"
+            className="audio-control-btn transition-colors p-1"
             disabled={tracks.length === 0}
             aria-label="Música anterior"
           >
@@ -192,7 +192,7 @@ export default function AudioPlayer({
           <button
             type="button"
             onClick={togglePlay}
-            className="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-full flex items-center justify-center text-gray-200 transition-colors"
+            className="audio-play-btn w-8 h-8 rounded-full flex items-center justify-center transition-colors"
             disabled={tracks.length === 0}
             aria-label={isPlaying ? "Pausar" : "Reproduzir"}
           >
@@ -206,7 +206,7 @@ export default function AudioPlayer({
           <button
             type="button"
             onClick={handleNext}
-            className="text-gray-400 hover:text-gray-200 transition-colors p-1"
+            className="audio-control-btn transition-colors p-1"
             disabled={tracks.length === 0}
             aria-label="Próxima música"
           >
@@ -216,23 +216,23 @@ export default function AudioPlayer({
 
         {/* Progress */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-xs text-gray-400 min-w-8 text-right">
+          <span className="audio-time text-xs min-w-8 text-right">
             {formatTime(currentTime)}
           </span>
           <button
             type="button"
             ref={progressRef}
-            className="w-20 h-1 bg-gray-600 rounded-full cursor-pointer relative overflow-hidden block"
+            className="audio-progress-bg w-20 h-1 rounded-full cursor-pointer relative overflow-hidden block"
             onClick={handleProgressClick}
             onKeyDown={handleProgressKeyDown}
             aria-label="Controle de progresso"
           >
             <div
-              className="h-full bg-gray-400 rounded-full transition-all duration-300"
+              className="audio-progress-fill h-full rounded-full transition-all duration-300"
               style={{ width: `${progressPercentage}%` }}
             />
           </button>
-          <span className="text-xs text-gray-400 min-w-8">
+          <span className="audio-time text-xs min-w-8">
             {formatTime(duration)}
           </span>
         </div>
@@ -242,7 +242,7 @@ export default function AudioPlayer({
           <button
             type="button"
             onClick={toggleMute}
-            className="text-gray-400 hover:text-gray-200 transition-colors p-1"
+            className="audio-control-btn transition-colors p-1"
             aria-label={isMuted ? "Ativar som" : "Silenciar"}
           >
             {isMuted ? (
@@ -258,7 +258,7 @@ export default function AudioPlayer({
             step="0.1"
             value={isMuted ? 0 : volume}
             onChange={handleVolumeChange}
-            className="w-12 h-1 bg-gray-600 rounded-full appearance-none cursor-pointer slider"
+            className="audio-volume-slider w-12 h-1 rounded-full appearance-none cursor-pointer slider"
             aria-label="Controle de volume"
           />
         </div>
