@@ -155,7 +155,7 @@ export default function AudioPlayer({
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="audio-player rounded-lg p-3 max-w-md mx-auto">
+    <div className="audio-player rounded-lg py-1 px-2 max-w-lg mx-auto">
       <audio ref={audioRef} preload="metadata">
         <track kind="captions" label="Sem legendas disponíveis" />
       </audio>
@@ -171,7 +171,7 @@ export default function AudioPlayer({
             <div className="audio-track-title text-sm font-medium truncate">
               {currentTrack?.title || "Sem música"}
             </div>
-            <div className="audio-track-artist text-xs truncate">
+            <div className="audio-track-artist text-xs truncate -mt-1">
               {currentTrack?.artist || "Artista desconhecido"}
             </div>
           </div>

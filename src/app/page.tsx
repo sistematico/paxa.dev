@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import AudioPlayer from "@/components/AudioPlayer";
-import TextSwitcher from "@/components/TextSwitcher";
-import InlineMenu from "@/components/InlineMenu";
+import TextSwitcher, { ContactLink } from "@/components/TextSwitcher";
+import InlineMenu, { NavigationLinks } from "@/components/InlineMenu";
 import { tracks } from "@/config";
 
 export default function Home() {
@@ -24,14 +24,23 @@ export default function Home() {
           <InlineMenu />
         </div>
         
-        <div className="prose-neutral dark:prose-invert mb-5">
+        <div className="prose-neutral dark:prose-invert mb-4">
           <h1 className="text-4xl font-bold">Paxá</h1>
+        </div>
+        
+        <NavigationLinks />
+        
+        <div className="prose-neutral dark:prose-invert">
           <TextSwitcher />
         </div>
         
+        <ContactLink />
+        
         {/* <div className="clear-both"></div> */}
         
-        <AudioPlayer tracks={tracks} autoPlay={false} />
+        <div className="mt-4">
+          <AudioPlayer tracks={tracks} autoPlay={false} />
+        </div>
       </section>
     </div>
   );

@@ -70,12 +70,16 @@ export default function TextSwitcher() {
           {technicalText}
         </div>
       </div>
+    </div>
+  );
+}
 
-      <div>
-        <a href="mailto:" className="synthwave-glow inline-block text-xl">
-          Entre em contato
-        </a>
-      </div>
+export function ContactLink() {
+  return (
+    <div>
+      <a href="mailto:sistematico@gmail.com" className="synthwave-glow inline-block text-xl">
+        Entre em contato
+      </a>
     </div>
   );
 }
