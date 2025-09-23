@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Home, ArrowLeft } from 'lucide-react';
+import Link from "next/link";
+import { Home, ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
@@ -33,7 +33,7 @@ export default function NotFound() {
             <Home size={20} />
             Voltar ao Início
           </Link>
-          
+
           <button
             type="button"
             onClick={() => window.history.back()}

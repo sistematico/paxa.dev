@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
-import { Menu, X, Sun, Moon, Type, Home } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
-import { useFontSize } from '@/contexts/FontSizeContext';
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+import { Menu, X, Sun, Moon, Type, Home } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useFontSize } from "@/contexts/FontSizeContext";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,7 +18,7 @@ export default function Navbar() {
 
   const getFontIcon = () => {
     // Alterna entre ícone pequeno e grande baseado no tamanho atual
-    const isSmallFont = fontSize === 'small' || fontSize === 'medium';
+    const isSmallFont = fontSize === "small" || fontSize === "medium";
     return <Type size={isSmallFont ? 14 : 20} />;
   };
 
@@ -60,10 +60,10 @@ export default function Navbar() {
             <button
               onClick={toggleTheme}
               className="control-btn theme-toggle"
-              title={theme === 'light' ? 'Modo escuro' : 'Modo claro'}
+              title={theme === "light" ? "Modo escuro" : "Modo claro"}
               type="button"
             >
-              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
             </button>
           </div>
         </div>
@@ -81,15 +81,15 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="mobile-menu">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="mobile-menu-link"
               onClick={() => setIsMenuOpen(false)}
             >
               <Home size={18} />
               <span>Início</span>
             </Link>
-            
+
             {/* Mobile Controls */}
             <div className="mobile-controls">
               <button
@@ -105,11 +105,11 @@ export default function Navbar() {
               <button
                 onClick={toggleTheme}
                 className="control-btn"
-                title={theme === 'light' ? 'Modo escuro' : 'Modo claro'}
+                title={theme === "light" ? "Modo escuro" : "Modo claro"}
                 type="button"
               >
-                {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-                <span>{theme === 'light' ? 'Modo escuro' : 'Modo claro'}</span>
+                {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+                <span>{theme === "light" ? "Modo escuro" : "Modo claro"}</span>
               </button>
             </div>
           </div>

@@ -23,21 +23,21 @@ export default function Home() {
           </Link>
           <InlineMenu />
         </div>
-        
+
         <div className="prose-neutral dark:prose-invert mb-4">
           <h1 className="text-4xl font-bold">Paxá</h1>
         </div>
-        
+
         <NavigationLinks />
-        
+
         <div className="prose-neutral dark:prose-invert">
           <TextSwitcher />
         </div>
-        
+
         <ContactLink />
-        
+
         {/* <div className="clear-both"></div> */}
-        
+
         <div className="mt-4">
           <AudioPlayer tracks={tracks} autoPlay={false} />
         </div>

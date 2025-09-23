@@ -18,9 +18,7 @@ export default function TextSwitcher() {
         exatamente como fazer seu site aparecer no Google e carregar super
         rápido. Seus clientes vão adorar navegar no seu site!
       </p>
-      <p>
-        Que tal tirarmos sua ideia do papel e colocarmos na internet?
-      </p>
+      <p>Que tal tirarmos sua ideia do papel e colocarmos na internet?</p>
     </>
   );
 
@@ -37,9 +35,7 @@ export default function TextSwitcher() {
         administração de sistemas, containerização e deployment automatizado,
         garantindo soluções robustas em produção.
       </p>
-      <p>
-        Vamos construir soluções tecnológicas inovadoras e de alto impacto!
-      </p>
+      <p>Vamos construir soluções tecnológicas inovadoras e de alto impacto!</p>
     </>
   );
 
@@ -77,7 +73,10 @@ export default function TextSwitcher() {
 export function ContactLink() {
   return (
     <div>
-      <a href="mailto:sistematico@gmail.com" className="synthwave-glow inline-block text-xl">
+      <a
+        href="mailto:sistematico@gmail.com"
+        className="synthwave-glow inline-block text-xl"
+      >
         Entre em contato
       </a>
     </div>

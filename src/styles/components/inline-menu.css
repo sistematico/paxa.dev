@@ -100,7 +100,7 @@
     justify-content: center;
     margin: 1rem 0;
   }
-  
+
   .inline-menu-btn {
     width: 2.25rem;
     height: 2.25rem;
@@ -129,7 +129,7 @@
   .inline-menu-btn:hover {
     min-width: 4.5rem;
   }
-  
+
   .btn-label {
     font-size: 0.75rem;
   }

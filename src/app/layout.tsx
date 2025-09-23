@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         alt: "Paxá - Desenvolvedor Web",
       },
     ],
-  }
+  },
 };
 
 export default function RootLayout({
@@ -36,15 +36,18 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" sizes="any" />
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href="/images/favicon.svg"
+          sizes="any"
+        />
       </head>
       <body className={`${nunito.variable} antialiased min-h-screen`}>
         <ThemeProvider>
           <FontSizeProvider>
             <div className="min-h-screen flex items-center justify-center p-4">
-              <main className="w-full max-w-4xl mx-auto">
-                {children}
-              </main>
+              <main className="w-full max-w-4xl mx-auto">{children}</main>
             </div>
           </FontSizeProvider>
         </ThemeProvider>

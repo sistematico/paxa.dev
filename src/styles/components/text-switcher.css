@@ -92,13 +92,13 @@
 .mode-button.active {
   color: #22d3ee;
   background: rgba(34, 211, 238, 0.08);
-  box-shadow: 
+  box-shadow:
     0 0 6px rgba(34, 211, 238, 0.2),
     inset 0 0 6px rgba(34, 211, 238, 0.05);
 }
 
 .mode-button.active::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -2px;
   left: -2px;
@@ -124,6 +124,10 @@
 }
 
 @keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2 } from 'lucide-react';
+import { useState, useRef, useEffect } from "react";
+import { Play, Pause, Volume2 } from "lucide-react";
 
 interface Track {
   id: number;
@@ -15,7 +15,10 @@ interface CompactAudioPlayerProps {
   autoPlay?: boolean;
 }
 
-export default function CompactAudioPlayer({ track, autoPlay = false }: CompactAudioPlayerProps) {
+export default function CompactAudioPlayer({
+  track,
+  autoPlay = false,
+}: CompactAudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -28,8 +31,8 @@ export default function CompactAudioPlayer({ track, autoPlay = false }: CompactA
     const updateTime = () => setCurrentTime(audio.currentTime);
     const updateDuration = () => setDuration(audio.duration);
 
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('loadedmetadata', updateDuration);
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateDuration);
 
     if (autoPlay) {
       audio.play();
@@ -37,8 +40,8 @@ export default function CompactAudioPlayer({ track, autoPlay = false }: CompactA
     }
 
     return () => {
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('loadedmetadata', updateDuration);
+      audio.removeEventListener("timeupdate", updateTime);
+      audio.removeEventListener("loadedmetadata", updateDuration);
     };
   }, [autoPlay]);
 
@@ -54,15 +57,15 @@ export default function CompactAudioPlayer({ track, autoPlay = false }: CompactA
         setIsPlaying(true);
       }
     } catch (error) {
-      console.error('Erro ao reproduzir áudio:', error);
+      console.error("Erro ao reproduzir áudio:", error);
     }
   };
 
   const formatTime = (time: number) => {
-    if (Number.isNaN(time)) return '0:00';
+    if (Number.isNaN(time)) return "0:00";
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
@@ -72,14 +75,14 @@ export default function CompactAudioPlayer({ track, autoPlay = false }: CompactA
       <audio ref={audioRef} src={track.src} preload="metadata">
         <track kind="captions" label="Sem legendas disponíveis" />
       </audio>
-      
+
       <div className="flex items-center space-x-4">
         {/* Play Button */}
         <button
           type="button"
           onClick={togglePlay}
           className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg flex-shrink-0"
-          aria-label={isPlaying ? 'Pausar' : 'Reproduzir'}
+          aria-label={isPlaying ? "Pausar" : "Reproduzir"}
         >
           {isPlaying ? (
             <Pause className="w-4 h-4" />
@@ -95,9 +98,7 @@ export default function CompactAudioPlayer({ track, autoPlay = false }: CompactA
               <h4 className="text-white text-sm font-medium truncate">
                 {track.title}
               </h4>
-              <p className="text-gray-400 text-xs truncate">
-                {track.artist}
-              </p>
+              <p className="text-gray-400 text-xs truncate">{track.artist}</p>
             </div>
             <div className="flex items-center space-x-2 ml-2">
               <Volume2 className="w-3 h-3 text-gray-400" />
@@ -106,10 +107,10 @@ export default function CompactAudioPlayer({ track, autoPlay = false }: CompactA
               </span>
             </div>
           </div>
-          
+
           {/* Progress Bar */}
           <div className="h-1 bg-gray-700 rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-300"
               style={{ width: `${progressPercentage}%` }}
             />
