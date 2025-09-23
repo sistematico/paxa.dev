@@ -4,8 +4,7 @@
   align-items: center;
   gap: 0.5rem;
   float: right;
-  margin-top: 1rem;
-  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .inline-menu-btn {
@@ -74,14 +73,14 @@
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.25);
   color: rgba(255, 255, 255, 0.95);
-  transform: translateY(-1px);
+  /* transform: translateY(-1px); */
 }
 
 [data-theme="light"] .inline-menu-btn:hover {
   background: rgba(0, 0, 0, 0.08);
   border-color: rgba(0, 0, 0, 0.25);
   color: rgba(0, 0, 0, 0.9);
-  transform: translateY(-1px);
+  /* transform: translateY(-1px); */
 }
 
 /* Navigation Links - specifically for navigation below title */

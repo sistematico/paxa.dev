@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Sun, Moon, Type, Home } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useFontSize } from "@/contexts/FontSizeContext";
+import { navLinks } from "@/config";
 
 // Componente apenas para os controles (tema e fonte)
 export default function InlineMenu() {
@@ -54,13 +55,14 @@ export default function InlineMenu() {
 export function NavigationLinks() {
   return (
     <div className="navigation-links mb-4">
-      {/* Home Link */}
-      <Link href="/" className="inline-menu-btn" title="Início">
-        <span className="btn-icon">
-          <Home size={18} />
-        </span>
-        <span className="btn-label">Início</span>
-      </Link>
+      {navLinks.map((link) => (
+        <Link key={link.href} href={link.href} className="inline-menu-btn">
+          <span className="btn-icon">
+            {link.icon && <link.icon size={18} />}
+          </span>
+          <span className="btn-label">{link.label}</span>
+        </Link>
+      ))}
     </div>
   );
 }
