@@ -1,0 +1,110 @@
+/* Audio Player Component Styles */
+
+.audio-player {
+  background: rgba(31, 41, 55, 0.6);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .audio-player {
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(203, 213, 225, 0.5);
+}
+
+/* Track info styles */
+.audio-track-icon {
+  background: rgba(75, 85, 99, 1);
+  color: rgba(209, 213, 219, 1);
+}
+
+[data-theme="light"] .audio-track-icon {
+  background: rgba(148, 163, 184, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.audio-track-title {
+  color: rgba(229, 231, 235, 1);
+}
+
+[data-theme="light"] .audio-track-title {
+  color: rgba(30, 41, 59, 1);
+}
+
+.audio-track-artist {
+  color: rgba(156, 163, 175, 1);
+}
+
+[data-theme="light"] .audio-track-artist {
+  color: rgba(100, 116, 139, 1);
+}
+
+/* Control buttons */
+.audio-control-btn {
+  color: rgba(156, 163, 175, 1);
+  transition: color 0.2s ease;
+}
+
+.audio-control-btn:hover {
+  color: rgba(229, 231, 235, 1);
+}
+
+[data-theme="light"] .audio-control-btn {
+  color: rgba(100, 116, 139, 1);
+}
+
+[data-theme="light"] .audio-control-btn:hover {
+  color: rgba(30, 41, 59, 1);
+}
+
+.audio-play-btn {
+  background: rgba(75, 85, 99, 1);
+  color: rgba(229, 231, 235, 1);
+}
+
+.audio-play-btn:hover {
+  background: rgba(107, 114, 128, 1);
+}
+
+[data-theme="light"] .audio-play-btn {
+  background: rgba(148, 163, 184, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+[data-theme="light"] .audio-play-btn:hover {
+  background: rgba(100, 116, 139, 1);
+}
+
+/* Progress bar */
+.audio-progress-bg {
+  background: rgba(75, 85, 99, 1);
+}
+
+[data-theme="light"] .audio-progress-bg {
+  background: rgba(203, 213, 225, 1);
+}
+
+.audio-progress-fill {
+  background: rgba(156, 163, 175, 1);
+}
+
+[data-theme="light"] .audio-progress-fill {
+  background: rgba(100, 116, 139, 1);
+}
+
+/* Time displays */
+.audio-time {
+  color: rgba(156, 163, 175, 1);
+}
+
+[data-theme="light"] .audio-time {
+  color: rgba(100, 116, 139, 1);
+}
+
+/* Volume slider */
+.audio-volume-slider {
+  background: rgba(75, 85, 99, 1);
+}
+
+[data-theme="light"] .audio-volume-slider {
+  background: rgba(203, 213, 225, 1);
+}
