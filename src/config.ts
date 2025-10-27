@@ -12,7 +12,7 @@ export const site = {
 
 export const navLinks = [
   { href: "/", label: "Início", icon: Home },
-  { href: "/blog", label: "Blog", icon: Newspaper },
+  { href: "/posts", label: "Blog", icon: Newspaper },
   { href: "/snippets", label: "Snippets", icon: SquareBottomDashedScissors },
   { href: "/favoritos", label: "Favoritos", icon: Bookmark },
 ];
@@ -26,8 +26,8 @@ export const tracks = [
   },
   {
     id: 2,
-    title: "Ambient Vibes",
-    artist: "Atmosphere",
-    src: "/audio/sample2.mp3",
+    title: "Just The Two Of Us",
+    artist: "Grover Washington Jr",
+    src: "/audio/Grover Washington Jr - Just The Two of Us.mp3",
   },
 ];

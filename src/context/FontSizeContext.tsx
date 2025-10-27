@@ -31,7 +31,7 @@ const lineHeights = {
   xlarge: "1.3",
 };
 
-const FontSizeContext = createContext<FontSizeContextType | undefined>(
+export const FontSizeContext = createContext<FontSizeContextType | undefined>(
   undefined,
 );
 

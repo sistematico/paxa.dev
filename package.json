@@ -13,9 +13,11 @@
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.548.0",
     "next": "16.0.0",
+    "prismjs": "^1.30.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "rehype-highlight": "^7.0.2",
+    "rehype-prism-plus": "^2.0.1",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1"
   },

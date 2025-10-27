@@ -5,10 +5,10 @@ import { Home, ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="text-center space-y-8">
+    <div className="flex items-center justify-center w-full p-4">
+      <div className="">
         {/* 404 with SynthWave effect */}
-        <div className="synthwave-text" data-text="404">
+        <div className="text-center synthwave-text" data-text="404">
           <h1 className="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500">
             404
           </h1>
@@ -19,7 +19,7 @@ export default function NotFound() {
           <h2 className="text-3xl font-bold text-white">
             Página Não Encontrada
           </h2>
-          <p className="text-lg text-gray-400 max-w-md mx-auto">
+          <p className="text-lg text-gray-400 max-w-xl mx-auto">
             Ops! A página que você está procurando não existe ou foi movida.
           </p>
         </div>
@@ -37,7 +37,7 @@ export default function NotFound() {
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="flex items-center gap-2 px-6 py-3 border border-gray-600 text-gray-300 font-medium rounded-lg hover:bg-gray-800 hover:border-gray-500 transition-all duration-200"
+            className="flex items-center gap-2 px-6 py-3 border border-gray-600 text-gray-300 font-medium rounded-lg hover:bg-gray-800 hover:border-gray-500 transition-all duration-200 cursor-pointer"
           >
             <ArrowLeft size={20} />
             Voltar
