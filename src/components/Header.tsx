@@ -1,14 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import InlineMenu, {NavigationLinks} from "@/components/InlineMenu";
+import Navbar from "@/components/Navbar";
 
 export default function Header() {
   return (
-    <div
-      className="relative w-full min-h-50 rounded-lg border-2 shadow-md border-blue-500 mb-4 sm:mb-2"
-    >
-      <div
-        className="absolute top-0 left-0 right-0 bottom-0 mask-alpha mask-r-from-black mask-r-from-1% mask-r-to-transparent bg-[url(/images/urban_canvas.jpg)] bg-cover bg-center bg-no-repeat">
+    <div className="relative w-full rounded-lg border-2 border-blue-500 shadow-md mb-4 sm:mb-2 overflow-hidden">
+      {/* Background Image with Gradient Overlay */}
+      <div className="absolute inset-0 bg-[url(/images/urban_canvas.jpg)] bg-cover bg-center">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-pink-500/20" />
+      </div>
+
+      {/* Content */}
+      <div className="relative p-6 h-full">
         <Link href="/">
           <Image
             src="/images/logo.svg"
@@ -21,13 +24,13 @@ export default function Header() {
           />
         </Link>
 
-        <InlineMenu/>
+        {/*<InlineMenu/>*/}
 
-        <div className="prose-neutral dark:prose-invert mb-4">
+        <div className="mb-4">
           <h1 className="text-4xl font-bold">Paxá</h1>
         </div>
 
-        <NavigationLinks/>
+        <Navbar/>
       </div>
     </div>
   );

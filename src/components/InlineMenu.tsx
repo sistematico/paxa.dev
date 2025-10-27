@@ -51,18 +51,3 @@ export default function InlineMenu() {
   );
 }
 
-// Novo componente para os links de navegação
-export function NavigationLinks() {
-  return (
-    <div className="navigation-links mb-4">
-      {navLinks.map((link) => (
-        <Link key={link.href} href={link.href} className="inline-menu-btn">
-          <span className="btn-icon">
-            {link.icon && <link.icon size={18} />}
-          </span>
-          <span className="btn-label">{link.label}</span>
-        </Link>
-      ))}
-    </div>
-  );
-}
