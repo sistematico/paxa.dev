@@ -4,34 +4,30 @@ import Navbar from "@/components/Navbar";
 
 export default function Header() {
   return (
-    <div className="relative w-full rounded-lg border-2 border-blue-500 shadow-md mb-4 sm:mb-2 overflow-hidden">
-      {/* Background Image with Gradient Overlay */}
-      <div className="absolute inset-0 bg-[url(/images/urban_canvas.jpg)] bg-cover bg-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-pink-500/20" />
-      </div>
-
+    <div className="relative h-48">
       {/* Content */}
-      <div className="relative p-6 h-full">
+      <div className="relative flex items-center justify-between w-full h-full z-30 p-3 md:p-5">
+        <div className="flex flex-col justify-between w-full h-full">
+          <div>
+            <h1 className="text-3xl font-bold -mt-1 md:mt-0">Paxá</h1>
+          </div>
+          <Navbar />
+        </div>
         <Link href="/">
           <Image
             src="/images/logo.svg"
             alt="Paxá"
-            className="block mx-auto sm:ml-auto sm:mr-0 hover:grayscale-0 sm:float-right"
+            className="block mx-auto sm:ml-auto sm:mr-0 hover:grayscale-0 sm:float-end"
             unoptimized
             width={160}
             height={160}
             priority
           />
         </Link>
-
-        {/*<InlineMenu/>*/}
-
-        <div className="mb-4">
-          <h1 className="text-4xl font-bold">Paxá</h1>
-        </div>
-
-        <Navbar/>
       </div>
+      {/* Background Image with Gradient Overlay */}
+      <div className="absolute top-0 h-full w-full bg-linear-to-r from-transparent via-purple-500/0 to-purple-600 z-20 border-2 border-blue-500 rounded-xl" />
+      <div className="absolute inset-0 bg-[url(/images/urban_canvas.jpg)] opacity-25 bg-cover bg-center z-10 rounded-xl" />
     </div>
   );
 }

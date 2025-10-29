@@ -70,6 +70,7 @@ body {
   color: var(--foreground);
   font-size: var(--base-font-size);
   line-height: var(--base-line-height);
+  font-family: var(--font-nunito-sans), 'Courier New', Courier, monospace;
   transition:
     background-color 0.3s ease,
     color 0.3s ease,
