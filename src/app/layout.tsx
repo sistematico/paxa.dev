@@ -1,10 +1,11 @@
-import {Nunito} from "next/font/google";
-import {ThemeProvider} from "@/context/ThemeContext";
-import {FontSizeProvider} from "@/context/FontSizeContext";
+import { Nunito } from "next/font/google";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { FontSizeProvider } from "@/context/FontSizeContext";
+import { AudioProvider } from "@/context/AudioContext";
 import Header from "@/components/Header";
-import type {Metadata} from "next";
-import "../styles/main.css";
 import Footer from "@/components/Footer";
+import type { Metadata } from "next";
+import "../styles/main.css";
 
 const nunito = Nunito({
   variable: "--font-nunito-sans",
@@ -37,31 +38,33 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-    <head>
-      <link
-        rel="icon"
-        type="image/svg+xml"
-        href="/images/favicon.svg"
-        sizes="any"
-      />
-    </head>
-    <body className={`${nunito.variable} antialiased min-h-screen`}>
-    <ThemeProvider>
-      <FontSizeProvider>
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <main className="w-full max-w-4xl mx-auto">
-            <div className="main-container">
-              <section className="relative mb-12">
-                <Header/>
-                {children}
-                <Footer/>
-              </section>
-            </div>
-          </main>
-        </div>
-      </FontSizeProvider>
-    </ThemeProvider>
-    </body>
+      <head>
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href="/images/favicon.svg"
+          sizes="any"
+        />
+      </head>
+      <body className={`${nunito.variable} antialiased min-h-screen`}>
+        <ThemeProvider>
+          <FontSizeProvider>
+            <AudioProvider>
+              <div className="min-h-screen flex items-center justify-center p-4">
+                <main className="w-full max-w-4xl mx-auto">
+                  <div className="main-container">
+                    <section className="relative mb-12">
+                      <Header />
+                      {children}
+                      <Footer />
+                    </section>
+                  </div>
+                </main>
+              </div>
+            </AudioProvider>
+          </FontSizeProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

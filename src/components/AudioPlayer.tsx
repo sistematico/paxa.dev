@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useAudio } from "@/context/AudioContext";
 import {
   Play,
   Pause,
@@ -26,94 +27,76 @@ interface AudioPlayerProps {
 
 export default function AudioPlayer({
   tracks,
-  autoPlay = false,
 }: AudioPlayerProps) {
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(1);
-  const [isMuted, setIsMuted] = useState(false);
+  const {
+    play,
+    next,
+    prev,
+    pause,
+    duration,
+    currentTime,
+    handleCurrentTime,
+    track,
+    volume,
+    setVolume,
+    muted,
+    setMuted,
+    isPlaying,
+    setIsPlaying,
+  } = useAudio();
+  // const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  // const [currentTime, setCurrentTime] = useState(0);
+  // const [duration, setDuration] = useState(0);
 
-  const audioRef = useRef<HTMLAudioElement>(null);
+  // const audioRef = useRef<HTMLAudioElement>(null);
   const progressRef = useRef<HTMLButtonElement>(null);
 
-  const currentTrack = tracks[currentTrackIndex];
+  // const currentTrack = tracks[currentTrackIndex];
 
-  const handleNext = useCallback(() => {
-    const newIndex = currentTrackIndex + 1;
-    if (newIndex >= tracks.length) {
-      setIsPlaying(false);
-      return;
-    }
-    setCurrentTrackIndex(newIndex);
-  }, [tracks.length, currentTrackIndex]);
+  // const handleNext = useCallback(() => {
+  //   const newIndex = currentTrackIndex + 1;
+  //   if (newIndex >= tracks.length) {
+  //     setIsPlaying(false);
+  //     return;
+  //   }
+  //   setCurrentTrackIndex(newIndex);
+  // }, [tracks.length, currentTrackIndex, setIsPlaying]);
 
   // Inicializar áudio quando o track muda
-  useEffect(() => {
-    if (audioRef.current && currentTrack) {
-      audioRef.current.src = currentTrack.src;
-      audioRef.current.load();
-      if (autoPlay || isPlaying) {
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    }
-  }, [currentTrack, autoPlay, isPlaying]);
+  // useEffect(() => {
+  //   if (audioRef.current && currentTrack) {
+  //     audioRef.current.src = currentTrack.src;
+  //     audioRef.current.load();
+  //     if (autoPlay || isPlaying) {
+  //       audioRef.current.play();
+  //       setIsPlaying(true);
+  //     }
+  //   }
+  // }, [currentTrack, autoPlay, isPlaying, setIsPlaying]);
 
   // Atualizar tempo atual
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+  // useEffect(() => {
+  //   const audio = audioRef.current;
+  //   if (!audio) return;
 
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
-    const handleEnded = () => handleNext();
+  //   const updateTime = () => setCurrentTime(audio.currentTime);
+  //   const updateDuration = () => setDuration(audio.duration);
+  //   const handleEnded = () => handleNext();
 
-    audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", updateDuration);
-    audio.addEventListener("ended", handleEnded);
+  //   audio.addEventListener("timeupdate", updateTime);
+  //   audio.addEventListener("loadedmetadata", updateDuration);
+  //   audio.addEventListener("ended", handleEnded);
 
-    return () => {
-      audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", updateDuration);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, [handleNext]);
-
-  const togglePlay = async () => {
-    if (!audioRef.current) return;
-
-    try {
-      if (isPlaying) {
-        await audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        await audioRef.current.play();
-        setIsPlaying(true);
-      }
-    } catch (error) {
-      console.error("Erro ao reproduzir áudio:", error);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentTime > 3) {
-      // Se passou mais de 3 segundos, volta para o início da música atual
-      setCurrentTime(0);
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-      }
-    } else {
-      // Senão, vai para a música anterior
-      const newIndex =
-        currentTrackIndex === 0 ? tracks.length - 1 : currentTrackIndex - 1;
-      setCurrentTrackIndex(newIndex);
-    }
-  };
+  //   return () => {
+  //     audio.removeEventListener("timeupdate", updateTime);
+  //     audio.removeEventListener("loadedmetadata", updateDuration);
+  //     audio.removeEventListener("ended", handleEnded);
+  //   };
+  // }, [handleNext]);
 
   const handleProgressClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!progressRef.current || !audioRef.current) return;
+    // if (!progressRef.current || !audioRef.current) return;
+    if (!progressRef.current) return;
 
     const rect = progressRef.current.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
@@ -121,8 +104,8 @@ export default function AudioPlayer({
     const percentage = clickX / width;
     const newTime = percentage * duration;
 
-    audioRef.current.currentTime = newTime;
-    setCurrentTime(newTime);
+    // audioRef.current.currentTime = newTime;
+    handleCurrentTime(newTime);
   };
 
   const handleProgressKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -134,21 +117,21 @@ export default function AudioPlayer({
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume;
-    }
-    setIsMuted(newVolume === 0);
+    // if (audioRef.current) {
+    //   audioRef.current.volume = newVolume;
+    // }
+    setMuted(newVolume === 0);
   };
 
   const toggleMute = () => {
-    if (!audioRef.current) return;
+    //if (!audioRef.current) return;
 
-    if (isMuted) {
-      audioRef.current.volume = volume;
-      setIsMuted(false);
+    if (muted) {
+      //audioRef.current.volume = volume;
+      setMuted(false);
     } else {
-      audioRef.current.volume = 0;
-      setIsMuted(true);
+      //audioRef.current.volume = 0;
+      setMuted(true);
     }
   };
 
@@ -164,9 +147,9 @@ export default function AudioPlayer({
 
   return (
     <div className="audio-player rounded-lg py-1 px-2 max-w-lg mx-auto">
-      <audio ref={audioRef} preload="metadata">
+      {/* <audio ref={audioRef} preload="metadata">
         <track kind="captions" label="Sem legendas disponíveis" />
-      </audio>
+      </audio> */}
 
       {/* Single Line Layout */}
       <div className="flex items-center gap-3">
@@ -177,19 +160,19 @@ export default function AudioPlayer({
           </div>
           <div className="min-w-0 flex-1">
             <div className="audio-track-title text-sm font-medium truncate">
-              {currentTrack?.title || "Sem música"}
+              {track.title || "Sem música"}
             </div>
             <div className="audio-track-artist text-xs truncate -mt-1">
-              {currentTrack?.artist || "Artista desconhecido"}
+              {track.artist || "Artista desconhecido"}
             </div>
           </div>
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
-            onClick={handlePrevious}
+            onClick={prev}
             className="audio-control-btn transition-colors p-1"
             disabled={tracks.length === 0}
             aria-label="Música anterior"
@@ -199,7 +182,11 @@ export default function AudioPlayer({
 
           <button
             type="button"
-            onClick={togglePlay}
+            onClick={() =>
+              isPlaying
+                ? pause()
+                : play()
+            }
             className="audio-play-btn w-8 h-8 rounded-full flex items-center justify-center transition-colors"
             disabled={tracks.length === 0}
             aria-label={isPlaying ? "Pausar" : "Reproduzir"}
@@ -213,7 +200,7 @@ export default function AudioPlayer({
 
           <button
             type="button"
-            onClick={handleNext}
+            onClick={next}
             className="audio-control-btn transition-colors p-1"
             disabled={tracks.length === 0}
             aria-label="Próxima música"
@@ -223,7 +210,7 @@ export default function AudioPlayer({
         </div>
 
         {/* Progress */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <span className="audio-time text-xs min-w-8 text-right">
             {formatTime(currentTime)}
           </span>
@@ -246,14 +233,14 @@ export default function AudioPlayer({
         </div>
 
         {/* Volume */}
-        <div className="flex items-center gap-1 flex-shrink-0">
+        <div className="flex items-center gap-1 shrink-0">
           <button
             type="button"
             onClick={toggleMute}
             className="audio-control-btn transition-colors p-1"
-            aria-label={isMuted ? "Ativar som" : "Silenciar"}
+            aria-label={muted ? "Ativar som" : "Silenciar"}
           >
-            {isMuted ? (
+            {muted ? (
               <VolumeX className="w-4 h-4" />
             ) : (
               <Volume2 className="w-4 h-4" />
@@ -264,7 +251,7 @@ export default function AudioPlayer({
             min="0"
             max="1"
             step="0.1"
-            value={isMuted ? 0 : volume}
+            value={muted ? 0 : volume}
             onChange={handleVolumeChange}
             className="audio-volume-slider w-12 h-1 rounded-full appearance-none cursor-pointer slider"
             aria-label="Controle de volume"
