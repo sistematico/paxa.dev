@@ -208,13 +208,13 @@ export default function AudioPlayer({
 
         {/* Progress */}
         <div className="flex items-center gap-1 md:gap-2 shrink-0">
-          <span className="audio-time text-xs min-w-8 text-right">
+          <span className="audio-time text-xs min-w-6 md:min-w-8 text-right">
             {formatTime(currentTime)}
           </span>
           <button
             type="button"
             ref={progressRef}
-            className="audio-progress-bg w-12 md:w-20 h-1.5 rounded-full cursor-pointer relative overflow-hidden block"
+            className="audio-progress-bg w-10 md:w-20 h-1.5 rounded-full cursor-pointer relative overflow-hidden block"
             onClick={handleProgressClick}
             onKeyDown={handleProgressKeyDown}
             aria-label="Controle de progresso"
@@ -224,7 +224,7 @@ export default function AudioPlayer({
               style={{ width: `${progressPercentage}%` }}
             />
           </button>
-          <span className="audio-time text-xs min-w-8">
+          <span className="audio-time text-xs min-w-6 md:min-w-8">
             {formatTime(duration)}
           </span>
         </div>
