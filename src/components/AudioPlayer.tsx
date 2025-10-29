@@ -146,16 +146,16 @@ export default function AudioPlayer({
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="audio-player rounded-lg py-1 px-2 max-w-lg mx-auto">
+    <div className="audio-player rounded-lg px-1 md:px-2 py-1 max-w-md md:max-w-lg mx-auto">
       {/* <audio ref={audioRef} preload="metadata">
         <track kind="captions" label="Sem legendas disponíveis" />
       </audio> */}
 
       {/* Single Line Layout */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1 md:gap-3">
         {/* Track Info */}
-        <div className="flex items-center gap-2 min-w-0 flex-1">
-          <div className="audio-track-icon w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0">
+        <div className="flex items-center gap-1 md:gap-2 min-w-0 flex-1">
+          <div className="audio-track-icon w-8 h-8 rounded-md flex items-center justify-center shrink-0">
             <Music className="w-4 h-4" />
           </div>
           <div className="min-w-0 flex-1">
@@ -167,19 +167,17 @@ export default function AudioPlayer({
             </div>
           </div>
         </div>
-
         {/* Controls */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1 md:gap-2 shrink-0">
           <button
             type="button"
             onClick={prev}
-            className="audio-control-btn transition-colors p-1"
+            className="hidden md:block audio-control-btn transition-colors p-1"
             disabled={tracks.length === 0}
             aria-label="Música anterior"
           >
             <SkipBack className="w-4 h-4" />
           </button>
-
           <button
             type="button"
             onClick={() =>
@@ -194,10 +192,9 @@ export default function AudioPlayer({
             {isPlaying ? (
               <Pause className="w-3.5 h-3.5" />
             ) : (
-              <Play className="w-3.5 h-3.5 ml-0.5" />
+              <Play className="w-3.5 h-3.5" />
             )}
           </button>
-
           <button
             type="button"
             onClick={next}
@@ -210,14 +207,14 @@ export default function AudioPlayer({
         </div>
 
         {/* Progress */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1 md:gap-2 shrink-0">
           <span className="audio-time text-xs min-w-8 text-right">
             {formatTime(currentTime)}
           </span>
           <button
             type="button"
             ref={progressRef}
-            className="audio-progress-bg w-20 h-1 rounded-full cursor-pointer relative overflow-hidden block"
+            className="audio-progress-bg w-12 md:w-20 h-1.5 rounded-full cursor-pointer relative overflow-hidden block"
             onClick={handleProgressClick}
             onKeyDown={handleProgressKeyDown}
             aria-label="Controle de progresso"
@@ -233,7 +230,7 @@ export default function AudioPlayer({
         </div>
 
         {/* Volume */}
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center shrink-0">
           <button
             type="button"
             onClick={toggleMute}
@@ -253,7 +250,7 @@ export default function AudioPlayer({
             step="0.1"
             value={muted ? 0 : volume}
             onChange={handleVolumeChange}
-            className="audio-volume-slider w-12 h-1 rounded-full appearance-none cursor-pointer slider"
+            className="audio-volume-slider w-12 h-1 rounded-full appearance-none cursor-pointer slider hidden md:block"
             aria-label="Controle de volume"
           />
         </div>

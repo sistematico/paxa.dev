@@ -50,14 +50,12 @@ export default function RootLayout({
         <ThemeProvider>
           <FontSizeProvider>
             <AudioProvider>
-              <div className="min-h-screen flex items-center justify-center p-4">
+              <div className="min-h-screen flex items-center justify-center">
                 <main className="w-full max-w-4xl mx-auto">
-                  <div className="main-container">
-                    <section className="relative mb-12">
-                      <Header />
-                      {children}
-                      <Footer />
-                    </section>
+                  <div className="relative bg-surface md:rounded-lg md:border-2 md:border-black/60 md:shadow-lg">
+                    <Header />
+                    {children}
+                    <Footer />
                   </div>
                 </main>
               </div>

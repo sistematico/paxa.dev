@@ -12,13 +12,7 @@ export interface PostData {
   title: string;
   date: string;
   excerpt: string;
-  tags?: string[];
   content?: string;
-}
-
-export interface PostsByYear {
-  year: string;
-  posts: PostData[];
 }
 
 export function getSortedPostsData(): PostData[] {
@@ -34,29 +28,10 @@ export function getSortedPostsData(): PostData[] {
       title: matterResult.data.title,
       date: matterResult.data.date,
       excerpt: matterResult.data.excerpt,
-      tags: matterResult.data.tags || [],
     };
   });
 
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
-}
-
-export function getPostsByYear(): PostsByYear[] {
-  const posts = getSortedPostsData();
-  const postsByYear = new Map<string, PostData[]>();
-
-  for (const post of posts) {
-    const year = new Date(post.date).getFullYear().toString();
-    if (!postsByYear.has(year)) {
-      postsByYear.set(year, []);
-    }
-    postsByYear.get(year)!.push(post);
-  }
-
-  // Converter para array e ordenar por ano (mais recente primeiro)
-  return Array.from(postsByYear.entries())
-    .map(([year, posts]) => ({ year, posts }))
-    .sort((a, b) => Number(b.year) - Number(a.year));
 }
 
 export async function getPostData(slug: string): Promise<PostData> {
@@ -67,7 +42,7 @@ export async function getPostData(slug: string): Promise<PostData> {
   const processedContent = await remark()
     .use(html)
     .use(rehypePrism, {
-      showLineNumbers: true,
+      showLineNumbers: true, // opcional: mostrar números de linha
     })
     .process(matterResult.content);
   const contentHtml = processedContent.toString();
@@ -77,7 +52,6 @@ export async function getPostData(slug: string): Promise<PostData> {
     title: matterResult.data.title,
     date: matterResult.data.date,
     excerpt: matterResult.data.excerpt,
-    tags: matterResult.data.tags || [],
     content: contentHtml,
   };
 }
@@ -87,19 +61,4 @@ export function getAllPostSlugs() {
   return fileNames.map((fileName) => ({
     slug: fileName.replace(/\.md$/, ""),
   }));
-}
-
-export function getAllTags(): string[] {
-  const posts = getSortedPostsData();
-  const tagsSet = new Set<string>();
-
-  for (const post of posts) {
-    if (post.tags) {
-      for (const tag of post.tags) {
-        tagsSet.add(tag);
-      }
-    }
-  }
-
-  return Array.from(tagsSet).sort();
 }

@@ -18,17 +18,17 @@ interface FontSizeContextType {
 }
 
 const fontSizes = {
-  small: "0.875rem",
+  small: ".9rem",
   medium: "1rem",
-  large: "1.125rem",
-  xlarge: "1.25rem",
+  large: "1.8rem",
+  xlarge: "2rem",
 };
 
 const lineHeights = {
   small: "1.6",
   medium: "1.5",
-  large: "1.5",
-  xlarge: "1.4",
+  large: "1.4",
+  xlarge: "1.3",
 };
 
 export const FontSizeContext = createContext<FontSizeContextType | undefined>(
@@ -37,10 +37,8 @@ export const FontSizeContext = createContext<FontSizeContextType | undefined>(
 
 export function FontSizeProvider({ children }: { children: ReactNode }) {
   const [fontSize, setFontSize] = useState<FontSize>("medium");
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     // Recupera tamanho de fonte do localStorage
     const savedFontSize = localStorage.getItem("paxa-font-size") as FontSize;
     if (savedFontSize && savedFontSize in fontSizes) {
@@ -49,33 +47,23 @@ export function FontSizeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!mounted) return;
-    
     // Aplica tamanho de fonte e line-height ao documento
     const sizeInRem = fontSizes[fontSize];
     const lineHeight = lineHeights[fontSize];
-    
-    // Aplicar no html para que todos os elementos herdem
     document.documentElement.style.setProperty("--base-font-size", sizeInRem);
     document.documentElement.style.setProperty(
       "--base-line-height",
       lineHeight,
     );
-    
     localStorage.setItem("paxa-font-size", fontSize);
-    
-    // Debug log
-    console.log(`Font size changed to: ${fontSize} (${sizeInRem})`);
-  }, [fontSize, mounted]);
+  }, [fontSize]);
 
   const increaseFontSize = () => {
     const sizes: FontSize[] = ["small", "medium", "large", "xlarge"];
     const currentIndex = sizes.indexOf(fontSize);
     // Cicla pelos tamanhos (volta ao início quando chega no final)
     const nextIndex = (currentIndex + 1) % sizes.length;
-    const newSize = sizes[nextIndex];
-    console.log(`Increasing font size from ${fontSize} to ${newSize}`);
-    setFontSize(newSize);
+    setFontSize(sizes[nextIndex]);
   };
 
   const decreaseFontSize = () => {
