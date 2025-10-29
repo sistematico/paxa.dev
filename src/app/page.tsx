@@ -5,7 +5,6 @@ import { tracks } from "@/config";
 export default function Home() {
   return (
     <div className="p-4">
-      {/* <div className="prose-neutral dark:prose-invert"> */}
       <div>
         <TextSwitcher />
       </div>
