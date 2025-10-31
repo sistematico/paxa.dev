@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { serveStatic } from 'hono/bun'
 import { cors } from 'hono/cors'
 import type { ApiResponse } from 'shared/dist'
 
@@ -20,4 +21,19 @@ app.get('/hello', async (c) => {
   return c.json(data, { status: 200 })
 })
 
-export default app
+app.use("*", serveStatic({ root: "./static" }));
+ 
+app.get("*", async (c, next) => {
+  return serveStatic({ root: "./static", path: "index.html" })(c, next);
+});
+
+// export default app
+
+const port = parseInt(process.env.PORT || "3000");
+ 
+export default {
+  port,
+  fetch: app.fetch,
+};
+ 
+console.log(`🦫 bhvr server running on port ${port}`);
