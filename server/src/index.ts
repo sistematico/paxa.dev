@@ -3,6 +3,9 @@ import { serveStatic } from 'hono/bun'
 import { cors } from 'hono/cors'
 import type { ApiResponse } from 'shared/dist'
 
+const dev = import.meta.env.NODE_ENV !== 'production'
+const port = dev ? 3000 : 8080
+
 const app = new Hono()
 
 app.use(cors())
@@ -26,10 +29,6 @@ app.use("*", serveStatic({ root: "./static" }));
 app.get("*", async (c, next) => {
   return serveStatic({ root: "./static", path: "index.html" })(c, next);
 });
-
-// export default app
-
-const port = parseInt(process.env.PORT || "3000");
  
 export default {
   port,
