@@ -1,5 +1,4 @@
 import { useState } from "react";
-import beaver from "../assets/beaver.svg";
 import type { ApiResponse } from "shared";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
@@ -18,18 +17,7 @@ function Home() {
 	}
 
 	return (
-		<div className="max-w-xl mx-auto flex flex-col gap-6 items-center justify-center min-h-screen">
-			<a
-				href="https://github.com/stevedylandev/bhvr"
-				target="_blank"
-				rel="noopener"
-			>
-				<img
-					src={beaver}
-					className="w-16 h-16 cursor-pointer"
-					alt="beaver logo"
-				/>
-			</a>
+		<div>
 			<h1 className="text-5xl font-black">bhvr</h1>
 			<h2 className="text-2xl font-bold">Bun + Hono + Vite + React</h2>
 			<p>A typesafe fullstack monorepo</p>
@@ -51,7 +39,7 @@ function Home() {
 				</a>
 			</div>
 			{data && (
-				<pre className="bg-gray-100 p-4 rounded-md">
+				<pre className="p-4 rounded-md">
 					<code>
 						Message: {data.message} <br />
 						Success: {data.success.toString()}
