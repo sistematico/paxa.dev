@@ -11,8 +11,10 @@ SERVICE="$NAME.service"
 cp -a $WORKDIR $TEMPDIR
 cd $TEMPDIR
 
+#git clean -fxd -e .env.production
 git clean -fxd
-cp .env.production .env
+cp server/.env.production server/.env
+cp client/.env.production client/.env
 
 bun install
 bun run build:single || { echo "Build failed"; exit 1; }
