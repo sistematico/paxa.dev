@@ -1,0 +1,34 @@
+[Unit]
+Description=Paxa bhvr Service
+After=network.target
+
+[Service]
+Type=simple
+User=nginx
+Environment=NODE_ENV=production
+Environment=PORT=8080
+WorkingDirectory=/var/www/paxa.dev
+ExecStart=/home/nginx/.bun/bin/bun run start:single
+ExecStop=/usr/bin/kill -TERM $MAINPID
+# one of {no|on-success|on-failure|on-abnormal|on-watchdog|on-abort|always}
+Restart=always
+RestartSec=10s
+#StartLimitIntervalSec=60
+#StartLimitBurst=3
+
+# Limites de memória mais conservadores
+#MemoryAccounting=true
+#MemoryHigh=800M
+#MemoryMax=900M
+
+# Limites para WebSocket
+LimitNOFILE=65535
+LimitNPROC=2048
+
+# Segurança
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
