@@ -3,7 +3,7 @@ import { serveStatic } from 'hono/bun'
 import { cors } from 'hono/cors'
 import type { ApiResponse } from 'shared/dist'
 
-const dev = import.meta.env.NODE_ENV !== 'production'
+const dev = process.env.NODE_ENV !== 'production'
 const port = dev ? 3000 : 8080
 
 const app = new Hono()
