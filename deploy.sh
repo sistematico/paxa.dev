@@ -20,8 +20,6 @@ bun install
 bun run build:single || { echo "Build failed"; exit 1; }
 
 sudo /usr/bin/systemctl stop $SERVICE
-rm -rf $WORKDIR
+[ -d $WORKDIR ] && rm -rf $WORKDIR
 mv $TEMPDIR $WORKDIR
 sudo /usr/bin/systemctl start $SERVICE
-
-PORT=8080 bun run start:single
