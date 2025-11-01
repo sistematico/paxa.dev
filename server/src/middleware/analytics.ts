@@ -1,35 +1,32 @@
 import type { Context, Next } from 'hono';
-import { getVisitorId, trackSiteVisit } from '../lib/analytics';
+import crypto from 'node:crypto';
 
 const VISITOR_COOKIE_NAME = 'visitor_id';
 const COOKIE_MAX_AGE = 365 * 24 * 60 * 60; // 1 ano
 
 /**
- * Middleware para rastrear visitas ao site
+ * Middleware simplificado para analytics client-side
+ * NÃO rastreia automaticamente - apenas gerencia o visitor ID
+ * O tracking é feito pelo cliente via API
  */
 export async function analyticsMiddleware(c: Context, next: Next) {
   try {
-    // Obtém ou cria ID do visitante
-    const existingVisitorId = c.req.header('cookie')
+    // Obtém ou cria visitor ID
+    let visitorId = c.req.header('cookie')
       ?.split(';')
       .find(cookie => cookie.trim().startsWith(`${VISITOR_COOKIE_NAME}=`))
       ?.split('=')[1];
 
-    const visitorId = getVisitorId(existingVisitorId);
-
-    // Define o cookie se não existir
-    if (!existingVisitorId) {
-      c.header('Set-Cookie', `${VISITOR_COOKIE_NAME}=${visitorId}; Max-Age=${COOKIE_MAX_AGE}; Path=/; HttpOnly; SameSite=Lax`);
+    if (!visitorId) {
+      visitorId = crypto.randomUUID();
+      c.header(
+        'Set-Cookie',
+        `${VISITOR_COOKIE_NAME}=${visitorId}; Max-Age=${COOKIE_MAX_AGE}; Path=/; HttpOnly; SameSite=Lax`
+      );
     }
 
-    // Armazena o visitorId no contexto para uso posterior
+    // Armazena no contexto para uso nas rotas
     c.set('visitorId', visitorId);
-
-    // Registra a visita (apenas para rotas HTML, não para API ou assets)
-    const path = c.req.path;
-    if (!path.startsWith('/api') && !path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf)$/)) {
-      await trackSiteVisit(visitorId);
-    }
 
     await next();
   } catch (error) {
@@ -37,3 +34,5 @@ export async function analyticsMiddleware(c: Context, next: Next) {
     await next();
   }
 }
+
+export default analyticsMiddleware;

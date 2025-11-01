@@ -3,7 +3,7 @@ import { serveStatic } from 'hono/bun';
 import { cors } from 'hono/cors';
 import path from 'node:path';
 import type {
-	ApiResponse,
+	// ApiResponse,
 	PostsIndexResponse,
 	SnippetsIndexResponse,
 	FavoritesResponse
@@ -23,13 +23,13 @@ const port = Number(process.env.PORT);
 
 const app = new Hono();
 
+// Middleware
 app.use(cors());
-
 app.use('*', analyticsMiddleware); // Rastreia visitas
 
-app.route('/api/analytics', analyticsRoutes);
-
+// Routes
 app.get('/api', (c) => c.text('Paxá API'));
+app.route('/api/analytics', analyticsRoutes);
 
 // app.get('/hello', async (c) => {
 // 	const data: ApiResponse = {

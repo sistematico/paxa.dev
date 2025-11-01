@@ -8,7 +8,7 @@ import Snippets from './components/Snippets';
 import Snippet from './components/Snippet';
 import ContactForm from './components/Contact';
 import NotFound from './components/NotFound';
-// import BlogLayout from './layouts/blog/BlogLayout';
+import { usePageTracking } from './hooks/usePageTracking';
 
 const router = createBrowserRouter([
   // {
@@ -38,6 +38,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  usePageTracking();
   return <RouterProvider router={router} />;
 }
 
