@@ -1,6 +1,6 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import type { PostMetadata, PostsByYear } from 'shared/dist';
+import type { PostMetadata, PostsByYear } from 'shared';
 
 /**
  * Extrai o frontmatter de um arquivo MDX
@@ -14,7 +14,7 @@ function parseFrontmatter(content: string): Record<string, any> {
   const frontmatterText = match[1];
   const metadata: Record<string, any> = {};
 
-  if (!frontmatterText) return metadata;
+  if (!frontmatterText) return {};
   
   frontmatterText.split('\n').forEach(line => {
     const [key, ...valueParts] = line.split(':');
@@ -130,64 +130,20 @@ export async function getPostBySlug(postsDirectory: string, slug: string): Promi
  */
 export async function getPostContent(postsDirectory: string, slug: string): Promise<string | null> {
   try {
-    console.log(`[getPostContent] Searching for slug: ${slug}`);
-    console.log(`[getPostContent] Directory: ${postsDirectory}`);
-    
     const files = await readdir(postsDirectory);
-    console.log(`[getPostContent] Files found: ${files.join(', ')}`);
+    const mdxFile = files.find(file => {
+      const fileSlug = path.parse(file).name;
+      return fileSlug === slug && (file.endsWith('.mdx') || file.endsWith('.md'));
+    });
     
-    // Filtra apenas arquivos .md e .mdx
-    const mdxFiles = files.filter(file => file.endsWith('.mdx') || file.endsWith('.md'));
-    console.log(`[getPostContent] MDX files: ${mdxFiles.join(', ')}`);
+    if (!mdxFile) return null;
     
-    // Procura o arquivo correspondente
-    for (const file of mdxFiles) {
-      const filePath = path.join(postsDirectory, file);
-      const content = await readFile(filePath, 'utf-8');
-      const metadata = parseFrontmatter(content);
-      
-      // Verifica se o slug do frontmatter corresponde
-      const fileSlug = metadata.slug || path.parse(file).name;
-      console.log(`[getPostContent] File: ${file}, Slug: ${fileSlug}`);
-      
-      if (fileSlug === slug) {
-        console.log(`[getPostContent] Match found! File: ${file}`);
-        return content;
-      }
-    }
+    const filePath = path.join(postsDirectory, mdxFile);
+    const content = await readFile(filePath, 'utf-8');
     
-    console.log(`[getPostContent] No match found for slug: ${slug}`);
-    return null;
+    return content;
   } catch (error) {
-    console.error('[getPostContent] Error reading post content:', error);
-    return null;
-  }
-}
-
-/**
- * Busca post completo com conteúdo pelo slug
- */
-export async function getFullPost(postsDirectory: string, slug: string): Promise<{ post: PostMetadata; content: string } | null> {
-  try {
-    const content = await getPostContent(postsDirectory, slug);
-    
-    if (!content) return null;
-    
-    const metadata = parseFrontmatter(content);
-    const excerpt = metadata.excerpt || extractExcerpt(content);
-    
-    const post: PostMetadata = {
-      title: metadata.title || slug.replace(/-/g, ' '),
-      slug: metadata.slug || slug,
-      date: metadata.date || new Date().toISOString().split('T')[0],
-      excerpt,
-      tags: metadata.tags ? (Array.isArray(metadata.tags) ? metadata.tags : metadata.tags.split(',').map((t: string) => t.trim())) : [],
-      author: metadata.author,
-    };
-    
-    return { post, content };
-  } catch (error) {
-    console.error('Error getting full post:', error);
+    console.error('Error reading post content:', error);
     return null;
   }
 }

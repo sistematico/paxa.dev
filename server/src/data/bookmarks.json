@@ -1,0 +1,166 @@
+{
+  "favorites": [
+    {
+      "id": "mdn-web-docs",
+      "title": "MDN Web Docs",
+      "url": "https://developer.mozilla.org",
+      "description": "Documentação completa sobre HTML, CSS, JavaScript e Web APIs",
+      "category": "Documentação",
+      "tags": ["javascript", "html", "css", "web"],
+      "addedAt": "2024-11-15T10:00:00Z"
+    },
+    {
+      "id": "react-docs",
+      "title": "React Documentation",
+      "url": "https://react.dev",
+      "description": "Documentação oficial do React com tutoriais e guias",
+      "category": "Documentação",
+      "tags": ["react", "javascript", "frontend"],
+      "addedAt": "2024-11-16T14:30:00Z"
+    },
+    {
+      "id": "typescript-handbook",
+      "title": "TypeScript Handbook",
+      "url": "https://www.typescriptlang.org/docs/handbook/intro.html",
+      "description": "Guia completo do TypeScript para iniciantes e avançados",
+      "category": "Documentação",
+      "tags": ["typescript", "javascript"],
+      "addedAt": "2024-11-20T09:15:00Z"
+    },
+    {
+      "id": "tailwind-css",
+      "title": "Tailwind CSS",
+      "url": "https://tailwindcss.com",
+      "description": "Framework CSS utility-first para criar designs customizados rapidamente",
+      "category": "Ferramentas",
+      "tags": ["css", "framework", "design"],
+      "addedAt": "2024-12-01T11:00:00Z"
+    },
+    {
+      "id": "github",
+      "title": "GitHub",
+      "url": "https://github.com",
+      "description": "Plataforma de hospedagem de código e colaboração",
+      "category": "Ferramentas",
+      "tags": ["git", "versionamento", "opensource"],
+      "addedAt": "2024-10-10T08:00:00Z"
+    },
+    {
+      "id": "vercel",
+      "title": "Vercel",
+      "url": "https://vercel.com",
+      "description": "Plataforma para deploy de aplicações frontend e serverless",
+      "category": "Ferramentas",
+      "tags": ["deploy", "hosting", "frontend"],
+      "addedAt": "2024-12-05T16:20:00Z"
+    },
+    {
+      "id": "figma",
+      "title": "Figma",
+      "url": "https://figma.com",
+      "description": "Ferramenta de design colaborativo para interfaces",
+      "category": "Design",
+      "tags": ["design", "ui", "ux", "prototyping"],
+      "addedAt": "2024-11-25T13:45:00Z"
+    },
+    {
+      "id": "dribbble",
+      "title": "Dribbble",
+      "url": "https://dribbble.com",
+      "description": "Comunidade de designers para compartilhar trabalhos e inspiração",
+      "category": "Design",
+      "tags": ["design", "inspiração", "portfolio"],
+      "addedAt": "2024-11-22T10:30:00Z"
+    },
+    {
+      "id": "coolors",
+      "title": "Coolors",
+      "url": "https://coolors.co",
+      "description": "Gerador de paletas de cores para seus projetos",
+      "category": "Design",
+      "tags": ["colors", "design", "paleta"],
+      "addedAt": "2024-12-03T15:00:00Z"
+    },
+    {
+      "id": "css-tricks",
+      "title": "CSS-Tricks",
+      "url": "https://css-tricks.com",
+      "description": "Artigos, tutoriais e dicas sobre CSS e desenvolvimento web",
+      "category": "Aprendizado",
+      "tags": ["css", "tutoriais", "web"],
+      "addedAt": "2024-11-18T12:00:00Z"
+    },
+    {
+      "id": "web-dev",
+      "title": "web.dev",
+      "url": "https://web.dev",
+      "description": "Guias e melhores práticas do Google para desenvolvimento web",
+      "category": "Aprendizado",
+      "tags": ["web", "performance", "seo", "acessibilidade"],
+      "addedAt": "2024-11-30T09:30:00Z"
+    },
+    {
+      "id": "freecodecamp",
+      "title": "freeCodeCamp",
+      "url": "https://www.freecodecamp.org",
+      "description": "Plataforma gratuita para aprender programação com certificações",
+      "category": "Aprendizado",
+      "tags": ["programação", "cursos", "certificação"],
+      "addedAt": "2024-10-15T14:00:00Z"
+    },
+    {
+      "id": "stackoverflow",
+      "title": "Stack Overflow",
+      "url": "https://stackoverflow.com",
+      "description": "Maior comunidade de perguntas e respostas sobre programação",
+      "category": "Comunidade",
+      "tags": ["programação", "help", "comunidade"],
+      "addedAt": "2024-10-05T08:30:00Z"
+    },
+    {
+      "id": "dev-to",
+      "title": "DEV Community",
+      "url": "https://dev.to",
+      "description": "Comunidade de desenvolvedores para compartilhar conhecimento",
+      "category": "Comunidade",
+      "tags": ["blog", "comunidade", "artigos"],
+      "addedAt": "2024-11-12T11:15:00Z"
+    },
+    {
+      "id": "reddit-webdev",
+      "title": "r/webdev",
+      "url": "https://reddit.com/r/webdev",
+      "description": "Subreddit sobre desenvolvimento web",
+      "category": "Comunidade",
+      "tags": ["reddit", "web", "discussão"],
+      "addedAt": "2024-11-08T16:45:00Z"
+    },
+    {
+      "id": "can-i-use",
+      "title": "Can I Use",
+      "url": "https://caniuse.com",
+      "description": "Compatibilidade de features web entre navegadores",
+      "category": "Ferramentas",
+      "tags": ["browser", "compatibilidade", "web"],
+      "addedAt": "2024-12-02T10:00:00Z"
+    },
+    {
+      "id": "regex101",
+      "title": "Regex101",
+      "url": "https://regex101.com",
+      "description": "Testador e debugger de expressões regulares",
+      "category": "Ferramentas",
+      "tags": ["regex", "testing", "debugging"],
+      "addedAt": "2024-11-28T13:20:00Z"
+    },
+    {
+      "id": "npm",
+      "title": "npm",
+      "url": "https://www.npmjs.com",
+      "description": "Registro de pacotes JavaScript",
+      "category": "Ferramentas",
+      "tags": ["javascript", "packages", "nodejs"],
+      "addedAt": "2024-10-20T09:00:00Z"
+    }
+  ]
+}
