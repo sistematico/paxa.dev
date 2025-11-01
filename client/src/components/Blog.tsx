@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router';
 import type { PostMetadata, PostsByYear } from 'shared/dist';
 import { Tag as TagIcon } from 'lucide-react';
 
-const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.VITE_API_URL!;
 
 export function PostList() {
 	const [posts, setPosts] = useState<PostMetadata[]>([]);
@@ -20,7 +20,7 @@ export function PostList() {
 		const fetchData = async () => {
 			try {
 				// Buscar tags
-				const tagsResponse = await fetch(`${apiUrl}/api/posts/tags/all`);
+				const tagsResponse = await fetch(`${apiUrl}/posts/tags/all`);
 				if (tagsResponse.ok) {
 					const tagsData = await tagsResponse.json();
 					setAllTags(tagsData.tags);
@@ -29,8 +29,8 @@ export function PostList() {
 
 				// Buscar posts (filtrados por tag se selecionada)
 				const postsUrl = selectedTag 
-					? `${apiUrl}/api/posts/tag/${selectedTag}`
-					: `${apiUrl}/api/posts`;
+					? `${apiUrl}/posts/tag/${selectedTag}`
+					: `${apiUrl}/posts`;
 				
 				const response = await fetch(postsUrl);
 				

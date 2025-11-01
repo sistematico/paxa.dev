@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 import CodeBlock from './CodeBlock';
 import type { SnippetMetadata } from 'shared/dist';
 
-const SERVER_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.VITE_API_URL!;
 
 function Snippet() {
 	const { slug } = useParams();
@@ -19,7 +19,7 @@ function Snippet() {
 			if (!slug) return;
 
 			try {
-				const response = await fetch(`${SERVER_URL}/api/snippets/${slug}/content`);
+				const response = await fetch(`${apiUrl}/snippets/${slug}/content`);
 				
 				if (!response.ok) {
 					throw new Error('Snippet not found');

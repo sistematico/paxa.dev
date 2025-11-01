@@ -23,17 +23,17 @@ const app = new Hono();
 
 app.use(cors());
 
-app.get('/', (c) => c.text('Paxá API'));
+app.get('/api', (c) => c.text('Paxá API'));
 
-app.get('/hello', async (c) => {
-	const data: ApiResponse = {
-		message: 'Hello BHVR!',
-		success: true
-	};
-	return c.json(data, { status: 200 });
-});
+// app.get('/hello', async (c) => {
+// 	const data: ApiResponse = {
+// 		message: 'Hello BHVR!',
+// 		success: true
+// 	};
+// 	return c.json(data, { status: 200 });
+// });
 
-app.post('/api/send-email', async (c) => {
+app.post('/api/email', async (c) => {
 	try {
 		const { name, email, message } = await c.req.json();
 
@@ -364,7 +364,7 @@ app.get('/api/bookmarks', async (c) => {
 });
 
 // Busca favoritos por categoria específica
-app.get('/api/favorites/category/:category', async (c) => {
+app.get('/api/bookmarks/category/:category', async (c) => {
 	const category = c.req.param('category');
 	const favoritesPath = path.join(
 		process.cwd(),
@@ -389,7 +389,7 @@ app.get('/api/favorites/category/:category', async (c) => {
 });
 
 // Busca um favorito específico pelo ID
-app.get('/api/favorites/:id', async (c) => {
+app.get('/api/bookmarks/:id', async (c) => {
 	const id = c.req.param('id');
 	const favoritesPath = path.join(
 		process.cwd(),

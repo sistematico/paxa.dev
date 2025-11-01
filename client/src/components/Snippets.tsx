@@ -3,7 +3,7 @@ import { useSearchParams, Link } from 'react-router';
 import type { SnippetMetadata, SnippetsByCategory } from 'shared/dist';
 import { Code2, Tag } from 'lucide-react';
 
-const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.VITE_API_URL!;
 
 export function Snippets() {
 	const [snippets, setSnippets] = useState<SnippetMetadata[]>([]);
@@ -24,7 +24,7 @@ export function Snippets() {
 		const fetchData = async () => {
 			try {
 				// Buscar tags
-				const tagsResponse = await fetch(`${apiUrl}/api/snippets/tags/all`);
+				const tagsResponse = await fetch(`${apiUrl}/snippets/tags/all`);
 				if (tagsResponse.ok) {
 					const tagsData = await tagsResponse.json();
 					setAllTags(tagsData.tags);
@@ -33,8 +33,8 @@ export function Snippets() {
 
 				// Buscar snippets (filtrados por tag se selecionada)
 				const snippetsUrl = selectedTag 
-					? `${apiUrl}/api/snippets/tag/${selectedTag}`
-					: `${apiUrl}/api/snippets`;
+					? `${apiUrl}/snippets/tag/${selectedTag}`
+					: `${apiUrl}/snippets`;
 				
 				const response = await fetch(snippetsUrl);
 
