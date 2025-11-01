@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import CodeBlock from './CodeBlock';
+// import ReactMarkdown from 'react-markdown';
+// import remarkGfm from 'remark-gfm';
 import type { PostMetadata } from 'shared/dist';
 
 const SERVER_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -60,6 +59,7 @@ function Post() {
 		);
 	}
 
+	// Remove o frontmatter do conteúdo para exibição
 	const contentWithoutFrontmatter = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
 
 	return (
@@ -125,41 +125,11 @@ function Post() {
 				</header>
 
 				<div className="prose prose-invert prose-lg max-w-none">
-					<ReactMarkdown 
-						remarkPlugins={[remarkGfm]}
-						components={{
-							h1: (props) => <h1 className="text-3xl font-bold mb-4 mt-8" {...props} />,
-							h2: (props) => <h2 className="text-2xl font-bold mb-3 mt-6" {...props} />,
-							h3: (props) => <h3 className="text-xl font-bold mb-2 mt-4" {...props} />,
-							p: (props) => <p className="mb-4 leading-relaxed" {...props} />,
-							code: ({ children, className }) => {
-								const match = /language-(\w+)/.exec(className || '');
-								const language = match ? match[1] : '';
-								
-								return match ? (
-									<CodeBlock language={language}>
-										{String(children).replace(/\n$/, '')}
-									</CodeBlock>
-								) : (
-									<code className="bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono">
-										{children}
-									</code>
-								);
-							},
-							pre: (props) => <pre className="my-4" {...props} />,
-							ul: (props) => <ul className="list-disc list-inside mb-4 space-y-2 ml-4" {...props} />,
-							ol: (props) => <ol className="list-decimal list-inside mb-4 space-y-2 ml-4" {...props} />,
-							li: (props) => <li className="ml-2" {...props} />,
-							blockquote: (props) => (
-								<blockquote className="border-l-4 border-gray-700 pl-4 italic my-4 text-gray-300" {...props} />
-							),
-							a: (props) => (
-								<a className="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />
-							),
-						}}
-					>
-						{contentWithoutFrontmatter}
-					</ReactMarkdown>
+					{/* Aqui você pode usar um parser MDX/Markdown */}
+					<div 
+						className="whitespace-pre-wrap"
+						//dangerouslySetInnerHTML={{ __html: contentWithoutFrontmatter }}
+					/>
 				</div>
 			</article>
 		</div>

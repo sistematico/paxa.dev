@@ -3,54 +3,95 @@ import path from 'node:path';
 import type { SnippetMetadata, SnippetsByCategory } from 'shared/dist';
 
 /**
- * Extrai o frontmatter de um arquivo MDX
+ * Parse valor para string
  */
-function parseFrontmatter(content: string): Record<string, any> {
-  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---/;
-  const match = content.match(frontmatterRegex);
-  
-  if (!match) return {};
-  
-  const frontmatterText = match[1];
-  const metadata: Record<string, any> = {};
+function parseString(value: unknown, defaultValue = ''): string {
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) return value.join(', ');
+  return defaultValue;
+}
 
-  if (!frontmatterText) return metadata;
+/**
+ * Parse valor para array
+ */
+function parseArray(value: unknown): string[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string') return value.split(',').map(s => s.trim()).filter(Boolean);
+  return [];
+}
+
+/**
+ * Extrai frontmatter
+ */
+function parseFrontmatter(content: string): Record<string, unknown> {
+  const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!match?.[1]) return {};
   
-  frontmatterText.split('\n').forEach(line => {
-    const [key, ...valueParts] = line.split(':');
-    if (key && valueParts.length > 0) {
-      const value = valueParts.join(':').trim().replace(/^["']|["']$/g, '');
-      metadata[key.trim()] = value;
+  const metadata: Record<string, unknown> = {};
+  const lines = match[1].split('\n');
+  
+  for (const line of lines) {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex === -1) continue;
+    
+    const key = line.slice(0, colonIndex).trim();
+    const rawValue = line.slice(colonIndex + 1).trim().replace(/^["']|["']$/g, '');
+    
+    // Parse arrays [item1, item2]
+    if (rawValue.startsWith('[') && rawValue.endsWith(']')) {
+      try {
+        const parsed = JSON.parse(rawValue.replace(/'/g, '"'));
+        metadata[key] = Array.isArray(parsed) ? parsed : rawValue;
+      } catch {
+        const items = rawValue.slice(1, -1).split(',')
+          .map(s => s.trim().replace(/^["']|["']$/g, ''))
+          .filter(Boolean);
+        metadata[key] = items.length > 0 ? items : rawValue;
+      }
+    } else {
+      metadata[key] = rawValue;
     }
-  });
+  }
   
   return metadata;
 }
 
 /**
- * Extrai descrição do conteúdo do snippet
+ * Extrai descrição
  */
-function extractDescription(content: string, maxLength: number = 160): string {
-  const contentWithoutFrontmatter = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
-  const withoutCodeBlocks = contentWithoutFrontmatter.replace(/```[\s\S]*?```/g, '');
-  const withoutHeadings = withoutCodeBlocks.replace(/^#{1,6}\s+.*$/gm, '');
-  
-  const paragraphs = withoutHeadings
-    .split('\n\n')
-    .map(p => p.trim())
-    .filter(p => p.length > 0);
-  
-  const description = paragraphs[0] || '';
-  
-  if (description.length <= maxLength) {
-    return description;
-  }
-  
-  return description.substring(0, maxLength).trim() + '...';
+function extractDescription(content: string, maxLength = 160): string {
+  const withoutFrontmatter = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
+  const withoutCode = withoutFrontmatter.replace(/```[\s\S]*?```/g, '');
+  const withoutHeadings = withoutCode.replace(/^#{1,6}\s+.*$/gm, '');
+  const paragraphs = withoutHeadings.split('\n\n').map(p => p.trim()).filter(Boolean);
+  const text = paragraphs[0] || '';
+  return text.length <= maxLength ? text : text.slice(0, maxLength) + '...';
 }
 
 /**
- * Lê e indexa todos os snippets MDX do diretório
+ * Converte metadata para SnippetMetadata
+ */
+function toSnippetMetadata(metadata: Record<string, unknown>, filename: string, content: string): SnippetMetadata {
+  const slug = parseString(metadata.slug) || path.parse(filename).name;
+  const title = parseString(metadata.title) || slug.replace(/-/g, ' ');
+  const category = parseString(metadata.category) || 'Outros';
+  const language = parseString(metadata.language) || 'text';
+  const description = parseString(metadata.description) || extractDescription(content);
+  const date = parseString(metadata.date) || undefined;
+  
+  return {
+    title,
+    slug,
+    category,
+    language,
+    description,
+    tags: parseArray(metadata.tags),
+    date,
+  };
+}
+
+/**
+ * Lê e indexa todos os snippets
  */
 export async function indexSnippets(snippetsDirectory: string): Promise<{
   snippets: SnippetMetadata[];
@@ -59,49 +100,30 @@ export async function indexSnippets(snippetsDirectory: string): Promise<{
 }> {
   try {
     const files = await readdir(snippetsDirectory);
-    
-    const mdxFiles = files.filter(
-      file => file.endsWith('.mdx') || file.endsWith('.md')
-    );
+    const mdxFiles = files.filter(f => f.endsWith('.mdx') || f.endsWith('.md'));
     
     const snippets: SnippetMetadata[] = await Promise.all(
       mdxFiles.map(async (file) => {
-        const filePath = path.join(snippetsDirectory, file);
-        const content = await readFile(filePath, 'utf-8');
+        const content = await readFile(path.join(snippetsDirectory, file), 'utf-8');
         const metadata = parseFrontmatter(content);
-        
-        const slug = metadata.slug || path.parse(file).name;
-        const description = metadata.description || extractDescription(content);
-        
-        return {
-          title: metadata.title || slug.replace(/-/g, ' '),
-          slug,
-          category: metadata.category || 'Outros',
-          language: metadata.language || 'text',
-          description,
-          tags: metadata.tags ? (Array.isArray(metadata.tags) ? metadata.tags : metadata.tags.split(',').map((t: string) => t.trim())) : [],
-          date: metadata.date || new Date().toISOString().split('T')[0],
-        };
+        return toSnippetMetadata(metadata, file, content);
       })
     );
     
-    // Ordena snippets por título
+    // Ordena por título
     snippets.sort((a, b) => a.title.localeCompare(b.title));
     
-    // Agrupa snippets por categoria
+    // Agrupa por categoria
     const snippetsByCategory: SnippetsByCategory = {};
     const categoriesSet = new Set<string>();
     
-    snippets.forEach(snippet => {
-      const category = snippet.category;
-      categoriesSet.add(category);
-      
-      if (!snippetsByCategory[category]) {
-        snippetsByCategory[category] = [];
+    for (const snippet of snippets) {
+      categoriesSet.add(snippet.category);
+      if (!Array.isArray(snippetsByCategory[snippet.category])) {
+        snippetsByCategory[snippet.category] = [];
       }
-      
-      snippetsByCategory[category].push(snippet);
-    });
+      snippetsByCategory[snippet.category]!.push(snippet);
+    }
     
     const categories = Array.from(categoriesSet).sort();
     
@@ -113,36 +135,27 @@ export async function indexSnippets(snippetsDirectory: string): Promise<{
 }
 
 /**
- * Busca um snippet específico pelo slug
+ * Busca snippet por slug
  */
 export async function getSnippetBySlug(snippetsDirectory: string, slug: string): Promise<SnippetMetadata | null> {
-  try {
-    const { snippets } = await indexSnippets(snippetsDirectory);
-    return snippets.find(snippet => snippet.slug === slug) || null;
-  } catch (error) {
-    console.error('Error getting snippet by slug:', error);
-    return null;
-  }
+  const { snippets } = await indexSnippets(snippetsDirectory);
+  return snippets.find(s => s.slug === slug) || null;
 }
 
 /**
- * Lê o conteúdo completo de um snippet
+ * Lê conteúdo do snippet
  */
 export async function getSnippetContent(snippetsDirectory: string, slug: string): Promise<string | null> {
   try {
     const files = await readdir(snippetsDirectory);
-    const mdxFiles = files.filter(file => file.endsWith('.mdx') || file.endsWith('.md'));
+    const mdxFiles = files.filter(f => f.endsWith('.mdx') || f.endsWith('.md'));
     
     for (const file of mdxFiles) {
-      const filePath = path.join(snippetsDirectory, file);
-      const content = await readFile(filePath, 'utf-8');
+      const content = await readFile(path.join(snippetsDirectory, file), 'utf-8');
       const metadata = parseFrontmatter(content);
+      const fileSlug = parseString(metadata.slug) || path.parse(file).name;
       
-      const fileSlug = metadata.slug || path.parse(file).name;
-      
-      if (fileSlug === slug) {
-        return content;
-      }
+      if (fileSlug === slug) return content;
     }
     
     return null;
@@ -153,26 +166,15 @@ export async function getSnippetContent(snippetsDirectory: string, slug: string)
 }
 
 /**
- * Busca snippet completo com conteúdo pelo slug
+ * Busca snippet completo com conteúdo
  */
 export async function getFullSnippet(snippetsDirectory: string, slug: string): Promise<{ snippet: SnippetMetadata; content: string } | null> {
   try {
     const content = await getSnippetContent(snippetsDirectory, slug);
-    
     if (!content) return null;
     
     const metadata = parseFrontmatter(content);
-    const description = metadata.description || extractDescription(content);
-    
-    const snippet: SnippetMetadata = {
-      title: metadata.title || slug.replace(/-/g, ' '),
-      slug: metadata.slug || slug,
-      category: metadata.category || 'Outros',
-      language: metadata.language || 'text',
-      description,
-      tags: metadata.tags ? (Array.isArray(metadata.tags) ? metadata.tags : metadata.tags.split(',').map((t: string) => t.trim())) : [],
-      date: metadata.date,
-    };
+    const snippet = toSnippetMetadata(metadata, slug, content);
     
     return { snippet, content };
   } catch (error) {

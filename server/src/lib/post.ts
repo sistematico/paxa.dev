@@ -3,57 +3,93 @@ import path from 'node:path';
 import type { PostMetadata, PostsByYear } from 'shared/dist';
 
 /**
- * Extrai o frontmatter de um arquivo MDX
+ * Parse valor para string
  */
-function parseFrontmatter(content: string): Record<string, any> {
-  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---/;
-  const match = content.match(frontmatterRegex);
-  
-  if (!match) return {};
-  
-  const frontmatterText = match[1];
-  const metadata: Record<string, any> = {};
+function parseString(value: unknown, defaultValue = ''): string {
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) return value.join(', ');
+  return defaultValue;
+}
 
-  if (!frontmatterText) return metadata;
+/**
+ * Parse valor para array
+ */
+function parseArray(value: unknown): string[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string') return value.split(',').map(s => s.trim()).filter(Boolean);
+  return [];
+}
+
+/**
+ * Extrai frontmatter
+ */
+function parseFrontmatter(content: string): Record<string, unknown> {
+  const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!match?.[1]) return {};
   
-  frontmatterText.split('\n').forEach(line => {
-    const [key, ...valueParts] = line.split(':');
-    if (key && valueParts.length > 0) {
-      const value = valueParts.join(':').trim().replace(/^["']|["']$/g, '');
-      metadata[key.trim()] = value;
+  const metadata: Record<string, unknown> = {};
+  const lines = match[1].split('\n');
+  
+  for (const line of lines) {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex === -1) continue;
+    
+    const key = line.slice(0, colonIndex).trim();
+    const rawValue = line.slice(colonIndex + 1).trim().replace(/^["']|["']$/g, '');
+    
+    // Parse arrays [item1, item2]
+    if (rawValue.startsWith('[') && rawValue.endsWith(']')) {
+      try {
+        const parsed = JSON.parse(rawValue.replace(/'/g, '"'));
+        metadata[key] = Array.isArray(parsed) ? parsed : rawValue;
+      } catch {
+        const items = rawValue.slice(1, -1).split(',')
+          .map(s => s.trim().replace(/^["']|["']$/g, ''))
+          .filter(Boolean);
+        metadata[key] = items.length > 0 ? items : rawValue;
+      }
+    } else {
+      metadata[key] = rawValue;
     }
-  });
+  }
   
   return metadata;
 }
 
 /**
- * Extrai um excerpt do conteúdo do post (primeiros parágrafos)
+ * Extrai excerpt
  */
-function extractExcerpt(content: string, maxLength: number = 160): string {
-  // Remove o frontmatter
-  const contentWithoutFrontmatter = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
-  
-  // Remove títulos markdown
-  const withoutHeadings = contentWithoutFrontmatter.replace(/^#{1,6}\s+.*$/gm, '');
-  
-  // Pega os primeiros parágrafos não vazios
-  const paragraphs = withoutHeadings
-    .split('\n\n')
-    .map(p => p.trim())
-    .filter(p => p.length > 0);
-  
-  const excerpt = paragraphs[0] || '';
-  
-  if (excerpt.length <= maxLength) {
-    return excerpt;
-  }
-  
-  return excerpt.substring(0, maxLength).trim() + '...';
+function extractExcerpt(content: string, maxLength = 160): string {
+  const withoutFrontmatter = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
+  const withoutHeadings = withoutFrontmatter.replace(/^#{1,6}\s+.*$/gm, '');
+  const paragraphs = withoutHeadings.split('\n\n').map(p => p.trim()).filter(Boolean);
+  const text = paragraphs[0] || '';
+  return text.length <= maxLength ? text : text.slice(0, maxLength) + '...';
 }
 
 /**
- * Lê e indexa todos os posts MDX do diretório
+ * Converte metadata para PostMetadata
+ */
+function toPostMetadata(metadata: Record<string, unknown>, filename: string, content: string): PostMetadata {
+  const slug = parseString(metadata.slug) || path.parse(filename).name;
+  const dateRaw = parseString(metadata.date);
+  const date: string | undefined = dateRaw !== '' ? dateRaw : new Date().toISOString().split('T')[0];
+  const excerpt = parseString(metadata.excerpt) || extractExcerpt(content);
+  const title = parseString(metadata.title) || slug.replace(/-/g, ' ');
+  const author = parseString(metadata.author) || undefined;
+  
+  return {
+    title,
+    slug,
+    date: date ?? '',
+    excerpt,
+    tags: parseArray(metadata.tags),
+    author,
+  };
+}
+
+/**
+ * Lê e indexa todos os posts
  */
 export async function indexPosts(postsDirectory: string): Promise<{
   posts: PostMetadata[];
@@ -61,49 +97,26 @@ export async function indexPosts(postsDirectory: string): Promise<{
 }> {
   try {
     const files = await readdir(postsDirectory);
-    
-    const mdxFiles = files.filter(
-      file => file.endsWith('.mdx') || file.endsWith('.md')
-    );
+    const mdxFiles = files.filter(f => f.endsWith('.mdx') || f.endsWith('.md'));
     
     const posts: PostMetadata[] = await Promise.all(
       mdxFiles.map(async (file) => {
-        const filePath = path.join(postsDirectory, file);
-        const content = await readFile(filePath, 'utf-8');
+        const content = await readFile(path.join(postsDirectory, file), 'utf-8');
         const metadata = parseFrontmatter(content);
-        
-        // Usa o slug do frontmatter ou gera a partir do nome do arquivo
-        const slug = metadata.slug || path.parse(file).name;
-        
-        // Gera excerpt se não existir no frontmatter
-        const excerpt = metadata.excerpt || extractExcerpt(content);
-        
-        return {
-          title: metadata.title || slug.replace(/-/g, ' '),
-          slug,
-          date: metadata.date || new Date().toISOString().split('T')[0],
-          excerpt,
-          tags: metadata.tags ? (Array.isArray(metadata.tags) ? metadata.tags : metadata.tags.split(',').map((t: string) => t.trim())) : [],
-          author: metadata.author,
-        };
+        return toPostMetadata(metadata, file, content);
       })
     );
     
-    // Ordena posts por data (mais recentes primeiro)
+    // Ordena por data (mais recentes primeiro)
     posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     
-    // Agrupa posts por ano
+    // Agrupa por ano
     const postsByYear: PostsByYear = {};
-    
-    posts.forEach(post => {
+    for (const post of posts) {
       const year = new Date(post.date).getFullYear().toString();
-      
-      if (!postsByYear[year]) {
-        postsByYear[year] = [];
-      }
-      
+      if (!postsByYear[year]) postsByYear[year] = [];
       postsByYear[year].push(post);
-    });
+    }
     
     return { posts, postsByYear };
   } catch (error) {
@@ -113,77 +126,46 @@ export async function indexPosts(postsDirectory: string): Promise<{
 }
 
 /**
- * Busca um post específico pelo slug
+ * Busca post por slug
  */
 export async function getPostBySlug(postsDirectory: string, slug: string): Promise<PostMetadata | null> {
-  try {
-    const { posts } = await indexPosts(postsDirectory);
-    return posts.find(post => post.slug === slug) || null;
-  } catch (error) {
-    console.error('Error getting post by slug:', error);
-    return null;
-  }
+  const { posts } = await indexPosts(postsDirectory);
+  return posts.find(p => p.slug === slug) || null;
 }
 
 /**
- * Lê o conteúdo completo de um post
+ * Lê conteúdo do post
  */
 export async function getPostContent(postsDirectory: string, slug: string): Promise<string | null> {
   try {
-    console.log(`[getPostContent] Searching for slug: ${slug}`);
-    console.log(`[getPostContent] Directory: ${postsDirectory}`);
-    
     const files = await readdir(postsDirectory);
-    console.log(`[getPostContent] Files found: ${files.join(', ')}`);
+    const mdxFiles = files.filter(f => f.endsWith('.mdx') || f.endsWith('.md'));
     
-    // Filtra apenas arquivos .md e .mdx
-    const mdxFiles = files.filter(file => file.endsWith('.mdx') || file.endsWith('.md'));
-    console.log(`[getPostContent] MDX files: ${mdxFiles.join(', ')}`);
-    
-    // Procura o arquivo correspondente
     for (const file of mdxFiles) {
-      const filePath = path.join(postsDirectory, file);
-      const content = await readFile(filePath, 'utf-8');
+      const content = await readFile(path.join(postsDirectory, file), 'utf-8');
       const metadata = parseFrontmatter(content);
+      const fileSlug = parseString(metadata.slug) || path.parse(file).name;
       
-      // Verifica se o slug do frontmatter corresponde
-      const fileSlug = metadata.slug || path.parse(file).name;
-      console.log(`[getPostContent] File: ${file}, Slug: ${fileSlug}`);
-      
-      if (fileSlug === slug) {
-        console.log(`[getPostContent] Match found! File: ${file}`);
-        return content;
-      }
+      if (fileSlug === slug) return content;
     }
     
-    console.log(`[getPostContent] No match found for slug: ${slug}`);
     return null;
   } catch (error) {
-    console.error('[getPostContent] Error reading post content:', error);
+    console.error('Error reading post content:', error);
     return null;
   }
 }
 
 /**
- * Busca post completo com conteúdo pelo slug
+ * Busca post completo com conteúdo
  */
 export async function getFullPost(postsDirectory: string, slug: string): Promise<{ post: PostMetadata; content: string } | null> {
   try {
     const content = await getPostContent(postsDirectory, slug);
-    
     if (!content) return null;
     
     const metadata = parseFrontmatter(content);
-    const excerpt = metadata.excerpt || extractExcerpt(content);
-    
-    const post: PostMetadata = {
-      title: metadata.title || slug.replace(/-/g, ' '),
-      slug: metadata.slug || slug,
-      date: metadata.date || new Date().toISOString().split('T')[0],
-      excerpt,
-      tags: metadata.tags ? (Array.isArray(metadata.tags) ? metadata.tags : metadata.tags.split(',').map((t: string) => t.trim())) : [],
-      author: metadata.author,
-    };
+    const post = toPostMetadata(metadata, slug, content);
     
     return { post, content };
   } catch (error) {

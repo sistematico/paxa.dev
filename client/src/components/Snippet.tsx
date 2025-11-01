@@ -3,40 +3,40 @@ import { useParams, Link } from 'react-router';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import CodeBlock from './CodeBlock';
-import type { PostMetadata } from 'shared/dist';
+import type { SnippetMetadata } from 'shared/dist';
 
 const SERVER_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-function Post() {
+function Snippet() {
 	const { slug } = useParams();
-	const [post, setPost] = useState<PostMetadata | null>(null);
+	const [snippet, setSnippet] = useState<SnippetMetadata | null>(null);
 	const [content, setContent] = useState<string>('');
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		const fetchPost = async () => {
+		const fetchSnippet = async () => {
 			if (!slug) return;
 
 			try {
-				const response = await fetch(`${SERVER_URL}/api/posts/${slug}/content`);
+				const response = await fetch(`${SERVER_URL}/api/snippets/${slug}/content`);
 				
 				if (!response.ok) {
-					throw new Error('Post not found');
+					throw new Error('Snippet not found');
 				}
 				
 				const data = await response.json();
-				setPost(data.post);
+				setSnippet(data.snippet);
 				setContent(data.content);
 				setLoading(false);
 			} catch (err) {
-				console.error('Error fetching post:', err);
-				setError('Post não encontrado');
+				console.error('Error fetching snippet:', err);
+				setError('Snippet não encontrado');
 				setLoading(false);
 			}
 		};
 
-		fetchPost();
+		fetchSnippet();
 	}, [slug]);
 
 	if (loading) {
@@ -47,13 +47,13 @@ function Post() {
 		);
 	}
 
-	if (error || !post) {
+	if (error || !snippet) {
 		return (
 			<div className="container mx-auto px-4 py-8">
 				<div className="text-center text-red-500 mb-4">{error}</div>
 				<div className="text-center">
-					<Link to="/posts" className="text-blue-400 hover:underline">
-						← Voltar para o blog
+					<Link to="/snippets" className="text-blue-400 hover:underline">
+						← Voltar para snippets
 					</Link>
 				</div>
 			</div>
@@ -65,7 +65,7 @@ function Post() {
 	return (
 		<div className="container mx-auto px-4 py-8 max-w-4xl">
 			<Link 
-				to="/posts" 
+				to="/snippets" 
 				className="inline-flex items-center gap-2 text-blue-400 hover:underline mb-8"
 			>
 				<svg 
@@ -83,44 +83,49 @@ function Post() {
 						d="M15 19l-7-7 7-7" 
 					/>
 				</svg>
-				Voltar para o blog
+				Voltar para snippets
 			</Link>
 
 			<article>
 				<header className="mb-8">
-					<h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+					<div className="flex items-center gap-3 mb-4">
+						<h1 className="text-4xl font-bold">{snippet.title}</h1>
+						<span className="text-sm bg-gray-800 text-gray-300 px-3 py-1 rounded">
+							{snippet.language}
+						</span>
+					</div>
+					
+					{snippet.description && (
+						<p className="text-lg text-gray-300 mb-4">
+							{snippet.description}
+						</p>
+					)}
 					
 					<div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
-						<time dateTime={post.date}>
-							{new Date(post.date).toLocaleDateString('pt-BR', {
-								day: '2-digit',
-								month: 'long',
-								year: 'numeric'
-							})}
-						</time>
+						<span className="bg-gray-800 px-2 py-1 rounded">{snippet.category}</span>
 						
-						{post.author && (
-							<span>por {post.author}</span>
+						{snippet.date && (
+							<time dateTime={snippet.date}>
+								{new Date(snippet.date).toLocaleDateString('pt-BR', {
+									day: '2-digit',
+									month: 'long',
+									year: 'numeric'
+								})}
+							</time>
 						)}
 					</div>
 					
-					{post.tags && post.tags.length > 0 && (
-						<div className="flex flex-wrap gap-2 mb-6">
-							{post.tags.map((tag) => (
+					{snippet.tags && snippet.tags.length > 0 && (
+						<div className="flex flex-wrap gap-2">
+							{snippet.tags.map((tag) => (
 								<span 
 									key={tag}
-									className="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded"
+									className="text-xs bg-gray-900 text-gray-400 px-2 py-1 rounded"
 								>
 									#{tag}
 								</span>
 							))}
 						</div>
-					)}
-					
-					{post.excerpt && (
-						<p className="text-lg text-gray-300 italic border-l-4 border-gray-700 pl-4">
-							{post.excerpt}
-						</p>
 					)}
 				</header>
 
@@ -134,7 +139,7 @@ function Post() {
 							p: (props) => <p className="mb-4 leading-relaxed" {...props} />,
 							code: ({ children, className }) => {
 								const match = /language-(\w+)/.exec(className || '');
-								const language = match ? match[1] : '';
+								const language = match ? match[1] : snippet.language;
 								
 								return match ? (
 									<CodeBlock language={language}>
@@ -149,13 +154,6 @@ function Post() {
 							pre: (props) => <pre className="my-4" {...props} />,
 							ul: (props) => <ul className="list-disc list-inside mb-4 space-y-2 ml-4" {...props} />,
 							ol: (props) => <ol className="list-decimal list-inside mb-4 space-y-2 ml-4" {...props} />,
-							li: (props) => <li className="ml-2" {...props} />,
-							blockquote: (props) => (
-								<blockquote className="border-l-4 border-gray-700 pl-4 italic my-4 text-gray-300" {...props} />
-							),
-							a: (props) => (
-								<a className="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />
-							),
 						}}
 					>
 						{contentWithoutFrontmatter}
@@ -166,4 +164,4 @@ function Post() {
 	);
 }
 
-export default Post;
+export default Snippet;

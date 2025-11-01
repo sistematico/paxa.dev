@@ -6,32 +6,33 @@ const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export function Favorites() {
 	const [favorites, setFavorites] = useState<Favorite[]>([]);
-	const [favoritesByCategory, setFavoritesByCategory] = useState<FavoritesByCategory>({});
+	const [favoritesByCategory, setFavoritesByCategory] =
+		useState<FavoritesByCategory>({});
 	const [categories, setCategories] = useState<string[]>([]);
 	const [activeCategory, setActiveCategory] = useState<string>('');
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	
+
 	const categoryRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
 	useEffect(() => {
 		const fetchFavorites = async () => {
 			try {
 				const response = await fetch(`${apiUrl}/api/bookmarks`);
-				
+
 				if (!response.ok) {
 					throw new Error('Failed to fetch favorites');
 				}
-				
+
 				const data = await response.json();
 				setFavorites(data.favorites);
 				setFavoritesByCategory(data.favoritesByCategory);
 				setCategories(data.categories);
-				
+
 				if (data.categories.length > 0) {
 					setActiveCategory(data.categories[0]);
 				}
-				
+
 				setLoading(false);
 			} catch (err) {
 				console.error('Error fetching favorites:', err);
@@ -43,17 +44,30 @@ export function Favorites() {
 		fetchFavorites();
 	}, []);
 
-	// Scrollspy effect
 	useEffect(() => {
 		const handleScroll = () => {
 			const scrollPosition = window.scrollY + 150;
+			const windowHeight = window.innerHeight;
+			const documentHeight = document.documentElement.scrollHeight;
+
+			// Se estiver no final da página, seleciona a última categoria
+			if (windowHeight + window.scrollY >= documentHeight - 100) {
+				const lastCategory = categories[categories.length - 1];
+				if (lastCategory) {
+					setActiveCategory(lastCategory);
+				}
+				return;
+			}
 
 			for (const category of categories) {
 				const element = categoryRefs.current[category];
 				if (element) {
 					const { offsetTop, offsetHeight } = element;
-					
-					if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+
+					if (
+						scrollPosition >= offsetTop &&
+						scrollPosition < offsetTop + offsetHeight
+					) {
 						setActiveCategory(category);
 						break;
 					}
@@ -66,6 +80,30 @@ export function Favorites() {
 
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, [categories]);
+
+	// Scrollspy effect
+	// useEffect(() => {
+	// 	const handleScroll = () => {
+	// 		const scrollPosition = window.scrollY + 150;
+
+	// 		for (const category of categories) {
+	// 			const element = categoryRefs.current[category];
+	// 			if (element) {
+	// 				const { offsetTop, offsetHeight } = element;
+
+	// 				if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+	// 					setActiveCategory(category);
+	// 					break;
+	// 				}
+	// 			}
+	// 		}
+	// 	};
+
+	// 	window.addEventListener('scroll', handleScroll);
+	// 	handleScroll();
+
+	// 	return () => window.removeEventListener('scroll', handleScroll);
+	// }, [categories]);
 
 	const scrollToCategory = (category: string) => {
 		const element = categoryRefs.current[category];
@@ -81,7 +119,7 @@ export function Favorites() {
 
 	const getFaviconUrl = (url: string, favicon?: string) => {
 		if (favicon) return favicon;
-		
+
 		try {
 			const domain = new URL(url).hostname;
 			return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
@@ -179,18 +217,23 @@ export function Favorites() {
 					{categories.map((category) => (
 						<section
 							key={category}
-							ref={(el) => { categoryRefs.current[category] = el; }}
+							ref={(el) => {
+								categoryRefs.current[category] = el;
+							}}
 							className="mb-16 scroll-mt-24"
 							id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}
 						>
 							<h2 className="text-3xl font-bold mb-6 border-b-2 border-gray-700 pb-2">
 								{category}
 							</h2>
-							
+
 							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 								{favoritesByCategory[category]?.map((favorite) => {
-									const faviconUrl = getFaviconUrl(favorite.url, favorite.favicon);
-									
+									const faviconUrl = getFaviconUrl(
+										favorite.url,
+										favorite.favicon
+									);
+
 									return (
 										<a
 											key={favorite.id}
@@ -201,9 +244,9 @@ export function Favorites() {
 										>
 											<div className="flex items-start gap-3 mb-3">
 												{faviconUrl && (
-													<img 
-														src={faviconUrl} 
-														alt="" 
+													<img
+														src={faviconUrl}
+														alt=""
 														className="w-6 h-6 mt-0.5 shrink-0"
 														onError={(e) => {
 															e.currentTarget.style.display = 'none';
@@ -213,24 +256,27 @@ export function Favorites() {
 												<div className="flex-1 min-w-0">
 													<h3 className="text-lg font-semibold flex items-center gap-2 group-hover:text-blue-400 transition-colors">
 														<span className="truncate">{favorite.title}</span>
-														<ExternalLink size={14} className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+														<ExternalLink
+															size={14}
+															className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+														/>
 													</h3>
 													<p className="text-xs text-gray-500 truncate">
 														{new URL(favorite.url).hostname}
 													</p>
 												</div>
 											</div>
-											
+
 											{favorite.description && (
 												<p className="text-sm text-gray-400 mb-4 line-clamp-3">
 													{favorite.description}
 												</p>
 											)}
-											
+
 											{favorite.tags && favorite.tags.length > 0 && (
 												<div className="flex flex-wrap gap-2">
 													{favorite.tags.slice(0, 3).map((tag) => (
-														<span 
+														<span
 															key={tag}
 															className="text-xs bg-gray-900 text-gray-400 px-2 py-1 rounded flex items-center gap-1"
 														>

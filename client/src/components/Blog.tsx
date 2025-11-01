@@ -1,27 +1,65 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import type { PostMetadata, PostsByYear } from 'shared/dist';
+import { Tag as TagIcon } from 'lucide-react';
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export function PostList() {
 	const [posts, setPosts] = useState<PostMetadata[]>([]);
 	const [postsByYear, setPostsByYear] = useState<PostsByYear>({});
+	const [allTags, setAllTags] = useState<string[]>([]);
+	const [tagCounts, setTagCounts] = useState<Record<string, number>>({});
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	
+	const [searchParams, setSearchParams] = useSearchParams();
+	const selectedTag = searchParams.get('tag');
 
 	useEffect(() => {
-		const fetchPosts = async () => {
+		const fetchData = async () => {
 			try {
-				const response = await fetch(`${apiUrl}/api/posts`);
+				// Buscar tags
+				const tagsResponse = await fetch(`${apiUrl}/api/posts/tags/all`);
+				if (tagsResponse.ok) {
+					const tagsData = await tagsResponse.json();
+					setAllTags(tagsData.tags);
+					setTagCounts(tagsData.tagCounts);
+				}
+
+				// Buscar posts (filtrados por tag se selecionada)
+				const postsUrl = selectedTag 
+					? `${apiUrl}/api/posts/tag/${selectedTag}`
+					: `${apiUrl}/api/posts`;
+				
+				const response = await fetch(postsUrl);
 				
 				if (!response.ok) {
 					throw new Error('Failed to fetch posts');
 				}
 				
 				const data = await response.json();
-				setPosts(data.posts);
-				setPostsByYear(data.postsByYear);
+				
+				if (selectedTag) {
+					// Quando filtrando por tag, reorganizar por ano
+					const filteredPosts = data.posts;
+					const byYear: PostsByYear = {};
+					
+					filteredPosts.forEach((post: PostMetadata) => {
+						const year = new Date(post.date).getFullYear().toString();
+						if (!byYear[year]) {
+							byYear[year] = [];
+						}
+						byYear[year].push(post);
+					});
+					
+					setPosts(filteredPosts);
+					setPostsByYear(byYear);
+				} else {
+					setPosts(data.posts);
+					setPostsByYear(data.postsByYear);
+				}
+				
 				setLoading(false);
 			} catch (err) {
 				console.error('Error fetching posts:', err);
@@ -30,8 +68,16 @@ export function PostList() {
 			}
 		};
 
-		fetchPosts();
-	}, []);
+		fetchData();
+	}, [selectedTag]);
+
+	const handleTagClick = (tag: string) => {
+		if (selectedTag === tag) {
+			setSearchParams({});
+		} else {
+			setSearchParams({ tag });
+		}
+	};
 
 	if (loading) {
 		return (
@@ -52,17 +98,79 @@ export function PostList() {
 	if (!posts || posts.length === 0) {
 		return (
 			<div className="container mx-auto px-4 py-8">
-				<div className="text-center">Nenhum post disponível.</div>
+				<div className="text-center">
+					{selectedTag ? (
+						<>
+							<p className="mb-4">Nenhum post encontrado com a tag "{selectedTag}".</p>
+							<button
+								type="button"
+								onClick={() => setSearchParams({})}
+								className="text-blue-400 hover:underline"
+							>
+								Ver todos os posts
+							</button>
+						</>
+					) : (
+						'Nenhum post disponível.'
+					)}
+				</div>
 			</div>
 		);
 	}
 
-	// Ordena os anos em ordem decrescente
 	const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
 
 	return (
-		<div className="container mx-auto px-4 py-8 max-w-4xl">
-			<h1 className="text-4xl font-bold mb-8">Blog</h1>
+		<div className="container mx-auto px-4 py-8 max-w-6xl">
+			<div className="mb-8">
+				<h1 className="text-4xl font-bold mb-4">Blog</h1>
+				
+				{/* Filtro de Tags */}
+				{allTags.length > 0 && (
+					<div className="mb-6">
+						<div className="flex items-center gap-2 mb-3">
+							<TagIcon size={18} className="text-gray-400" />
+							<span className="text-sm font-semibold text-gray-400">Filtrar por tag:</span>
+						</div>
+						<div className="flex flex-wrap gap-2">
+							<button
+								type="button"
+								onClick={() => setSearchParams({})}
+								className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+									!selectedTag
+										? 'bg-blue-600 text-white font-semibold'
+										: 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+								}`}
+							>
+								Todas ({posts.length})
+							</button>
+							{allTags.map((tag) => (
+								<button
+									key={tag}
+									type="button"
+									onClick={() => handleTagClick(tag)}
+									className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+										selectedTag === tag
+											? 'bg-blue-600 text-white font-semibold'
+											: 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+									}`}
+								>
+									#{tag} ({tagCounts[tag] || 0})
+								</button>
+							))}
+						</div>
+					</div>
+				)}
+
+				{selectedTag && (
+					<div className="bg-gray-800 border border-gray-700 rounded-lg p-4 mb-6">
+						<p className="text-sm">
+							Mostrando <span className="font-semibold">{posts.length}</span> post(s) com a tag{' '}
+							<span className="font-semibold text-blue-400">#{selectedTag}</span>
+						</p>
+					</div>
+				)}
+			</div>
 			
 			{years.map((year) => (
 				<div key={year} className="mb-12">
@@ -105,12 +213,21 @@ export function PostList() {
 								{post.tags && post.tags.length > 0 && (
 									<div className="flex flex-wrap gap-2">
 										{post.tags.map((tag) => (
-											<span 
+											<button
 												key={tag}
-												className="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded"
+												type="button"
+												onClick={(e) => {
+													e.preventDefault();
+													handleTagClick(tag);
+												}}
+												className={`text-xs px-2 py-1 rounded transition-colors ${
+													selectedTag === tag
+														? 'bg-blue-600 text-white'
+														: 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+												}`}
 											>
 												#{tag}
-											</span>
+											</button>
 										))}
 									</div>
 								)}

@@ -1,74 +1,36 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSearchParams, Link } from 'react-router';
-import type { SnippetMetadata, SnippetsByCategory } from 'shared/dist';
+import { Link } from 'react-router';
 import { Code2, Tag } from 'lucide-react';
+import type { SnippetMetadata, SnippetsByCategory } from 'shared/dist';
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-export function Snippets() {
+function Snippets() {
 	const [snippets, setSnippets] = useState<SnippetMetadata[]>([]);
-	const [snippetsByCategory, setSnippetsByCategory] = useState<SnippetsByCategory>({});
+	const [snippetsByCategory, setSnippetsByCategory] =
+		useState<SnippetsByCategory>({});
 	const [categories, setCategories] = useState<string[]>([]);
-	const [allTags, setAllTags] = useState<string[]>([]);
-	const [tagCounts, setTagCounts] = useState<Record<string, number>>({});
 	const [activeCategory, setActiveCategory] = useState<string>('');
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	
-	const [searchParams, setSearchParams] = useSearchParams();
-	const selectedTag = searchParams.get('tag');
 
 	const categoryRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchSnippets = async () => {
 			try {
-				// Buscar tags
-				const tagsResponse = await fetch(`${apiUrl}/api/snippets/tags/all`);
-				if (tagsResponse.ok) {
-					const tagsData = await tagsResponse.json();
-					setAllTags(tagsData.tags);
-					setTagCounts(tagsData.tagCounts);
-				}
-
-				// Buscar snippets (filtrados por tag se selecionada)
-				const snippetsUrl = selectedTag 
-					? `${apiUrl}/api/snippets/tag/${selectedTag}`
-					: `${apiUrl}/api/snippets`;
-				
-				const response = await fetch(snippetsUrl);
+				const response = await fetch(`${apiUrl}/api/snippets`);
 
 				if (!response.ok) {
 					throw new Error('Failed to fetch snippets');
 				}
 
 				const data = await response.json();
-				
-				if (selectedTag) {
-					// Quando filtrando por tag, reorganizar por categoria
-					const filteredSnippets = data.snippets;
-					const byCategory: SnippetsByCategory = {};
-					const cats = new Set<string>();
-					
-					filteredSnippets.forEach((snippet: SnippetMetadata) => {
-						const category = snippet.category;
-						cats.add(category);
-						if (!byCategory[category]) {
-							byCategory[category] = [];
-						}
-						byCategory[category].push(snippet);
-					});
-					
-					setSnippets(filteredSnippets);
-					setSnippetsByCategory(byCategory);
-					setCategories(Array.from(cats).sort());
-				} else {
-					setSnippets(data.snippets);
-					setSnippetsByCategory(data.snippetsByCategory);
-					setCategories(data.categories);
-				}
+				setSnippets(data.snippets);
+				setSnippetsByCategory(data.snippetsByCategory);
+				setCategories(data.categories);
 
-				if (data.categories && data.categories.length > 0) {
+				if (data.categories.length > 0) {
 					setActiveCategory(data.categories[0]);
 				}
 
@@ -80,16 +42,15 @@ export function Snippets() {
 			}
 		};
 
-		fetchData();
-	}, [selectedTag]);
+		fetchSnippets();
+	}, []);
 
-	// Scrollspy effect melhorado
 	useEffect(() => {
 		const handleScroll = () => {
 			const scrollPosition = window.scrollY + 150;
 			const windowHeight = window.innerHeight;
 			const documentHeight = document.documentElement.scrollHeight;
-			
+
 			// Se estiver no final da página, seleciona a última categoria
 			if (windowHeight + window.scrollY >= documentHeight - 100) {
 				const lastCategory = categories[categories.length - 1];
@@ -103,8 +64,11 @@ export function Snippets() {
 				const element = categoryRefs.current[category];
 				if (element) {
 					const { offsetTop, offsetHeight } = element;
-					
-					if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+
+					if (
+						scrollPosition >= offsetTop &&
+						scrollPosition < offsetTop + offsetHeight
+					) {
 						setActiveCategory(category);
 						break;
 					}
@@ -118,23 +82,42 @@ export function Snippets() {
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, [categories]);
 
+	// // Scrollspy effect
+	// useEffect(() => {
+	// 	const handleScroll = () => {
+	// 		const scrollPosition = window.scrollY + 150; // offset para o header
+
+	// 		for (const category of categories) {
+	// 			const element = categoryRefs.current[category];
+	// 			if (element) {
+	// 				const { offsetTop, offsetHeight } = element;
+
+	// 				if (
+	// 					scrollPosition >= offsetTop &&
+	// 					scrollPosition < offsetTop + offsetHeight
+	// 				) {
+	// 					setActiveCategory(category);
+	// 					break;
+	// 				}
+	// 			}
+	// 		}
+	// 	};
+
+	// 	window.addEventListener('scroll', handleScroll);
+	// 	handleScroll(); // Check initial position
+
+	// 	return () => window.removeEventListener('scroll', handleScroll);
+	// }, [categories]);
+
 	const scrollToCategory = (category: string) => {
 		const element = categoryRefs.current[category];
 		if (element) {
-			const offset = 100;
+			const offset = 100; // offset para o header fixo
 			const elementPosition = element.offsetTop - offset;
 			window.scrollTo({
 				top: elementPosition,
 				behavior: 'smooth'
 			});
-		}
-	};
-
-	const handleTagClick = (tag: string) => {
-		if (selectedTag === tag) {
-			setSearchParams({});
-		} else {
-			setSearchParams({ tag });
 		}
 	};
 
@@ -157,22 +140,7 @@ export function Snippets() {
 	if (!snippets || snippets.length === 0) {
 		return (
 			<div className="container mx-auto px-4 py-8">
-				<div className="text-center">
-					{selectedTag ? (
-						<>
-							<p className="mb-4">Nenhum snippet encontrado com a tag "{selectedTag}".</p>
-							<button
-								type="button"
-								onClick={() => setSearchParams({})}
-								className="text-blue-400 hover:underline"
-							>
-								Ver todos os snippets
-							</button>
-						</>
-					) : (
-						'Nenhum snippet disponível.'
-					)}
-				</div>
+				<div className="text-center">Nenhum snippet disponível.</div>
 			</div>
 		);
 	}
@@ -213,55 +181,9 @@ export function Snippets() {
 				<main className="flex-1 min-w-0">
 					<div className="mb-8">
 						<h1 className="text-4xl font-bold mb-2">Snippets</h1>
-						<p className="text-gray-400 mb-6">
+						<p className="text-gray-400">
 							Coleção de {snippets.length} snippets de código úteis
 						</p>
-
-						{/* Filtro de Tags */}
-						{allTags.length > 0 && (
-							<div className="mb-6">
-								<div className="flex items-center gap-2 mb-3">
-									<Tag size={18} className="text-gray-400" />
-									<span className="text-sm font-semibold text-gray-400">Filtrar por tag:</span>
-								</div>
-								<div className="flex flex-wrap gap-2">
-									<button
-										type="button"
-										onClick={() => setSearchParams({})}
-										className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
-											!selectedTag
-												? 'bg-blue-600 text-white font-semibold'
-												: 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-										}`}
-									>
-										Todos ({snippets.length})
-									</button>
-									{allTags.map((tag) => (
-										<button
-											key={tag}
-											type="button"
-											onClick={() => handleTagClick(tag)}
-											className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
-												selectedTag === tag
-													? 'bg-blue-600 text-white font-semibold'
-													: 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-											}`}
-										>
-											#{tag} ({tagCounts[tag] || 0})
-										</button>
-									))}
-								</div>
-							</div>
-						)}
-
-						{selectedTag && (
-							<div className="bg-gray-800 border border-gray-700 rounded-lg p-4 mb-6">
-								<p className="text-sm">
-									Mostrando <span className="font-semibold">{snippets.length}</span> snippet(s) com a tag{' '}
-									<span className="font-semibold text-blue-400">#{selectedTag}</span>
-								</p>
-							</div>
-						)}
 					</div>
 
 					{/* Navegação mobile */}
@@ -297,7 +219,7 @@ export function Snippets() {
 							<h2 className="text-3xl font-bold mb-6 border-b-2 border-gray-700 pb-2">
 								{category}
 							</h2>
-							
+
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								{snippetsByCategory[category]?.map((snippet) => (
 									<article
@@ -322,19 +244,13 @@ export function Snippets() {
 										{snippet.tags && snippet.tags.length > 0 && (
 											<div className="flex flex-wrap gap-2 mb-4">
 												{snippet.tags.map((tag) => (
-													<button
+													<span
 														key={tag}
-														type="button"
-														onClick={() => handleTagClick(tag)}
-														className={`text-xs px-2 py-1 rounded flex items-center gap-1 transition-colors ${
-															selectedTag === tag
-																? 'bg-blue-600 text-white'
-																: 'bg-gray-900 text-gray-400 hover:bg-gray-800'
-														}`}
+														className="text-xs bg-gray-900 text-gray-400 px-2 py-1 rounded flex items-center gap-1"
 													>
 														<Tag size={10} />
 														{tag}
-													</button>
+													</span>
 												))}
 											</div>
 										)}

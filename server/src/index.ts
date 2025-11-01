@@ -106,6 +106,56 @@ app.get('/api/posts/:slug/content', async (c) => {
   }
 });
 
+app.get('/api/posts/tag/:tag', async (c) => {
+  const tag = c.req.param('tag');
+  const postsDirectory = path.join(process.cwd(), '..', 'posts');
+  
+  try {
+    const { posts } = await indexPosts(postsDirectory);
+    const tagPosts = posts.filter(post => 
+      post.tags?.some(t => t.toLowerCase() === tag.toLowerCase())
+    );
+    
+    return c.json({ 
+      tag, 
+      posts: tagPosts,
+      total: tagPosts.length 
+    });
+  } catch (err) {
+    console.error('Error fetching posts by tag:', err);
+    return c.json({ message: 'Error fetching posts' }, 500);
+  }
+});
+
+// Lista todas as tags disponíveis
+app.get('/api/posts/tags/all', async (c) => {
+  const postsDirectory = path.join(process.cwd(), '..', 'posts');
+  
+  try {
+    const { posts } = await indexPosts(postsDirectory);
+    const tagsSet = new Set<string>();
+    const tagCounts: Record<string, number> = {};
+    
+    posts.forEach(post => {
+      post.tags?.forEach(tag => {
+        tagsSet.add(tag);
+        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+      });
+    });
+    
+    const tags = Array.from(tagsSet).sort();
+    
+    return c.json({ 
+      tags,
+      tagCounts,
+      total: tags.length 
+    });
+  } catch (err) {
+    console.error('Error fetching tags:', err);
+    return c.json({ message: 'Error fetching tags' }, 500);
+  }
+});
+
 // ==================== SNIPPETS ====================
 
 // Lista todos os snippets com índice por categoria
@@ -187,6 +237,56 @@ app.get('/api/snippets/:slug/content', async (c) => {
   } catch (err) {
     console.error('Error fetching snippet content:', err);
     return c.json({ message: 'Error fetching snippet' }, 500);
+  }
+});
+
+app.get('/api/snippets/tag/:tag', async (c) => {
+  const tag = c.req.param('tag');
+  const snippetsDirectory = path.join(process.cwd(), '..', 'snippets');
+  
+  try {
+    const { snippets } = await indexSnippets(snippetsDirectory);
+    const tagSnippets = snippets.filter(snippet => 
+      snippet.tags?.some(t => t.toLowerCase() === tag.toLowerCase())
+    );
+    
+    return c.json({ 
+      tag, 
+      snippets: tagSnippets,
+      total: tagSnippets.length 
+    });
+  } catch (err) {
+    console.error('Error fetching snippets by tag:', err);
+    return c.json({ message: 'Error fetching snippets' }, 500);
+  }
+});
+
+// Lista todas as tags disponíveis
+app.get('/api/snippets/tags/all', async (c) => {
+  const snippetsDirectory = path.join(process.cwd(), '..', 'snippets');
+  
+  try {
+    const { snippets } = await indexSnippets(snippetsDirectory);
+    const tagsSet = new Set<string>();
+    const tagCounts: Record<string, number> = {};
+    
+    snippets.forEach(snippet => {
+      snippet.tags?.forEach(tag => {
+        tagsSet.add(tag);
+        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+      });
+    });
+    
+    const tags = Array.from(tagsSet).sort();
+    
+    return c.json({ 
+      tags,
+      tagCounts,
+      total: tags.length 
+    });
+  } catch (err) {
+    console.error('Error fetching tags:', err);
+    return c.json({ message: 'Error fetching tags' }, 500);
   }
 });
 
