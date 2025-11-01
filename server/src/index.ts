@@ -1,16 +1,18 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
 import { cors } from 'hono/cors'
-import { readdir } from 'node:fs/promises'
 import path from 'node:path'
-import type { ApiResponse } from 'shared/dist'
+import type { ApiResponse, PostsIndexResponse } from 'shared/dist'
+import { indexPosts, getPostBySlug, getPostContent } from './lib/post'
 
 const port = Number(process.env.PORT)
 
 const app = new Hono()
 
 app.use(cors())
+
 app.get('/', (c) => c.text('Paxá API'))
+
 app.get('/hello', async (c) => {
   const data: ApiResponse = {
     message: "Hello BHVR!",
@@ -19,30 +21,85 @@ app.get('/hello', async (c) => {
   return c.json(data, { status: 200 })
 })
 
-// Define an API endpoint to list posts
+// Lista todos os posts com índice por ano
 app.get('/api/posts', async (c) => {
-  const postsDirectory = path.join(process.cwd(), '..', 'posts'); // Assuming posts are in a 'posts' directory in the project root
+  const postsDirectory = path.join(process.cwd(), '..', 'posts');
+  
   try {
-    const files = await readdir(postsDirectory);
-
-    console.log('Read files from posts directory:', files);
+    const { posts, postsByYear } = await indexPosts(postsDirectory);
     
-    // Process file names into a list of post objects (e.g., extracting slug/title)
-    const postList = files
-      .filter(file => file.endsWith('.md') || file.endsWith('.mdx')) // Filter for relevant files
-      .map(file => {
-        const slug = path.parse(file).name;
-        return {
-          slug: slug,
-          title: slug.replace(/-/g, ' '), // Simple title generation
-          // Add other metadata if you parse the file content here
-        };
-      });
-
-    return c.json({ posts: postList });
+    const response: PostsIndexResponse = {
+      posts,
+      postsByYear,
+      total: posts.length
+    };
+    
+    return c.json(response);
   } catch (err) {
-    console.error('Error reading posts directory:', err);
+    console.error('Error fetching posts:', err);
     return c.json({ message: 'Error fetching posts' }, 500);
+  }
+});
+
+// Busca posts por ano específico
+app.get('/api/posts/year/:year', async (c) => {
+  const year = c.req.param('year');
+  const postsDirectory = path.join(process.cwd(), '..', 'posts');
+  
+  try {
+    const { postsByYear } = await indexPosts(postsDirectory);
+    const yearPosts = postsByYear[year] || [];
+    
+    return c.json({ 
+      year, 
+      posts: yearPosts,
+      total: yearPosts.length 
+    });
+  } catch (err) {
+    console.error('Error fetching posts by year:', err);
+    return c.json({ message: 'Error fetching posts' }, 500);
+  }
+});
+
+// Busca um post específico pelo slug (apenas metadata)
+app.get('/api/posts/:slug', async (c) => {
+  const slug = c.req.param('slug');
+  const postsDirectory = path.join(process.cwd(), '..', 'posts');
+  
+  try {
+    const post = await getPostBySlug(postsDirectory, slug);
+    
+    if (!post) {
+      return c.json({ message: 'Post not found' }, 404);
+    }
+    
+    return c.json({ post });
+  } catch (err) {
+    console.error('Error fetching post:', err);
+    return c.json({ message: 'Error fetching post' }, 500);
+  }
+});
+
+// Busca o conteúdo completo de um post
+app.get('/api/posts/:slug/content', async (c) => {
+  const slug = c.req.param('slug');
+  const postsDirectory = path.join(process.cwd(), '..', 'posts');
+  
+  try {
+    const post = await getPostBySlug(postsDirectory, slug);
+    const content = await getPostContent(postsDirectory, slug);
+    
+    if (!post || !content) {
+      return c.json({ message: 'Post not found' }, 404);
+    }
+    
+    return c.json({ 
+      post,
+      content 
+    });
+  } catch (err) {
+    console.error('Error fetching post content:', err);
+    return c.json({ message: 'Error fetching post' }, 500);
   }
 });
 
