@@ -15,6 +15,8 @@ import {
 	getFullSnippet
 } from './lib/snippets';
 import { indexFavorites, getFavoriteById } from './lib/bookmark';
+import { analyticsRoutes } from './routes';
+import { analyticsMiddleware } from './middleware/analytics';
 import nodemailer from 'nodemailer';
 
 const port = Number(process.env.PORT);
@@ -22,6 +24,10 @@ const port = Number(process.env.PORT);
 const app = new Hono();
 
 app.use(cors());
+
+app.use('*', analyticsMiddleware); // Rastreia visitas
+
+app.route('/api/analytics', analyticsRoutes);
 
 app.get('/api', (c) => c.text('Paxá API'));
 

@@ -8,6 +8,7 @@
     "dev": "bun --watch run src/index.ts"
   },
   "dependencies": {
+    "@libsql/client": "^0.15.15",
     "drizzle-orm": "^0.44.7",
     "hono": "^4.7.11",
     "shared": "workspace:*"

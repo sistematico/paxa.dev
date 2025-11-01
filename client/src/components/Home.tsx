@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "./Icon";
 import Lottie from "lottie-react";
 import businessman from "../assets/lottie/businessman.json";
 
@@ -42,11 +43,11 @@ function Home() {
 	);
 
 	return (
-		<div className="w-full max-w-7xl mx-auto px-4 py-12 lg:py-20">
+		<div className="w-full max-w-7xl mx-auto px-4 py-12 lg:py-20 mb-10">
 			<div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 				{/* Conteúdo de Texto */}
 				<div className="order-2 lg:order-1">
-					<h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+					<h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 bg-linear-to-r from-orange-400 to-red-800 bg-clip-text text-transparent">
 						Lucas Brum
 					</h1>
 					
@@ -57,25 +58,27 @@ function Home() {
 					{/* Toggle de Modo */}
 					<div className="flex gap-2 mb-8 bg-black/30 p-1 rounded-lg inline-flex">
 						<button
-							className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+							className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${
 								!isTechnical
-									? "bg-primary text-white shadow-lg"
+									? "bg-orange-500 text-white shadow-lg"
 									: "text-gray-400 hover:text-white"
 							}`}
 							onClick={() => setIsTechnical(false)}
 							type="button"
 						>
+							<Icon name="mule" size={16} />
 							Versão Simples
 						</button>
 						<button
-							className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+							className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${
 								isTechnical
-									? "bg-primary text-white shadow-lg"
+									? "bg-orange-500 text-white shadow-lg"
 									: "text-gray-400 hover:text-white"
 							}`}
 							onClick={() => setIsTechnical(true)}
 							type="button"
 						>
+							<Icon name="brain" size={16} />
 							Versão Técnica
 						</button>
 					</div>

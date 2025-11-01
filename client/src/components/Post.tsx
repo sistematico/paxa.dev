@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import CodeBlock from './CodeBlock';
+import Giscus from '@giscus/react';
 import type { PostMetadata } from 'shared/dist';
 
 const SERVER_URL = import.meta.env.VITE_API_URL!;
@@ -20,11 +21,11 @@ function Post() {
 
 			try {
 				const response = await fetch(`${SERVER_URL}/posts/${slug}/content`);
-				
+
 				if (!response.ok) {
 					throw new Error('Post not found');
 				}
-				
+
 				const data = await response.json();
 				setPost(data.post);
 				setContent(data.content);
@@ -60,27 +61,30 @@ function Post() {
 		);
 	}
 
-	const contentWithoutFrontmatter = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
+	const contentWithoutFrontmatter = content.replace(
+		/^---\s*\n[\s\S]*?\n---\s*\n/,
+		''
+	);
 
 	return (
 		<div className="container mx-auto px-4 py-8 max-w-4xl">
-			<Link 
-				to="/posts" 
+			<Link
+				to="/posts"
 				className="inline-flex items-center gap-2 text-blue-400 hover:underline mb-8"
 			>
-				<svg 
-					xmlns="http://www.w3.org/2000/svg" 
-					className="h-4 w-4" 
-					fill="none" 
-					viewBox="0 0 24 24" 
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					className="h-4 w-4"
+					fill="none"
+					viewBox="0 0 24 24"
 					stroke="currentColor"
 				>
 					<title>Voltar</title>
-					<path 
-						strokeLinecap="round" 
-						strokeLinejoin="round" 
-						strokeWidth={2} 
-						d="M15 19l-7-7 7-7" 
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth={2}
+						d="M15 19l-7-7 7-7"
 					/>
 				</svg>
 				Voltar para o blog
@@ -89,7 +93,7 @@ function Post() {
 			<article>
 				<header className="mb-8">
 					<h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-					
+
 					<div className="flex items-center gap-1 text-sm text-gray-400 mb-4">
 						<time dateTime={post.date}>
 							{new Date(post.date).toLocaleDateString('pt-BR', {
@@ -98,16 +102,14 @@ function Post() {
 								year: 'numeric'
 							})}
 						</time>
-						
-						{post.author && (
-							<span>por {post.author}</span>
-						)}
+
+						{post.author && <span>por {post.author}</span>}
 					</div>
-					
+
 					{post.tags && post.tags.length > 0 && (
 						<div className="flex flex-wrap gap-2 mb-6">
 							{post.tags.map((tag) => (
-								<span 
+								<span
 									key={tag}
 									className="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded"
 								>
@@ -116,7 +118,7 @@ function Post() {
 							))}
 						</div>
 					)}
-					
+
 					{post.excerpt && (
 						<p className="text-lg text-gray-300 italic border-l-4 border-gray-700 pl-4">
 							{post.excerpt}
@@ -125,17 +127,23 @@ function Post() {
 				</header>
 
 				<div className="prose prose-invert prose-lg max-w-none">
-					<ReactMarkdown 
+					<ReactMarkdown
 						remarkPlugins={[remarkGfm]}
 						components={{
-							h1: (props) => <h1 className="text-3xl font-bold mb-4 mt-8" {...props} />,
-							h2: (props) => <h2 className="text-2xl font-bold mb-3 mt-6" {...props} />,
-							h3: (props) => <h3 className="text-xl font-bold mb-2 mt-4" {...props} />,
+							h1: (props) => (
+								<h1 className="text-3xl font-bold mb-4 mt-8" {...props} />
+							),
+							h2: (props) => (
+								<h2 className="text-2xl font-bold mb-3 mt-6" {...props} />
+							),
+							h3: (props) => (
+								<h3 className="text-xl font-bold mb-2 mt-4" {...props} />
+							),
 							p: (props) => <p className="mb-4 leading-relaxed" {...props} />,
 							code: ({ children, className }) => {
 								const match = /language-(\w+)/.exec(className || '');
 								const language = match ? match[1] : '';
-								
+
 								return match ? (
 									<CodeBlock language={language}>
 										{String(children).replace(/\n$/, '')}
@@ -147,21 +155,54 @@ function Post() {
 								);
 							},
 							pre: (props) => <pre className="my-4" {...props} />,
-							ul: (props) => <ul className="list-disc list-inside mb-4 space-y-2 ml-4" {...props} />,
-							ol: (props) => <ol className="list-decimal list-inside mb-4 space-y-2 ml-4" {...props} />,
+							ul: (props) => (
+								<ul
+									className="list-disc list-inside mb-4 space-y-2 ml-4"
+									{...props}
+								/>
+							),
+							ol: (props) => (
+								<ol
+									className="list-decimal list-inside mb-4 space-y-2 ml-4"
+									{...props}
+								/>
+							),
 							li: (props) => <li className="ml-2" {...props} />,
 							blockquote: (props) => (
-								<blockquote className="border-l-4 border-gray-700 pl-4 italic my-4 text-gray-300" {...props} />
+								<blockquote
+									className="border-l-4 border-gray-700 pl-4 italic my-4 text-gray-300"
+									{...props}
+								/>
 							),
 							a: (props) => (
-								<a className="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />
-							),
+								<a
+									className="text-blue-400 hover:underline"
+									target="_blank"
+									rel="noopener noreferrer"
+									{...props}
+								/>
+							)
 						}}
 					>
 						{contentWithoutFrontmatter}
 					</ReactMarkdown>
 				</div>
 			</article>
+			<Giscus
+				id="comments"
+				repo="sistematico/paxa.dev"
+				repoId="R_kgDOPykAIw"
+				category="General"
+				categoryId="DIC_kwDOPykAI84CxVJ1"
+				mapping="pathname"
+				term="Welcome to @giscus/react component!"
+				reactionsEnabled="1"
+				emitMetadata="0"
+				inputPosition="top"
+				theme="dark"
+				lang="pt"
+				loading="lazy"
+			/>
 		</div>
 	);
 }

@@ -1,4 +1,5 @@
 import SimpleIcon from '../components/SimpleIcon';
+import SiteStats from '../components/SiteStats'
 
 function Footer() {
 	return (
@@ -34,16 +35,26 @@ function Footer() {
 						</a>.
 					</div>
 					<div className="text-right">
-						<div className="flex gap-2 items-center">
-							<a href="https://facebook.com/lsbrum" target="_blank" rel="noopener noreferrer">
-								<SimpleIcon name="Facebook" size={22} />
-							</a>
-							<a href="https://x.com/sistematico" target="_blank" rel="noopener noreferrer">
-								<SimpleIcon name="X" size={20} />
-							</a>
-							<a href="https://github.com/sistematico" target="_blank" rel="noopener noreferrer">
+						<div className="flex gap-3 items-center group">
+							<a href="https://github.com/sistematico" target="_blank" rel="noopener noreferrer" className="transition transform hover:scale-120 duration-500 hover:text-orange-500">
 								<SimpleIcon name="GitHub" size={22} />
 							</a>
+							<a href="https://reddit.com/u/lsbrum" target="_blank" rel="noopener noreferrer" className="transition transform hover:scale-120 duration-500 hover:text-orange-500">
+								<SimpleIcon name="Reddit" size={22} />
+							</a>
+							<a href="https://mastodon.social/@sistematico" target="_blank" rel="noopener noreferrer" className="transition transform hover:scale-120 duration-500 hover:text-orange-500">
+								<SimpleIcon name="Mastodon" size={22} />
+							</a>
+							<a href="https://t.me/sistematico" target="_blank" rel="noopener noreferrer" className="transition transform hover:scale-120 duration-500 hover:text-orange-500">
+								<SimpleIcon name="Telegram" size={22} />
+							</a>
+							<a href="https://x.com/sistematico" target="_blank" rel="noopener noreferrer" className="transition transform hover:scale-120 duration-500 hover:text-orange-500">
+								<SimpleIcon name="X" size={20} />
+							</a>
+							<a href="https://facebook.com/lsbrum" target="_blank" rel="noopener noreferrer" className="transition transform hover:scale-120 duration-500 hover:text-orange-500">
+								<SimpleIcon name="Facebook" size={22} />
+							</a>
+							<SiteStats />
 						</div>
 					</div>
 				</div>
