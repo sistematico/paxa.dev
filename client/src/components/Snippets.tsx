@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router';
 import type { SnippetMetadata, SnippetsByCategory } from 'shared/dist';
 import { Code2, Tag } from 'lucide-react';
 
@@ -7,32 +6,33 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
 
 export function Snippets() {
 	const [snippets, setSnippets] = useState<SnippetMetadata[]>([]);
-	const [snippetsByCategory, setSnippetsByCategory] = useState<SnippetsByCategory>({});
+	const [snippetsByCategory, setSnippetsByCategory] =
+		useState<SnippetsByCategory>({});
 	const [categories, setCategories] = useState<string[]>([]);
 	const [activeCategory, setActiveCategory] = useState<string>('');
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	
+
 	const categoryRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
 	useEffect(() => {
 		const fetchSnippets = async () => {
 			try {
 				const response = await fetch(`${SERVER_URL}/api/snippets`);
-				
+
 				if (!response.ok) {
 					throw new Error('Failed to fetch snippets');
 				}
-				
+
 				const data = await response.json();
 				setSnippets(data.snippets);
 				setSnippetsByCategory(data.snippetsByCategory);
 				setCategories(data.categories);
-				
+
 				if (data.categories.length > 0) {
 					setActiveCategory(data.categories[0]);
 				}
-				
+
 				setLoading(false);
 			} catch (err) {
 				console.error('Error fetching snippets:', err);
@@ -53,8 +53,11 @@ export function Snippets() {
 				const element = categoryRefs.current[category];
 				if (element) {
 					const { offsetTop, offsetHeight } = element;
-					
-					if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+
+					if (
+						scrollPosition >= offsetTop &&
+						scrollPosition < offsetTop + offsetHeight
+					) {
 						setActiveCategory(category);
 						break;
 					}
@@ -169,17 +172,19 @@ export function Snippets() {
 					{categories.map((category) => (
 						<section
 							key={category}
-							ref={(el) => { categoryRefs.current[category] = el; }}
+							ref={(el) => {
+								categoryRefs.current[category] = el;
+							}}
 							className="mb-16 scroll-mt-24"
 							id={`category-${category.toLowerCase().replace(/\s+/g, '-')}`}
 						>
 							<h2 className="text-3xl font-bold mb-6 border-b-2 border-gray-700 pb-2">
 								{category}
 							</h2>
-							
+
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								{snippetsByCategory[category]?.map((snippet) => (
-									<article 
+									<article
 										key={snippet.slug}
 										className="border border-gray-800 rounded-lg p-5 hover:border-gray-600 transition-all hover:shadow-lg hover:shadow-gray-900/50"
 									>
@@ -191,17 +196,17 @@ export function Snippets() {
 												{snippet.language}
 											</span>
 										</div>
-										
+
 										{snippet.description && (
 											<p className="text-sm text-gray-400 mb-4 line-clamp-2">
 												{snippet.description}
 											</p>
 										)}
-										
+
 										{snippet.tags && snippet.tags.length > 0 && (
 											<div className="flex flex-wrap gap-2 mb-4">
 												{snippet.tags.map((tag) => (
-													<span 
+													<span
 														key={tag}
 														className="text-xs bg-gray-900 text-gray-400 px-2 py-1 rounded flex items-center gap-1"
 													>
@@ -211,25 +216,25 @@ export function Snippets() {
 												))}
 											</div>
 										)}
-										
+
 										<button
 											type="button"
 											className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-1 transition-colors"
 										>
 											Ver código
-											<svg 
-												xmlns="http://www.w3.org/2000/svg" 
-												className="h-4 w-4" 
-												fill="none" 
-												viewBox="0 0 24 24" 
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												className="h-4 w-4"
+												fill="none"
+												viewBox="0 0 24 24"
 												stroke="currentColor"
 											>
 												<title>Seta</title>
-												<path 
-													strokeLinecap="round" 
-													strokeLinejoin="round" 
-													strokeWidth={2} 
-													d="M9 5l7 7-7 7" 
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth={2}
+													d="M9 5l7 7-7 7"
 												/>
 											</svg>
 										</button>
