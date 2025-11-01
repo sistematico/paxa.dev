@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 import CodeBlock from './CodeBlock';
 import type { PostMetadata } from 'shared/dist';
 
-const SERVER_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const SERVER_URL = import.meta.env.VITE_API_URL!;
 
 function Post() {
 	const { slug } = useParams();
@@ -19,7 +19,7 @@ function Post() {
 			if (!slug) return;
 
 			try {
-				const response = await fetch(`${SERVER_URL}/api/posts/${slug}/content`);
+				const response = await fetch(`${SERVER_URL}/posts/${slug}/content`);
 				
 				if (!response.ok) {
 					throw new Error('Post not found');

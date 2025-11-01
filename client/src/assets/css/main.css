@@ -14,7 +14,7 @@ body {
   color: #ffffff;
 }
 
-@theme {
+@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
@@ -23,7 +23,7 @@ body {
   --color-mint-500: oklch(0.72 0.11 178);
 }
 
+@view-transition {
+  navigation: auto;
+}
 
-/* a {
-  @apply text-blue-400 hover:text-red-600 transition-colors duration-700;
-} */

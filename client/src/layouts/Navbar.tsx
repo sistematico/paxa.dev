@@ -1,21 +1,31 @@
-import { Home, Newspaper, SquareBottomDashedScissors, Bookmark } from 'lucide-react'
-import { Link } from 'react-router'
+import {
+	Home,
+	Newspaper,
+	SquareBottomDashedScissors,
+	Bookmark
+} from 'lucide-react';
+import { Link, useLocation } from 'react-router';
 
 const navLinks = [
 	{ href: '/', label: 'Início', icon: Home },
 	{ href: '/posts', label: 'Blog', icon: Newspaper },
 	{ href: '/snippets', label: 'Snippets', icon: SquareBottomDashedScissors },
 	{ href: '/favoritos', label: 'Favoritos', icon: Bookmark }
-]
+];
 
 export function Navbar() {
+	const location = useLocation();
+
 	return (
 		<ul className="hidden md:flex items-center gap-6 text-sm">
 			{navLinks.map((link) => (
 				<li key={link.href}>
 					<Link
 						to={link.href}
-						className="flex gap-2 text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+						className={`flex gap-2 p-3 text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 ${
+							(location.pathname === link.href || (location.pathname.startsWith('/post') && link.href.includes('/post'))) ? 'rounded-md border-2 border-orange-500 font-bold' : ''
+						}`}
+						viewTransition
 					>
 						<span className="navbar-icon">
 							{link.icon && <link.icon size={18} />}
@@ -27,10 +37,14 @@ export function Navbar() {
 				</li>
 			))}
 		</ul>
-	)
+	);
 }
 
-export function NavbarMobile({ setOpen }: { setOpen: (open: boolean) => void; }) {
+export function NavbarMobile({
+	setOpen
+}: {
+	setOpen: (open: boolean) => void;
+}) {
 	return (
 		<nav className="md:hidden border-t border-black/10 ">
 			<ul className="flex flex-col gap-4 text-sm">
@@ -40,6 +54,7 @@ export function NavbarMobile({ setOpen }: { setOpen: (open: boolean) => void; })
 							to={link.href}
 							onClick={() => setOpen(false)}
 							className="flex gap-2 text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+							viewTransition
 						>
 							<span className="navbar-icon">
 								{link.icon && <link.icon size={18} />}
@@ -52,5 +67,5 @@ export function NavbarMobile({ setOpen }: { setOpen: (open: boolean) => void; })
 				))}
 			</ul>
 		</nav>
-	)
+	);
 }
