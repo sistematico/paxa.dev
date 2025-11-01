@@ -9,15 +9,17 @@ function Header() {
 		<header className="sticky top-0 bg-background border-b-2 border-black/50 bg-background py-2 px-2 md:px-0 z-50">
 			<div className="container mx-auto">
 				<div className="flex h-16 items-center justify-between gap-8">
-					<Link to="/" className="flex items-center gap-2">
-						<span className="sr-only">Home</span>
+					<Link to="/" className="flex items-center gap-2 px-3 border-2 border-black/50 shadow-xl bg-background rounded-xl h-16">
 						<img
 							src="/images/logo.svg"
 							alt="Paxá"
 							width={40}
 							height={40}
 						/>
-						<span className="text-2xl font-bold">Paxá</span>
+						<div className="flex flex-col justify-center gap-4">
+							<h2 className="text-2xl tracking-[.52em] uppercase leading-0 m-0 mt-[7px] p-0">Paxá</h2>
+							<span className="italic text-xs -tracking-[.01em] leading-0 m-0 -ml-[2px] p-0">Fullstack Developer</span>
+						</div>
 					</Link>
 					<Navbar />
 					<button

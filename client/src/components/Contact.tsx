@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { Send, CheckCircle, XCircle } from 'lucide-react';
 
 const apiUrl = import.meta.env.VITE_API_URL!;
+
+type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
 const ContactForm = () => {
 	const [formData, setFormData] = useState({
@@ -8,12 +11,7 @@ const ContactForm = () => {
 		email: '',
 		message: ''
 	});
-
-	// interface FormData {
-	//   name: string;
-	//   email: string;
-	//   message: string;
-	// }
+	const [status, setStatus] = useState<FormStatus>('idle');
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -23,6 +21,8 @@ const ContactForm = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setStatus('sending');
+
 		try {
 			const response = await fetch(`${apiUrl}/email`, {
 				method: 'POST',
@@ -31,46 +31,129 @@ const ContactForm = () => {
 				},
 				body: JSON.stringify(formData)
 			});
-			const data = await response.text();
-			alert(data);
+
+			if (response.ok) {
+				setStatus('success');
+				setFormData({ name: '', email: '', message: '' });
+				setTimeout(() => setStatus('idle'), 5000);
+			} else {
+				setStatus('error');
+				setTimeout(() => setStatus('idle'), 5000);
+			}
 		} catch (error) {
 			console.error('Error sending email:', error);
-			alert('Failed to send email.');
+			setStatus('error');
+			setTimeout(() => setStatus('idle'), 5000);
 		}
 	};
 
 	return (
-		<form className="flex flex-col" onSubmit={handleSubmit}>
-			<input
-				type="text"
-				name="name"
-				placeholder="Your Name"
-				value={formData.name}
-				onChange={handleChange}
-        className="border-2 border-black/50 bg-black/20 w-full mb-4"
-			/>
-			<input
-				type="email"
-				name="email"
-				placeholder="Your Email"
-				value={formData.email}
-				onChange={handleChange}
-        className="border-2 border-black/50 bg-black/20 w-full mb-4"
-			/>
-			<textarea
-				name="message"
-				placeholder="Your Message"
-				value={formData.message}
-        className="border-2 border-black/50 bg-black/20 w-full mb-4"
-				onChange={handleChange}
-			></textarea>
-			<button 
-        className="border-2 border-black/50 bg-black/20 w-full mb-4"
-        type="submit"
-      >
-        Enviar
-      </button>
-		</form>
+		<div className="w-full max-w-2xl mx-auto px-4 py-12">
+			<div className="mb-8">
+				<h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+					Entre em Contato
+				</h1>
+				<p className="text-gray-400 text-lg">
+					Vamos conversar sobre seu próximo projeto
+				</p>
+			</div>
+
+			<form onSubmit={handleSubmit} className="space-y-6">
+				{/* Nome */}
+				<div className="group">
+					<label 
+						htmlFor="name" 
+						className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-primary"
+					>
+						Nome
+					</label>
+					<input
+						id="name"
+						type="text"
+						name="name"
+						placeholder="Seu nome completo"
+						value={formData.name}
+						onChange={handleChange}
+						required
+						className="w-full px-4 py-3 bg-black/30 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+					/>
+				</div>
+
+				{/* Email */}
+				<div className="group">
+					<label 
+						htmlFor="email" 
+						className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-primary"
+					>
+						Email
+					</label>
+					<input
+						id="email"
+						type="email"
+						name="email"
+						placeholder="seu@email.com"
+						value={formData.email}
+						onChange={handleChange}
+						required
+						className="w-full px-4 py-3 bg-black/30 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+					/>
+				</div>
+
+				{/* Mensagem */}
+				<div className="group">
+					<label 
+						htmlFor="message" 
+						className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-primary"
+					>
+						Mensagem
+					</label>
+					<textarea
+						id="message"
+						name="message"
+						placeholder="Conte-me sobre seu projeto..."
+						value={formData.message}
+						onChange={handleChange}
+						required
+						rows={6}
+						className="w-full px-4 py-3 bg-black/30 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+					/>
+				</div>
+
+				{/* Botão de Envio */}
+				<button
+					type="submit"
+					disabled={status === 'sending'}
+					className="w-full bg-gradient-to-r from-primary to-secondary text-white font-semibold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+				>
+					{status === 'sending' ? (
+						<>
+							<div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+							<span>Enviando...</span>
+						</>
+					) : (
+						<>
+							<span>Enviar Mensagem</span>
+							<Send size={18} className="group-hover:translate-x-1 transition-transform" />
+						</>
+					)}
+				</button>
+
+				{/* Feedback Messages */}
+				{status === 'success' && (
+					<div className="flex items-center gap-2 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 animate-in fade-in slide-in-from-bottom-4 duration-500">
+						<CheckCircle size={20} />
+						<span>Mensagem enviada com sucesso! Responderemos em breve.</span>
+					</div>
+				)}
+
+				{status === 'error' && (
+					<div className="flex items-center gap-2 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 animate-in fade-in slide-in-from-bottom-4 duration-500">
+						<XCircle size={20} />
+						<span>Erro ao enviar mensagem. Tente novamente mais tarde.</span>
+					</div>
+				)}
+			</form>
+		</div>
 	);
 };
 

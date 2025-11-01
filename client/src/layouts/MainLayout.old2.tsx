@@ -9,16 +9,11 @@ function MainLayout() {
 	return (
 		<div className="min-h-screen flex flex-col">
 			<Header />
-			<main
-				className="flex-1 w-full"
-				style={{
-					transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out',
-					opacity: isNavigating ? 0 : 1,
-					transform: isNavigating ? 'translateY(10px)' : 'translateY(0)'
-				}}
-			>
-				<Outlet />
-			</main>
+			<div className={isNavigating ? 'fade-out-up' : 'fade-in-down'}>
+				<main className="flex flex-1 flex-wrap items-center justify-center container mx-auto pt-2 mb-8">
+					<Outlet />
+				</main>
+			</div>
 			<Footer />
 		</div>
 	);
