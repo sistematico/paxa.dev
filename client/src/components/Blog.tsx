@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import type { PostMetadata, PostsByYear } from 'shared/dist';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export function PostList() {
 	const [posts, setPosts] = useState<PostMetadata[]>([]);
@@ -13,7 +13,7 @@ export function PostList() {
 	useEffect(() => {
 		const fetchPosts = async () => {
 			try {
-				const response = await fetch(`${SERVER_URL}/api/posts`);
+				const response = await fetch(`${apiUrl}/api/posts`);
 				
 				if (!response.ok) {
 					throw new Error('Failed to fetch posts');

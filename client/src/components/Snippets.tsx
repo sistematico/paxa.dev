@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { SnippetMetadata, SnippetsByCategory } from 'shared/dist';
 import { Code2, Tag } from 'lucide-react';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export function Snippets() {
 	const [snippets, setSnippets] = useState<SnippetMetadata[]>([]);
@@ -18,7 +18,7 @@ export function Snippets() {
 	useEffect(() => {
 		const fetchSnippets = async () => {
 			try {
-				const response = await fetch(`${SERVER_URL}/api/snippets`);
+				const response = await fetch(`${apiUrl}/api/snippets`);
 
 				if (!response.ok) {
 					throw new Error('Failed to fetch snippets');

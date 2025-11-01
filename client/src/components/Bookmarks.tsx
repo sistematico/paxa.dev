@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { Favorite, FavoritesByCategory } from 'shared/dist';
 import { Bookmark, ExternalLink, Tag } from 'lucide-react';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export function Favorites() {
 	const [favorites, setFavorites] = useState<Favorite[]>([]);
@@ -17,7 +17,7 @@ export function Favorites() {
 	useEffect(() => {
 		const fetchFavorites = async () => {
 			try {
-				const response = await fetch(`${SERVER_URL}/api/bookmarks`);
+				const response = await fetch(`${apiUrl}/api/bookmarks`);
 				
 				if (!response.ok) {
 					throw new Error('Failed to fetch favorites');

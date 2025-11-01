@@ -1,14 +1,14 @@
 import { useState } from "react";
 import type { ApiResponse } from "shared";
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 function Home() {
 	const [data, setData] = useState<ApiResponse | undefined>();
 
 	async function sendRequest() {
 		try {
-			const req = await fetch(`${SERVER_URL}/hello`);
+			const req = await fetch(`${apiUrl}/hello`);
 			const res: ApiResponse = await req.json();
 			setData(res);
 		} catch (error) {
