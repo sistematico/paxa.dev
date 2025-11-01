@@ -1,94 +1,102 @@
 import { Hono } from 'hono';
-import {
-	getSiteStats,
-	getPostStats,
-	hasUserLikedPost,
-	trackPostView,
-	togglePostLike,
-	getPopularPosts
-} from '../lib/analytics';
+import { db } from '../db';
+import { siteVisits, postViews } from '../db/schema';
+import { eq, sql } from 'drizzle-orm';
 
 const app = new Hono();
 
-// ==================== ANALYTICS ====================
+/**
+ * POST /api/analytics/pageview
+ * Rastreia uma pageview vinda do cliente
+ */
+app.post('/pageview', async (c) => {
+  try {
+    const visitorId = c.req.header('visitorid');
+    const { path } = await c.req.json();
 
-// Estatísticas globais do site
-app.get('/stats', async (c) => {
-	try {
-		const stats = await getSiteStats();
-		return c.json(stats);
-	} catch (err) {
-		console.error('Error fetching site stats:', err);
-		return c.json({ message: 'Error fetching stats' }, 500);
-	}
+    if (!visitorId || !path) {
+      return c.json({ error: 'Invalid request' }, 400);
+    }
+
+    console.log(`📊 Pageview tracked: ${path} - Visitor: ${visitorId.slice(0, 8)}...`);
+
+    // Verifica se o visitante já existe
+    const existing = await db.select()
+      .from(siteVisits)
+      .where(eq(siteVisits.visitorId, visitorId))
+      .limit(1);
+
+    if (existing.length > 0) {
+      // Atualiza visitante existente
+      await db.update(siteVisits)
+        .set({
+          totalHits: sql`${siteVisits.totalHits} + 1`,
+          lastVisit: new Date(),
+        })
+        .where(eq(siteVisits.visitorId, visitorId));
+    } else {
+      // Cria novo visitante
+      await db.insert(siteVisits).values({
+        visitorId,
+        totalHits: 1,
+        firstVisit: new Date(),
+        lastVisit: new Date(),
+      });
+    }
+
+    // Se for um post, registra a visualização
+    const postMatch = path.match(/^\/post\/(.+)$/);
+    if (postMatch) {
+      const slug = postMatch[1];
+      
+      // Verifica se já visualizou este post
+      const existingView = await db.select()
+        .from(postViews)
+        .where(
+          sql`${postViews.postSlug} = ${slug} AND ${postViews.visitorId} = ${visitorId}`
+        )
+        .limit(1);
+
+      if (existingView.length === 0) {
+        // Registra nova visualização
+        await db.insert(postViews).values({
+          postSlug: slug,
+          visitorId,
+          viewedAt: new Date(),
+        });
+      }
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Error tracking pageview:', error);
+    return c.json({ error: 'Failed to track pageview' }, 500);
+  }
 });
 
-// Estatísticas de um post específico
-app.get('/posts/:slug/stats', async (c) => {
-	const slug = c.req.param('slug');
-	const visitorId = c.req.header('visitorid');
+/**
+ * POST /api/analytics/event
+ * Rastreia um evento customizado
+ */
+app.post('/event', async (c) => {
+  try {
+    const visitorId = c.req.header('visitorid');
+    const { event, data, path } = await c.req.json();
 
-	try {
-		const stats = await getPostStats(slug);
-		const hasLiked = visitorId ? await hasUserLikedPost(slug, visitorId) : false;
+    if (!visitorId || !event) {
+      return c.json({ error: 'Invalid request' }, 400);
+    }
 
-		return c.json({
-			...stats,
-			hasLiked
-		});
-	} catch (err) {
-		console.error('Error fetching post stats:', err);
-		return c.json({ message: 'Error fetching post stats' }, 500);
-	}
+    console.log(`📊 Event tracked: ${event}`, { path, data });
+
+    // Aqui você pode salvar eventos customizados em uma tabela separada
+    // Por enquanto, apenas loga
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Error tracking event:', error);
+    return c.json({ error: 'Failed to track event' }, 500);
+  }
 });
 
-// Registrar visualização de post
-app.post('/posts/:slug/view', async (c) => {
-	const slug = c.req.param('slug');
-	const visitorId = c.req.header('visitorid');
-
-	try {
-		if (!visitorId) {
-			return c.json({ message: 'Missing visitorId' }, 400);
-		}
-		await trackPostView(slug, visitorId);
-		const stats = await getPostStats(slug);
-		return c.json({ success: true, stats });
-	} catch (err) {
-		console.error('Error tracking post view:', err);
-		return c.json({ message: 'Error tracking view' }, 500);
-	}
-});
-
-// Curtir/descurtir post
-app.post('/posts/:slug/like', async (c) => {
-	const slug = c.req.param('slug');
-	const visitorId = c.req.header('visitorid');
-
-	if (!visitorId) {
-		return c.json({ message: 'Missing visitorId' }, 400);
-	}
-
-	try {
-		const result = await togglePostLike(slug, visitorId);
-		return c.json(result);
-	} catch (err) {
-		console.error('Error toggling post like:', err);
-		return c.json({ message: 'Error toggling like' }, 500);
-	}
-});
-
-// Posts mais populares
-app.get('/posts/popular', async (c) => {
-	const limit = Number(c.req.query('limit')) || 10;
-
-	try {
-		const posts = await getPopularPosts(limit);
-		return c.json({ posts });
-	} catch (err) {
-		console.error('Error fetching popular posts:', err);
-		return c.json({ message: 'Error fetching popular posts' }, 500);
-	}
-});
-
-export { app as analyticsRoutes }
+export { app as analyticsRoutes };
