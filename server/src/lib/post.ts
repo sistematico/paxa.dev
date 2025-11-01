@@ -64,7 +64,7 @@ function extractExcerpt(content: string, maxLength = 160): string {
   const withoutHeadings = withoutFrontmatter.replace(/^#{1,6}\s+.*$/gm, '');
   const paragraphs = withoutHeadings.split('\n\n').map(p => p.trim()).filter(Boolean);
   const text = paragraphs[0] || '';
-  return text.length <= maxLength ? text : text.slice(0, maxLength) + '...';
+  return text.length <= maxLength ? text : `${text.slice(0, maxLength)}...`;
 }
 
 /**
@@ -106,19 +106,21 @@ export async function indexPosts(postsDirectory: string): Promise<{
         return toPostMetadata(metadata, file, content);
       })
     );
+
+    const publishedPosts: PostMetadata[] = posts.filter(post => post.published);
     
     // Ordena por data (mais recentes primeiro)
-    posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    publishedPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     
     // Agrupa por ano
     const postsByYear: PostsByYear = {};
-    for (const post of posts) {
+    for (const post of publishedPosts) {
       const year = new Date(post.date).getFullYear().toString();
       if (!postsByYear[year]) postsByYear[year] = [];
       postsByYear[year].push(post);
     }
     
-    return { posts, postsByYear };
+    return { posts: publishedPosts, postsByYear };
   } catch (error) {
     console.error('Error indexing posts:', error);
     return { posts: [], postsByYear: {} };

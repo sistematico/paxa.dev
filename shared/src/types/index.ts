@@ -10,6 +10,7 @@ export type PostMetadata = {
   excerpt?: string;
   tags?: string[];
   author?: string;
+  published?: boolean;
 }
 
 export type Post = PostMetadata & {
