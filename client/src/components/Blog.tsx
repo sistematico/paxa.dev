@@ -190,7 +190,7 @@ export function PostList() {
 									</h3>
 								</Link>
 								
-								<div className="flex items-center gap-4 text-sm text-gray-400 mb-2">
+								<div className="flex items-center gap-1 text-sm text-gray-400 mb-2">
 									<time dateTime={post.date}>
 										{new Date(post.date).toLocaleDateString('pt-BR', {
 											day: '2-digit',

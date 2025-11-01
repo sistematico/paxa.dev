@@ -10,7 +10,7 @@ export type PostMetadata = {
   excerpt?: string;
   tags?: string[];
   author?: string;
-  published?: boolean;
+  draft?: boolean;
 }
 
 export type Post = PostMetadata & {
@@ -36,6 +36,7 @@ export type SnippetMetadata = {
   description?: string;
   tags?: string[];
   date?: string;
+  draft?: boolean;
 }
 
 export type Snippet = SnippetMetadata & {

@@ -6,7 +6,7 @@ function Header() {
 	const [open, setOpen] = useState(false)
 
 	return (
-		<header className="border-b-2 border-black/50 bg-background py-2 px-2 md:px-0">
+		<header className="sticky top-0 bg-background border-b-2 border-black/50 bg-background py-2 px-2 md:px-0">
 			<div className="container mx-auto">
 				<div className="flex h-16 items-center justify-between gap-8">
 					<Link to="/" className="flex items-center gap-2">

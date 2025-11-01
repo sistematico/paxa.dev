@@ -25,7 +25,7 @@
     "type-check": "turbo type-check",
     "test": "turbo test",
     "postinstall": "turbo build --filter=shared --filter=server",
-    "format": "biome format . --write"
+    "format": "biome --css-parse-tailwind-directives=true format . --write"
   },
   "keywords": [
     "bun",

@@ -326,7 +326,7 @@ export function Snippets() {
 														key={tag}
 														type="button"
 														onClick={() => handleTagClick(tag)}
-														className={`text-xs px-2 py-1 rounded flex items-center gap-1 transition-colors ${
+														className={`text-xs px-2 py-1 rounded flex items-center gap-1 ${
 															selectedTag === tag
 																? 'bg-blue-600 text-white'
 																: 'bg-gray-900 text-gray-400 hover:bg-gray-800'
@@ -341,7 +341,7 @@ export function Snippets() {
 
 										<Link
 											to={`/snippet/${snippet.slug}`}
-											className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-1 transition-colors"
+											className="text-sm font-medium flex items-center gap-1"
 										>
 											Ver código
 											<svg

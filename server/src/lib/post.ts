@@ -8,6 +8,7 @@ import type { PostMetadata, PostsByYear } from 'shared/dist';
 function parseString(value: unknown, defaultValue = ''): string {
   if (typeof value === 'string') return value;
   if (Array.isArray(value)) return value.join(', ');
+  if (typeof value === 'boolean') return value ? 'true' : 'false';
   return defaultValue;
 }
 
@@ -45,7 +46,7 @@ function parseFrontmatter(content: string): Record<string, unknown> {
       } catch {
         const items = rawValue.slice(1, -1).split(',')
           .map(s => s.trim().replace(/^["']|["']$/g, ''))
-          .filter(Boolean);
+          //.filter(Boolean);
         metadata[key] = items.length > 0 ? items : rawValue;
       }
     } else {
@@ -73,10 +74,11 @@ function extractExcerpt(content: string, maxLength = 160): string {
 function toPostMetadata(metadata: Record<string, unknown>, filename: string, content: string): PostMetadata {
   const slug = parseString(metadata.slug) || path.parse(filename).name;
   const dateRaw = parseString(metadata.date);
-  const date: string | undefined = dateRaw !== '' ? dateRaw : new Date().toISOString().split('T')[0];
+  const date = dateRaw !== '' ? dateRaw : new Date().toISOString().split('T')[0];
   const excerpt = parseString(metadata.excerpt) || extractExcerpt(content);
   const title = parseString(metadata.title) || slug.replace(/-/g, ' ');
   const author = parseString(metadata.author) || undefined;
+  const draft = metadata.draft === 'true';
   
   return {
     title,
@@ -85,6 +87,7 @@ function toPostMetadata(metadata: Record<string, unknown>, filename: string, con
     excerpt,
     tags: parseArray(metadata.tags),
     author,
+    draft
   };
 }
 
@@ -107,8 +110,8 @@ export async function indexPosts(postsDirectory: string): Promise<{
       })
     );
 
-    const publishedPosts: PostMetadata[] = posts.filter(post => post.published);
-    
+    const publishedPosts = posts.filter(post => post.draft === false);
+
     // Ordena por data (mais recentes primeiro)
     publishedPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     

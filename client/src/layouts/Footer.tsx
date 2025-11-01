@@ -11,17 +11,25 @@ function Footer() {
 							href="https://unlicense.org/"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="underline"
+							className="underline transition delay-100 hover:text-primary no-underline"
 						>
 							UnLicense
 						</a>
 						.<br />
-						Copyleft {new Date().getFullYear()} Paxá
+						Copyleft {new Date().getFullYear()} Paxá, fontes no <a href="https://github.com/sistematico/paxa.dev" target="_blank" rel="noopener noreferrer" className="underline transition delay-100 hover:text-primary no-underline">Github</a>.
 					</div>
 					<div className="text-right">
-            <a href="https://facebook.com/lsbrum" target="_blank" rel="noopener noreferrer">
-              <SimpleIcon name="siFacebook" size={22} />
-            </a>
+						<div className="flex gap-2 items-center">
+							<a href="https://facebook.com/lsbrum" target="_blank" rel="noopener noreferrer">
+								<SimpleIcon name="Facebook" size={22} />
+							</a>
+							<a href="https://x.com/sistematico" target="_blank" rel="noopener noreferrer">
+								<SimpleIcon name="X" size={20} />
+							</a>
+							<a href="https://github.com/sistematico" target="_blank" rel="noopener noreferrer">
+								<SimpleIcon name="GitHub" size={22} />
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>

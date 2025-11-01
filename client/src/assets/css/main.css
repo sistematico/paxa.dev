@@ -1,8 +1,29 @@
 @import url("./fonts.css");
 @import "tailwindcss";
 
+:root {
+  --background: #121113;
+  --primary: #1E90FF;
+  --secondary: #FF4500;
+  --text-color: #FFFFFF;
+}
+
 body {
   font-family: "Nunito", Arial, Helvetica, sans-serif;
   background: #121113;
   color: #ffffff;
 }
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-text: var(--text-color);
+  --color-mint-500: oklch(0.72 0.11 178);
+}
+
+
+/* a {
+  @apply text-blue-400 hover:text-red-600 transition-colors duration-700;
+} */

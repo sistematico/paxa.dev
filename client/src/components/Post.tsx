@@ -90,7 +90,7 @@ function Post() {
 				<header className="mb-8">
 					<h1 className="text-4xl font-bold mb-4">{post.title}</h1>
 					
-					<div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
+					<div className="flex items-center gap-1 text-sm text-gray-400 mb-4">
 						<time dateTime={post.date}>
 							{new Date(post.date).toLocaleDateString('pt-BR', {
 								day: '2-digit',
