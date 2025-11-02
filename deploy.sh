@@ -11,8 +11,10 @@ SERVICE="$NAME.service"
 cp -a $WORKDIR $TEMPDIR
 cd $TEMPDIR
 
-#git clean -fxd -e .env.production
-git clean -fxd
+git clean -fxd \
+  -e server/drizzle/database.sqlite \
+  -e client/.env.production \
+  -e server/.env.production
 cp server/.env.production server/.env
 cp client/.env.production client/.env
 
