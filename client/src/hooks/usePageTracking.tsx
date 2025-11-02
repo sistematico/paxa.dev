@@ -29,7 +29,7 @@ export function usePageTracking() {
                     credentials: 'include',
                     body: JSON.stringify({ path }),
                 });
-            } catch (error) {
+            } catch {
                 // Ignora erros silenciosamente
             }
         };
