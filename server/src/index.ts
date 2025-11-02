@@ -19,17 +19,26 @@ import { analyticsRoutes } from './routes';
 import { analyticsMiddleware } from './middleware/analytics';
 import nodemailer from 'nodemailer';
 
+const isDev = process.env.NODE_ENV !== 'production';
 const port = Number(process.env.PORT);
 
 const app = new Hono();
 
 // Middleware
-app.use(cors());
+//app.use(cors());
+
+app.use('*', cors({
+  origin: isDev ? 'http://localhost:5173' : 'https://paxa.dev',
+  credentials: true, // Permite cookies
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use('*', analyticsMiddleware); // Rastreia visitas
 
 // Routes
-app.get('/api', (c) => c.text('Paxá API'));
 app.route('/api/analytics', analyticsRoutes);
+app.get('/api', (c) => c.text('Paxá API'));
 
 // app.get('/hello', async (c) => {
 // 	const data: ApiResponse = {

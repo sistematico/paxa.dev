@@ -17,6 +17,7 @@ cp server/.env.production server/.env
 cp client/.env.production client/.env
 
 bun install
+bunx drizzle-kit push
 bun run build:single || { echo "Build failed"; exit 1; }
 
 sudo /usr/bin/systemctl stop $SERVICE
