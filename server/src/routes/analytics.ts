@@ -15,7 +15,7 @@ const app = new Hono<{ Variables: Variables }>();
  */
 app.post('/pageview', async (c) => {
   try {
-    const visitorId = c.get('visitorId');
+    const visitorId = c.req.header('visitorid');
 
     // Debug: Log do que está recebendo
     console.log('=== DEBUG PAGEVIEW ===');
@@ -143,7 +143,7 @@ app.get('/stats', async (c) => {
 app.get('/posts/:slug/stats', async (c) => {
   try {
     const slug = c.req.param('slug');
-    const visitorId = c.get('visitorId');
+    const visitorId = c.req.header('visitorid');
 
     let stats = await db
       .select()
@@ -196,11 +196,9 @@ app.get('/posts/:slug/stats', async (c) => {
 app.post('/posts/:slug/view', async (c) => {
   try {
     const slug = c.req.param('slug');
-    const visitorId = c.get('visitorId');
+    const visitorId = c.req.header('visitorid');
 
-    if (!visitorId) {
-      return c.json({ error: 'Missing visitorId' }, 400);
-    }
+    if (!visitorId) return c.json({ error: 'Missing visitorId' }, 400);
 
     const existing = await db
       .select()
@@ -242,7 +240,7 @@ app.post('/posts/:slug/view', async (c) => {
 app.post('/posts/:slug/like', async (c) => {
   try {
     const slug = c.req.param('slug');
-    const visitorId = c.get('visitorId');
+    const visitorId = c.req.header('visitorid');
 
     if (!visitorId) {
       return c.json({ error: 'Missing visitorId' }, 400);
@@ -277,7 +275,7 @@ app.post('/posts/:slug/like', async (c) => {
         visitorId,
         likedAt: new Date(),
       });
-      liked = true;
+      const liked = true;
     }
 
     await updatePostStats(slug);
@@ -303,7 +301,7 @@ app.post('/posts/:slug/like', async (c) => {
  */
 app.post('/event', async (c) => {
   try {
-    const visitorId = c.get('visitorId');
+    const visitorId = c.req.header('visitorid');
     const { event, data, path } = await c.req.json();
 
     if (!visitorId || !event) {
