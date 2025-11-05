@@ -34,4 +34,4 @@ app.post('/', async (c) => {
 	}
 });
 
-export { app as emailRoute };
+export { app as emailRoutes };
