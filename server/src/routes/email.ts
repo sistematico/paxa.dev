@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 
 const app = new Hono();
 
-app.post('/api/email', async (c) => {
+app.post('/', async (c) => {
 	try {
 		const { name, email, subject, message } = await c.req.json();
 

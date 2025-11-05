@@ -14,7 +14,7 @@ import {
 	getFullSnippet
 } from './lib/snippets';
 import { indexFavorites, getFavoriteById } from './lib/bookmark';
-import { analyticsRoutes } from './routes';
+import { analyticsRoutes, emailRoutes } from './routes';
 import { analyticsMiddleware } from './middleware/analytics';
 import nodemailer from 'nodemailer';
 
@@ -37,7 +37,7 @@ app.use('*', analyticsMiddleware); // Rastreia visitas
 // Routes
 app.get('/api', (c) => c.text('Paxá API'));
 app.route('/api/analytics', analyticsRoutes);
-
+app.route('/api/email', emailRoutes);
 
 // ==================== POSTS ====================
 
