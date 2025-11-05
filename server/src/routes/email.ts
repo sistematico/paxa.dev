@@ -5,34 +5,32 @@ const app = new Hono();
 
 app.post('/api/email', async (c) => {
 	try {
-		const { name, email, message } = await c.req.json();
+		const { name, email, subject, message } = await c.req.json();
 
 		// Create a Nodemailer transporter
 		const transporter = nodemailer.createTransport({
-			host: 'smtp.your-email-provider.com', // Replace with your SMTP host
-			port: 587, // Or 465 for secure SSL
-			secure: false, // true for 465, false for other ports
+			service: "iCloud", 
 			auth: {
-				user: 'your-email@example.com', // Your email address
-				pass: 'your-email-password' // Your email password or app-specific password
+				user: process.env.ICLOUD_EMAIL!, 
+				pass: process.env.ICLOUD_PASSWORD!
 			}
 		});
 
 		// Define email options
 		const mailOptions = {
-			from: '"Your Name" <your-email@example.com>', // Sender address
-			to: 'recipient@example.com', // Recipient email address
-			subject: `New Message from ${name}`,
-			html: `<p>Name: ${name}</p><p>Email: ${email}</p><p>Message: ${message}</p>`
+			from: `"${name}" <${email}>`,
+			to: 'paxa@paxa.dev', // Recipient email address
+			subject: `paxa.dev: ${subject} ${name}`,
+			html: `<p>Nome: ${name}</p><p>E-mail: ${email}</p><p>Mensagem: ${message}</p>`
 		};
 
 		// Send the email
 		await transporter.sendMail(mailOptions);
 
-		return c.text('Email sent successfully!');
+		return c.text('E-mail enviado');
 	} catch (error) {
-		console.error('Error sending email:', error);
-		return c.text('Failed to send email.', 500);
+		console.error('Erro ao enviar e-mail:', error);
+		return c.text('Erro ao enviar e-mail.', 500);
 	}
 });
 

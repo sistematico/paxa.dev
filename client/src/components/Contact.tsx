@@ -99,7 +99,27 @@ const ContactForm = () => {
 					/>
 				</div>
 
-				{/* Mensagem */}
+        {/* Assunto */}
+        <div className="group">
+          <label
+            htmlFor="subject"
+            className="block text-sm font-medium 󱓻 text-gray-300 mb-2 transition-colors group-focus-within:text-primary"
+          >
+            Assunto
+          </label>
+          <input
+            id="subject"
+            type="text"
+            name="subject"
+            placeholder="Assunto"
+            value={formData.subject}
+            onChange={handleChange}
+            className="w-full px-4 py-3 󱓻 bg-black/30 border 󱓻 border-gray-700 rounded-lg 󱓻 text-white 󱓻 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            required
+          />
+        </div>
+
+        {/* Mensagem */}
 				<div className="group">
 					<label 
 						htmlFor="message" 

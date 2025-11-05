@@ -2,3 +2,5 @@
 node_modules/
 drizzle/**
 !drizzle/.gitkeep
+.env
+.env.local
