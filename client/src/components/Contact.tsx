@@ -9,6 +9,7 @@ const ContactForm = () => {
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
+    subject: '',
 		message: ''
 	});
 	const [status, setStatus] = useState<FormStatus>('idle');
@@ -34,14 +35,14 @@ const ContactForm = () => {
 
 			if (response.ok) {
 				setStatus('success');
-				setFormData({ name: '', email: '', message: '' });
+				setFormData({ name: '', email: '', subject: '', message: '' });
 				setTimeout(() => setStatus('idle'), 5000);
 			} else {
 				setStatus('error');
 				setTimeout(() => setStatus('idle'), 5000);
 			}
 		} catch (error) {
-			console.error('Error sending email:', error);
+			console.error('Erro ao enviar e-mail:', error);
 			setStatus('error');
 			setTimeout(() => setStatus('idle'), 5000);
 		}
