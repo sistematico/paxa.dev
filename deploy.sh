@@ -15,6 +15,7 @@ git clean -fxd \
   -e server/drizzle/database.sqlite \
   -e client/.env \
   -e server/.env
+  
 cp server/.env server/.env.production
 cp client/.env client/.env.production
 
