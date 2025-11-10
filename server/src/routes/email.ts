@@ -19,9 +19,10 @@ app.post("/", async (c) => {
 
     // Define email options
     const mailOptions = {
-      from: `"${name}" <${email}>`,
+      from: `"Paxá" <paxa@paxa.dev>`,
       to: "paxa@paxa.dev", // Recipient email address
-      subject: `paxa.dev: ${subject} ${name}`,
+      replyTo: `"${name}" <${email}>`
+      subject: `paxa.dev: ${subject}`,
       html: `<p>Nome: ${name}</p><p>E-mail: ${email}</p><p>Mensagem: ${message}</p>`
     }
 
