@@ -3,9 +3,8 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import mdx from '@mdx-js/rollup'
 
-
 const dev = process.env.NODE_ENV !== 'production'
-const port = process.env.NODE_ENV === 'production' ? 8080 : 3000
+const port = process.env.NODE_ENV === 'production' ? 8082 : 3000
 
 export default defineConfig({
 	plugins: [react(), tailwindcss(), mdx()],
