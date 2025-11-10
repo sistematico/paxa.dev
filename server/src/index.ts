@@ -2,31 +2,20 @@ import { Hono } from 'hono';
 import { serveStatic } from 'hono/bun';
 import { cors } from 'hono/cors';
 import path from 'node:path';
-import type {
-	PostsIndexResponse,
-	SnippetsIndexResponse,
-	FavoritesResponse
-} from 'shared/dist';
+import nodemailer from 'nodemailer';
 import { indexPosts, getPostBySlug, getFullPost } from './lib/post';
-import {
-	indexSnippets,
-	getSnippetBySlug,
-	getFullSnippet
-} from './lib/snippets';
+import { indexSnippets,	getSnippetBySlug,	getFullSnippet } from './lib/snippets';
 import { indexFavorites, getFavoriteById } from './lib/bookmark';
 import { analyticsRoutes, emailRoutes } from './routes';
 import { analyticsMiddleware } from './middleware/analytics';
-import nodemailer from 'nodemailer';
+import type {	PostsIndexResponse,	SnippetsIndexResponse, FavoritesResponse } from 'shared/dist';
 
-const isDev = process.env.NODE_ENV !== 'production';
+const dev = process.env.NODE_ENV !== 'production';
 const port = Number(process.env.PORT);
-
 const app = new Hono();
 
-// app.use(cors());
-
 app.use('*', cors({
-  origin: isDev ? 'http://localhost:5173' : 'https://paxa.dev',
+  origin: dev ? 'http://localhost:5173' : 'https://paxa.dev',
   credentials: true, // Permite cookies
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
@@ -38,8 +27,6 @@ app.use('*', analyticsMiddleware); // Rastreia visitas
 app.get('/api', (c) => c.text('Paxá API'));
 app.route('/api/analytics', analyticsRoutes);
 app.route('/api/email', emailRoutes);
-
-// ==================== POSTS ====================
 
 // Lista todos os posts com índice por ano
 app.get('/api/posts', async (c) => {
