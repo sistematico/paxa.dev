@@ -2,35 +2,8 @@ import SimpleIcon from "../components/SimpleIcon"
 import SiteStats from "../components/SiteStats"
 import Popover from "../components/Popover"
 
-const Page = () => {
-  return (
-    <div className="w-screen h-screen flex justify-center items-center gap-4">
-      <Popover content={<p>This Content Will be render in Popover.</p>}>
-        <button
-          type="button"
-          className="bg-indigo-500 px-4 py-1.5 border rounded text-white"
-        >
-          Click me
-        </button>
-      </Popover>
-      <Popover
-        trigger="hover"
-        content={<p>This Content Will be render in Popover.</p>}
-      >
-        <button
-          type="button"
-          className="bg-indigo-500 px-4 py-1.5 border rounded text-white"
-        >
-          Hover me
-        </button>
-      </Popover>
-    </div>
-  )
-}
-
 function Footer() {
   return (
-    // <footer className="fixed bottom-0 left-0 right-0 z-50 border-t-2 border-black/50 bg-background py-2 text-xs shrink-0">
     <footer className="border-t-2 border-black/50 bg-background py-4 mt-auto">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-2">
