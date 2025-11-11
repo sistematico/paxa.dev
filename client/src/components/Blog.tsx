@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import type { PostMetadata, PostsByYear } from 'shared/dist';
 import { Tag as TagIcon } from 'lucide-react';
+import PostPreviewStats from './PostPreviewStats';
 
 const apiUrl = import.meta.env.VITE_API_URL!;
 
@@ -211,7 +212,7 @@ export function PostList() {
 								)}
 								
 								{post.tags && post.tags.length > 0 && (
-									<div className="flex flex-wrap gap-2">
+									<div className="flex flex-wrap gap-2 mb-2">
 										{post.tags.map((tag) => (
 											<button
 												key={tag}
@@ -231,6 +232,8 @@ export function PostList() {
 										))}
 									</div>
 								)}
+								
+								<PostPreviewStats slug={post.slug} />
 							</article>
 						))}
 					</div>
