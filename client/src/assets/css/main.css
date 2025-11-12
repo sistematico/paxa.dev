@@ -2,9 +2,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #121113;
+  /* --background: #121113; */
+  --background: #252423;
   --primary: #1E90FF;
-  --secondary: #FF4500;
+  --secondary: rgb(255, 75, 75);
+  --secondary-background: #412726;
   --text-color: #FFFFFF;
 }
 
@@ -19,6 +21,7 @@ body {
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
+  --color-secondary-background: var(--secondary-background);
   --color-text: var(--text-color);
   --color-mint-500: oklch(0.72 0.11 178);
 }
