@@ -1,0 +1,138 @@
+---
+title: "Deploy automatico"
+date: "2025-11-16"
+slug: "deploy"
+excerpt: "Faça deploy automático de um site em Next.js"
+tags: ["typescript", "javascript", "programação"]
+author: "Lucas Brum"
+draft: false
+---
+
+# Deploy automático usando o Gitlab CI ou Github Actions 
+
+Já fazem 25 longos anos desde que eu usava FTP(File Transfer Protocol) para enviar meus arquivos para o servidor e publicar um site na internet.
+
+Os métodos mudaram muito, mas o objetivo ainda é o mesmo, copiar arquivos de uma máquina para outra.
+
+## Porque usar a estratégia de "desenvolvimento contínuo"?
+
+1. Atualização fácil e automática
+2. Possibilidade de rodar testes antes e/ou depois do deploy
+3. Manter snapshots de cada estágio do desenvolvimento criando a possiblidade de rollbacks sem necessidade de backup
+4. Muitas outras vantagens
+
+Nesta estratégia de desenvolvimento a linguagem ou frameworks usados pouco importam.
+
+Tenha em mente que você irá trabalhar com 3 cópias do seu projeto:
+
+- Desenvolvimento(no seu PC local)
+- Staging no Github, Gilab, Codeberg ou outros
+- Produção(a cópia enviada para a VPS, AWS, Azure, etc...)
+
+## Gitlab
+
+`.gitlab-ci.yml`
+
+```yaml
+stages:
+  - build
+  - deploy
+
+variables:
+  BUN_VERSION: "1.3.2"
+  SSH_PORT: "2200"
+  SSH_USER: "nginx"
+  APP_PORT: "4060"
+
+build:
+  stage: build
+  image: oven/bun:1.3.2
+  script:
+    - bun install
+    - bun run build
+  artifacts:
+    paths:
+      - .next/
+      - package.json
+      - bun.lockb
+      - public/
+      - next.config.*
+    expire_in: 1 hour
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client rsync sshpass
+  script:
+    # Sincronizar arquivos usando sshpass com porta 2200
+    - sshpass -p "$SSH_PASS" rsync -avz --delete -e "ssh -p $SSH_PORT -o StrictHostKeyChecking=no" .next/ package.json bun.lockb public/ next.config.* $SSH_USER@$SSH_HOST:$PROJECT_PATH/
+    
+    # Executar comandos remotos usando sshpass com porta 2200
+    - sshpass -p "$SSH_PASS" ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd $PROJECT_PATH && bun install --production"
+    - sshpass -p "$SSH_PASS" ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "sudo systemctl daemon-reload"
+    - sshpass -p "$SSH_PASS" ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "sudo systemctl restart $SERVICE_NAME"
+    
+    # Verificar status do serviço
+    - sleep 5
+    - sshpass -p "$SSH_PASS" ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "sudo systemctl status $SERVICE_NAME --no-pager"
+    
+    # Verificar se a aplicação está respondendo
+    - sleep 10
+    - sshpass -p "$SSH_PASS" ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "curl -f http://localhost:$APP_PORT > /dev/null 2>&1 && echo '✅ Aplicação está respondendo' || echo '❌ Aplicação não está respondendo'"
+  only:
+    - main
+```
+
+## Github Actions
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy site via SSH with Password
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASS }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "."
+          target: ${{ secrets.PROJECT_PATH }}
+
+  build:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install and build Next.js
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASS }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ${{ secrets.PROJECT_PATH }}
+            bash scripts/deploy.sh
+```
+
+## Conclusão
+
+As vezes no começo pode parecer confuso trabalhar desta forma, mas na minha opinião é muito mais simples que transferir arquivos via FTP, rsync ou SSH.
+
