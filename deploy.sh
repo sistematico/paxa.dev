@@ -16,8 +16,8 @@ git clean -fxd \
   -e client/.env \
   -e server/.env
   
-cp server/.env server/.env.production
-cp client/.env client/.env.production
+[ -f server/.env ] && cp server/.env server/.env.production
+[ -f client/.env ] && cp client/.env client/.env.production
 
 bun install
 
