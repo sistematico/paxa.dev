@@ -66,7 +66,7 @@ function Post() {
   const contentWithoutFrontmatter = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, "")
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mb-12">
 			<Link to="/posts" className="border-2 border-black/50 py-2 ps-1.5 pe-4 rounded-lg inline-flex items-center gap-2 hover:bg-black/20 transition-colors duration-800 mb-8 uppercase">
       	<ArrowLeft /> Voltar
       </Link>
@@ -92,10 +92,10 @@ function Post() {
         Voltar para o blog
       </Link> */}
 
-      <div className="flex gap-8">
-        <article className="flex-1 max-w-4xl">
+      <div className="flex flex-col lg:flex-row gap-8">
+        <article className="flex-1 w-full lg:max-w-4xl">
           <header className="mb-8">
-            <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 break-words">{post.title}</h1>
 
             <div className="flex items-center gap-1 text-sm text-gray-400 mb-4">
               <time dateTime={post.date}>
@@ -123,24 +123,24 @@ function Post() {
             )}
 
             {post.excerpt && (
-              <p className="text-lg text-gray-300 italic border-l-4 border-gray-700 pl-4">
+              <p className="text-base sm:text-lg text-gray-300 italic border-l-4 border-gray-700 pl-4 break-words">
                 {post.excerpt}
               </p>
             )}
           </header>
 
-          <div className="prose prose-invert prose-lg max-w-none">
+          <div className="prose prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none w-full overflow-hidden">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
                 h1: (props) => (
-                  <h1 className="text-3xl font-bold mb-4 mt-8" {...props} />
+                  <h1 className="text-2xl sm:text-3xl font-bold mb-4 mt-8 break-words" {...props} />
                 ),
                 h2: (props) => (
-                  <h2 className="text-2xl font-bold mb-3 mt-6" {...props} />
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3 mt-6 break-words" {...props} />
                 ),
                 h3: (props) => (
-                  <h3 className="text-xl font-bold mb-2 mt-4" {...props} />
+                  <h3 className="text-lg sm:text-xl font-bold mb-2 mt-4 break-words" {...props} />
                 ),
                 p: (props) => <p className="mb-4 leading-relaxed" {...props} />,
                 code: ({ children, className }) => {

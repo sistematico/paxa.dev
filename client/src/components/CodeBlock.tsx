@@ -32,7 +32,7 @@ export function CodeBlock({ children, language, showLineNumbers = true }: CodeBl
 	};
 
 	return (
-		<div className="relative group">
+		<div className="relative group w-full overflow-hidden">
 			<div className="flex items-center justify-between bg-zinc-800 px-4 py-2 rounded-t-lg border-b border-black/50">
 				<span className="text-xs font-mono text-gray-400 uppercase">{language}</span>
 				<button
@@ -54,20 +54,23 @@ export function CodeBlock({ children, language, showLineNumbers = true }: CodeBl
 					)}
 				</button>
 			</div>
-			<SyntaxHighlighter
-				style={vscDarkPlus}
-				language={language}
-				PreTag="div"
-				className="!mt-0 !rounded-t-none !rounded-b-lg"
-				showLineNumbers={showLineNumbers}
-				customStyle={{
-					margin: 0,
-					borderTopLeftRadius: 0,
-					borderTopRightRadius: 0,
-				}}
-			>
-				{children}
-			</SyntaxHighlighter>
+			<div className="overflow-x-auto">
+				<SyntaxHighlighter
+					style={vscDarkPlus}
+					language={language}
+					PreTag="div"
+					className="!mt-0 !rounded-t-none !rounded-b-lg"
+					showLineNumbers={showLineNumbers}
+					customStyle={{
+						margin: 0,
+						borderTopLeftRadius: 0,
+						borderTopRightRadius: 0,
+						maxWidth: '100%',
+					}}
+				>
+					{children}
+				</SyntaxHighlighter>
+			</div>
 		</div>
 	);
 }
