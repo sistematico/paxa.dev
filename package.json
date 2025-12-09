@@ -18,7 +18,7 @@
     "build": "turbo build",
     "build:client": "turbo build --filter=client",
     "build:server": "turbo build --filter=server",
-    "build:single": "bun run build && bun run copy:static && /home/nginx/.bun/bin/bun run build:server",
+    "build:single": "BUN_JSC_forceRAMSize=524288000 /home/nginx/.bun/bin/bun run build && /home/nginx/.bun/bin/bun run copy:static && BUN_JSC_forceRAMSize=524288000 /home/nginx/.bun/bin/bun run build:server",
     "copy:static": "rm -rf server/static && cp -r client/dist server/static",
     "start:single": "cd server && PORT=8082 /home/nginx/.bun/bin/bun run dist/index.js",
     "push": "cd server && bunx drizzle-kit push",
