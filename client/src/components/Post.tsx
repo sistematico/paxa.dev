@@ -67,8 +67,8 @@ function Post() {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mb-12">
-			<Link to="/posts" className="border-2 border-black/50 py-2 ps-1.5 pe-4 rounded-lg inline-flex items-center gap-2 hover:bg-black/20 transition-colors duration-800 mb-8 uppercase">
-      	<ArrowLeft /> Voltar
+      <Link to="/posts" className="border-2 border-black/50 py-2 ps-1.5 pe-4 rounded-lg inline-flex items-center gap-2 hover:bg-black/20 transition-colors duration-800 mb-8 uppercase">
+        <ArrowLeft /> Voltar
       </Link>
       {/* <Link
         to="/posts"

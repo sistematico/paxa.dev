@@ -12,7 +12,7 @@ Construindo um Prompt ZSH Personalizado do Zero
 
 ...e entendendo como seu tema de prompt ZSH favorito funciona!
 
-Amitosh Swain Mahapatra
+Artigo original de: Amitosh Swain Mahapatra
 *02 de Maio de 2024*
 
 Esta semana, recebi um novo MacBook Pro space black 💻 com CPU e GPU M3 Pro. Estava animado para configurar meu ambiente de desenvolvimento, mas desta vez decidi não copiar minha configuração ZSH de mais de uma década com Oh my ZSH! e Starship. Foi uma excelente chance para começar do zero e aprender mais sobre o funcionamento interno do ZSH.
@@ -41,14 +41,16 @@ $
 O ZSH usa sequências de escape para exibir informações dinâmicas no prompt. Por exemplo, a sequência de escape %n expande para o nome de usuário atual, %~ exibe o diretório de trabalho atual e %# expande para # se o usuário atual tiver privilégios de superusuário.
 
 Para iterar e testar o prompt rapidamente, você pode definir a variável PROMPT na sessão atual do shell. Por exemplo, o prompt padrão do ZSH no macOS é "%n@%m %~%# ", que exibe o nome de usuário, nome do host, diretório de trabalho e um # se o usuário tiver privilégios de superusuário. Seria equivalente a definir a variável PROMPT para:
-zsh
 
+```zsh
 PROMPT='%n@%m %~%# '
+```
 
 Usando isso como ponto de partida, decidi me livrar do nome de usuário e do host (já que sou o único usuário na minha máquina) para terminar com algo assim:
-zsh
 
+```zsh
 PROMPT='%~ %# '
+```
 
 Indo para Múltiplas Linhas
 
@@ -57,13 +59,14 @@ Sou um grande fã de prompts de várias linhas, pois me permitem exibir caminhos
 Minha primeira tentativa foi inserir um caractere de nova linha (\n) na variável PROMPT, mas isso não funcionou. O ZSH não suporta sequências de escape na variável PROMPT, então usei o hook precmd para imprimir o CWD e exibir o prompt na linha seguinte.
 
 O hook precmd é executado antes de cada prompt ser exibido e pode ser usado para executar comandos ou funções personalizadas. Usei print com -P dentro dele para interpretar sequências de expansão de prompt, assim como na variável PROMPT.
-zsh
 
+```zsh
 precmd() {
   print -P "%~"
 }
 
 PROMPT='%# '
+```
 
 Funcionou perfeitamente; pude exibir o diretório de trabalho atual em uma nova linha.
 Adicionando Informações do Git
@@ -71,22 +74,25 @@ Adicionando Informações do Git
 O ZSH tem suporte integrado para exibir informações do Git no prompt. Você pode usar o módulo vcs_info para exibir o branch Git atual e o status no prompt.
 
 Para habilitar o módulo vcs_info, você deve carregá-lo em sua sessão ZSH usando o comando autoload.
-zsh
 
+```zsh
 autoload -Uz vcs_info
+```
 
 Uma vez carregado, você deve invocar a função vcs_info no hook precmd para atualizar as informações do Git antes de exibir cada prompt. A função então preenche a variável vcs_info_msg_0_ com as informações do Git, que você pode exibir no prompt.
-zsh
 
+```zsh
 precmd() {
   vcs_info
   print -P "%~ ${vcs_info_msg_0_}"
 }
+```
 
 Exceto que isso não funcionou. O ZSH não habilita a expansão de variáveis em prompts por padrão, então tive que habilitá-lo usando o comando setopt prompt_subst.
-zsh
 
+```zsh
 setopt prompt_subst
+```
 
 Voilà! Agora eu tinha um prompt ZSH personalizado que exibia o diretório de trabalho atual e as informações do Git.
 Personalizando as Informações do VCS
@@ -94,19 +100,21 @@ Personalizando as Informações do VCS
 Você pode personalizar as informações do Git exibidas no prompt definindo a variável vcs_info_msg_0_ para uma string de formato personalizada. A string de formato pode conter sequências de escape que o ZSH expande quando o prompt é exibido.
 
 Eu queria ter o branch atual e o status de staged/unstaged. Então, usando zstyle, mudei a string de formato para:
-zsh
 
+```zsh
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' formats '%b%f %m%u%c %a'
+```
 
 Esta string de formato exibe o branch atual (%b), as mudanças staged (%c) e unstaged (%u), qualquer ação em andamento como rebase (%a) e informações diversas (%m).
 
 Eu queria exibir símbolos em vez de texto para o status do Git, então defini as variáveis stagedstr e unstagedstr como + e !.
-zsh
 
+```zsh
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' stagedstr ' +'
 zstyle ':vcs_info:*' unstagedstr ' !'
+```
 
 Cores e Formatação
 
@@ -121,8 +129,8 @@ Então fui para o Nerd Fonts, baixei a fonte "Fira Code" modificada e a defini c
 Em seguida, usei sequências de escape para definir as cores e formatação nos estilos PROMPT e vcs_info.
 
 Aqui está o prompt final. O símbolo Powerline para o branch git \uE0A0 infelizmente não é suportado em nenhuma outra fonte e, portanto, aparece como um quadrado não reconhecido.
-zsh
 
+```zsh
 zstyle ':vcs_info:git*' formats " %F{blue}%b%f %m%u%c %a "
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
@@ -135,17 +143,18 @@ precmd() {
 }
 
 PROMPT='%B%(!.#.$)%b '
+```
 
 E aqui está como ele se parece:
 
-https://recursivefunction.blog/images/zsh-prompt.png
+![Prompt ZSH](/images/posts/zsh-prompt.png "Prompt ZSH")
 
 Uso o esquema de cores Snazzy no iTerm, o que torna as cores do prompt ainda melhores. Minha configuração do ZSH tem mais algumas personalizações, como pesquisa de histórico, realce de sintaxe e autosugestões, mas vou deixar isso para outro post.
 
 E é isso! Agora tenho um prompt ZSH personalizado que exibe o diretório de trabalho atual, branch e status do Git de maneira minimalista e colorida.
 Código Completo do Prompt
-zsh
 
+```zsh
 #!/usr/bin/env zsh
 
 # Habilitar substituição de prompt
@@ -170,20 +179,23 @@ precmd() {
 
 # Prompt principal (símbolo # para root, $ para usuários normais)
 PROMPT='%B%(!.#.$)%b '
+```
 
 Como Instalar
 
     Salve o código acima em ~/.zsh_custom_prompt.zsh
 
     Adicione ao seu arquivo .zshrc:
-    zsh
 
+```zsh
 source ~/.zsh_custom_prompt.zsh
+```
 
 Recarregue o ZSH:
-bash
 
+```bash
 source ~/.zshrc
+```
 
 Características do Prompt
 
@@ -207,8 +219,8 @@ Técnicas Avançadas (do Primeiro Artigo)
 Adicionando Tempo de Execução
 
 Para exibir o tempo de execução do último comando (útil para comandos longos):
-zsh
 
+```zsh
 # Variável para armazenar o tempo inicial
 typeset -g timer
 
@@ -230,41 +242,41 @@ precmd() {
     
     print -P '%B%~%b ${vcs_info_msg_0_}'
 }
+```
 
 Prompt do Lado Direito (RPROMPT)
 
 Para informações menos críticas como a hora atual:
-zsh
 
+```zsh
 # Adicionar ao precmd
 RPROMPT='%F{242}%T%f'
+```
 
 Truncamento Inteligente de Caminhos
 
 Para encurtar caminhos longos mantendo apenas os últimos diretórios:
-zsh
 
+```zsh
 # No print do diretório, use:
 print -P '%B%4~%b ${vcs_info_msg_0_}'
 # Mostra no máximo 4 componentes do caminho
+```
 
-Conclusão
+### Conclusão
 
 Criar um prompt ZSH personalizado do zero foi uma experiência reveladora. Não apenas consegui um prompt mais rápido e adequado ao meu fluxo de trabalho, mas também ganhei uma compreensão mais profunda de como o ZSH funciona.
 
 O processo me mostrou que você não precisa de frameworks complexos para ter um prompt funcional e bonito. Com um pouco de conhecimento das ferramentas básicas do ZSH, você pode criar algo perfeitamente adaptado às suas necessidades.
 
 A chave é começar simples e adicionar funcionalidades gradualmente, testando cada mudança ao longo do caminho. E o melhor de tudo: agora entendo completamente como meu prompt funciona e posso modificá-lo facilmente conforme minhas necessidades evoluem.
-Recursos Adicionais
 
-    Documentação do ZSH: Expansão de Prompt
+### Recursos Adicionais
 
-    Módulo vcs_info
-
-    Nerd Fonts - Fontes com suporte a ícones
-
-    iTerm2 - Emulador de terminal para macOS
-
-    Snazzy Theme - Esquema de cores usado no exemplo
+Documentação do ZSH: Expansão de Prompt
+Módulo vcs_info
+Nerd Fonts - Fontes com suporte a ícones
+iTerm2 - Emulador de terminal para macOS
+Snazzy Theme - Esquema de cores usado no exemplo
 
 Dica: Use print -P no terminal para testar sequências de escape sem modificar sua configuração.
