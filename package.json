@@ -44,7 +44,7 @@
     "turbo": "^2.6.1"
   },
   "peerDependencies": {
-    "typescript": "^5.7.3"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@giscus/react": "^3.1.0",
