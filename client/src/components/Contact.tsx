@@ -64,7 +64,8 @@ export default function ContactForm() {
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        {/* <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> */}
+        <h1 className="text-4xl md:text-5xl mb-4">
           Entre em Contato
         </h1>
         <p className="text-gray-400 text-lg">
@@ -77,7 +78,7 @@ export default function ContactForm() {
         <div className="group">
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-primary"
+            className="block text-sm font-medium mb-2 transition-colors group-focus-within:text-primary"
           >
             Nome
           </label>
@@ -89,7 +90,7 @@ export default function ContactForm() {
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 bg-black/30 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            className="w-full px-4 py-3 bg-black/30 border-2 border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-all"
           />
         </div>
 
@@ -97,7 +98,7 @@ export default function ContactForm() {
         <div className="group">
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-primary"
+            className="block text-sm font-medium mb-2 transition-colors group-focus-within:text-primary"
           >
             Email
           </label>
@@ -109,7 +110,7 @@ export default function ContactForm() {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 bg-black/30 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            className="w-full px-4 py-3 bg-black/30 border-2 border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-all"
           />
         </div>
 
@@ -117,7 +118,7 @@ export default function ContactForm() {
         <div className="group">
           <label
             htmlFor="subject"
-            className="block text-sm font-medium 󱓻 text-gray-300 mb-2 transition-colors group-focus-within:text-primary"
+            className="block text-sm font-medium mb-2 transition-colors group-focus-within:text-primary"
           >
             Assunto
           </label>
@@ -128,7 +129,7 @@ export default function ContactForm() {
             placeholder="Assunto"
             value={formData.subject}
             onChange={handleChange}
-            className="w-full px-4 py-3 󱓻 bg-black/30 border 󱓻 border-gray-700 rounded-lg 󱓻 text-white 󱓻 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            className="w-full px-4 py-3 bg-black/30 border-2 border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-all"
             required
           />
         </div>
@@ -137,7 +138,7 @@ export default function ContactForm() {
         <div className="group">
           <label
             htmlFor="message"
-            className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-primary"
+            className="block text-sm font-medium mb-2 transition-colors group-focus-within:text-primary"
           >
             Mensagem
           </label>
@@ -149,7 +150,7 @@ export default function ContactForm() {
             onChange={handleChange}
             required
             rows={6}
-            className="w-full px-4 py-3 bg-black/30 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+            className="w-full px-4 py-3 bg-black/30 border-2 border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-all resize-none"
           />
         </div>
 
@@ -157,7 +158,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="text-white font-semibold py-3 px-6 rounded-lg border-2 border-primary hover:border-secondary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group cursor-pointer"
+          className="font-semibold py-3 px-6 rounded-lg border-2 border-primary hover:border-secondary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group cursor-pointer"
         >
           {status === "sending" ? (
             <>

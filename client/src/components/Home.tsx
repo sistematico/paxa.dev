@@ -54,10 +54,10 @@ function Home() {
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         {/* Conteúdo de Texto */}
         <div className="order-2 lg:order-1">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 bg-linear-to-r from-orange-400 to-red-800 bg-clip-text text-transparent">
-            Lucas Brum
+          <h1 className="text-4xl md:text-5xl font-black mb-2 bg-linear-to-r from-orange-400 to-red-800 bg-clip-text text-transparent">
+            Paxá
           </h1>          
-          <h2 className="text-xl md:text-2xl font-semibold mb-8 text-gray-300">
+          <h2 className="text-lg md:text-xl font-semibold mb-6 text-foreground/70">
             Desenvolvedor Full Stack
           </h2>
           {/* Toggle de Modo */}
@@ -97,7 +97,7 @@ function Home() {
                   : "opacity-0 -translate-y-4 pointer-events-none"
               }`}
             >
-              <div className="text-gray-300 text-base md:text-lg">
+              <div className="text-base md:text-lg">
                 {leigosText}
               </div>
             </div>
@@ -109,7 +109,7 @@ function Home() {
                   : "opacity-0 translate-y-4 pointer-events-none"
               }`}
             >
-              <div className="text-gray-300 text-base md:text-lg">
+              <div className="text-base md:text-lg">
                 {technicalText}
               </div>
             </div>

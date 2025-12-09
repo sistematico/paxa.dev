@@ -1,41 +1,46 @@
-import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router';
+import { useEffect, useRef } from "react"
+import { useLocation } from "react-router"
 
-const apiUrl = import.meta.env.VITE_API_URL!;
+const apiUrl = import.meta.env.VITE_API_URL!
 
 /**
  * Hook simplificado de analytics
  */
 export function usePageTracking() {
-    const location = useLocation();
-    const tracked = useRef(new Set<string>());
+  const location = useLocation()
+  const tracked = useRef(new Set<string>())
 
-    useEffect(() => {
-        const path = location.pathname;
+  useEffect(() => {
+    const path = location.pathname
 
-        // Previne tracking duplicado
-        if (tracked.current.has(path)) {
-            return;
-        }
+    // Apenas rastreia a página inicial
+    if (path !== "/") {
+      return
+    }
 
-        tracked.current.add(path);
+    // Previne tracking duplicado
+    if (tracked.current.has(path)) {
+      return
+    }
 
-        // Tracking
-        const trackPage = async () => {
-            try {
-                await fetch(`${apiUrl}/analytics/pageview`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({ path }),
-                });
-            } catch {
-                // Ignora erros silenciosamente
-            }
-        };
+    tracked.current.add(path)
 
-        trackPage();
-    }, [location.pathname]);
+    // Tracking
+    async function trackPage() {
+      try {
+        await fetch(`${apiUrl}/analytics/pageview`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ path })
+        })
+      } catch {
+        // Ignora erros silenciosamente
+      }
+    }
+
+    trackPage()
+  }, [location.pathname])
 }
 
-export default usePageTracking;
+export default usePageTracking
