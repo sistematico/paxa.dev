@@ -246,6 +246,67 @@ Deplying each piece is very versatile and can be done numerous ways, and explora
 - [Bun](https://hono.dev/docs/getting-started/bun)
 - [Node.js](https://hono.dev/docs/getting-started/nodejs)
 
+### Rocky Linux Deployment Notes
+
+If you're deploying on Rocky Linux (or other RHEL-based distributions with SELinux), you **must** configure SELinux policies to allow the web server to access your application files and proxy to the backend.
+
+**Required SELinux configuration:**
+
+```bash
+# Set the correct SELinux context for your web directory
+sudo semanage fcontext -a -t httpd_sys_content_t '/var/www(/.*)?'
+sudo restorecon -Rv /var/www
+
+# CRITICAL: Allow Nginx to make network connections (fixes 502 Bad Gateway)
+sudo setsebool -P httpd_can_network_connect 1
+
+# Add backend port to allowed HTTP ports
+sudo semanage port -a -t http_port_t -p tcp 8082
+
+# Allow Bun binary to execute (required if running backend with systemd)
+sudo chcon -t bin_t /home/nginx/.bun/bin/bun
+# Or set it permanently:
+sudo semanage fcontext -a -t bin_t '/home/nginx/.bun/bin/bun'
+sudo restorecon -v /home/nginx/.bun/bin/bun
+
+# If using Node.js instead of Bun, apply the same permissions:
+# sudo chcon -t bin_t /path/to/node
+# Example: sudo chcon -t bin_t /usr/bin/node
+
+# Verify the port was added
+sudo semanage port -l | grep http_port_t
+```
+
+Without these commands, you will encounter **502 Bad Gateway** errors when accessing `/api/*` routes.
+
+**Troubleshooting 502 Bad Gateway errors:**
+
+If you receive 502 errors on `/api/*` routes, check:
+
+1. **Backend is running:**
+   ```bash
+   # Check if the process is listening on port 8082
+   sudo ss -tlnp | grep 8082
+   ```
+
+2. **SELinux is blocking connections:**
+   ```bash
+   # Check SELinux audit logs for denials
+   sudo ausearch -m avc -ts recent | grep httpd
+   
+   # Or check general logs
+   sudo tail -f /var/log/audit/audit.log
+   ```
+
+3. **Firewall rules:**
+   ```bash
+   # Allow localhost connections (usually not needed but verify)
+   sudo firewall-cmd --permanent --add-port=8082/tcp
+   sudo firewall-cmd --reload
+   ```
+
+These commands ensure that SELinux allows the HTTP daemon to read and serve files from `/var/www` and proxy requests to your backend service.
+
 ## Type Sharing
 
 Types are automatically shared between the client and server thanks to the shared package and TypeScript path aliases. You can import them in your code using:

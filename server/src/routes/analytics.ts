@@ -155,7 +155,8 @@ app.get('/stats', async (c) => {
 app.get('/posts/:slug/stats', async (c) => {
 	try {
 		const slug = c.req.param('slug');
-		const visitorId = c.req.header('visitorid');
+		const cookie = getCookie(c, 'visitor_id');
+		const visitorId = cookie || undefined;
 
 		let stats = await db
 			.select()
@@ -210,9 +211,11 @@ app.get('/posts/:slug/stats', async (c) => {
 app.post('/posts/:slug/view', async (c) => {
 	try {
 		const slug = c.req.param('slug');
-		const visitorId = c.req.header('visitorid');
-
-		if (!visitorId) return c.json({ error: 'Missing visitorId' }, 400);
+		const cookie = getCookie(c, 'visitor_id');
+		
+		if (!cookie) return c.json({ error: 'Missing visitorId' }, 400);
+		
+		const visitorId = cookie;
 
 		const existing = await db
 			.select()
@@ -251,11 +254,13 @@ app.post('/posts/:slug/view', async (c) => {
 app.post('/posts/:slug/like', async (c) => {
 	try {
 		const slug = c.req.param('slug');
-		const visitorId = c.req.header('visitorid');
-
-		if (!visitorId) {
+		const cookie = getCookie(c, 'visitor_id');
+		
+		if (!cookie) {
 			return c.json({ error: 'Missing visitorId' }, 400);
 		}
+		
+		const visitorId = cookie;
 
 		const existing = await db
 			.select()

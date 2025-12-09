@@ -43,7 +43,7 @@ function Home() {
 	);
 
 	return (
-		<div className="w-full max-w-7xl mx-auto px-4 py-12 lg:py-20 mb-10">
+		<div className="w-full max-w-7xl mx-auto px-4 py-12 lg:py-20 mb-32">
 			<div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 				{/* Conteúdo de Texto */}
 				<div className="order-2 lg:order-1">
