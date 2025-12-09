@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { useState } from "react";
 import Icon from "./Icon";
 import Lottie from "lottie-react";
@@ -19,7 +20,10 @@ function Home() {
         e, mais importante, seus visitantes vão querer ficar.
       </p>
       <p className="leading-relaxed font-medium">
-        Pronto para dar vida ao seu próximo projeto digital?
+        Pronto para dar vida ao seu próximo projeto digital?<br />
+        <Link to="/contato" className="text-orange-400 hover:underline">
+          Entre em contato!
+        </Link>
       </p>
     </>
   );
@@ -37,7 +41,10 @@ function Home() {
         performance. Arquiteturas escaláveis são minha especialidade.
       </p>
       <p className="leading-relaxed font-medium">
-        Vamos construir algo extraordinário juntos?
+        Vamos construir algo extraordinário juntos?<br />
+        <Link to="/contato" className="text-orange-400 hover:underline">
+          Entre em contato!
+        </Link>
       </p>
     </>
   );
