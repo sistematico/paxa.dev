@@ -23,6 +23,7 @@ bun install
 
 cd server 
 bunx drizzle-kit push 
+
 cd ..
 bun run build:single || { echo "Build failed"; exit 1; }
 
