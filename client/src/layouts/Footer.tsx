@@ -24,10 +24,10 @@ function Footer() {
               content={<p>A propósito, meu nome é Lucas =)</p>}
             >
               {/* <span className="inline bg-indigo-500 p-1 rounded text-white"> */}
-							<span className="inline cursor-pointer underline-dotted">
-								Paxá
-							</span>
-							<span className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-purple-500 via-pink-500 to-red-500"></span>
+              <span className="inline cursor-pointer underline-dotted">
+                Paxá
+              </span>
+              <span className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-purple-500 via-pink-500 to-red-500"></span>
             </Popover>
             {/* <div className="relative group inline">
 							<span className="inline cursor-pointer underline-dotted">

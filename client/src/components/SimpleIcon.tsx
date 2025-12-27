@@ -1,17 +1,28 @@
-import { siGithub, siFacebook, siX, siReddit, siMastodon, siTelegram } from 'simple-icons'
+import {
+  siGithub,
+  siFacebook,
+  siX,
+  siReddit,
+  siMastodon,
+  siTelegram
+} from "simple-icons"
 // import type { SimpleIcon as SimpleIconType } from 'simple-icons'
 
 type SimpleIconProps = {
-  name: string;
-  size?: number;
-  color?: string;
+  name: string
+  size?: number
+  color?: string
 }
 
-const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps) => {
+const SimpleIcon = ({
+  name,
+  size = 24,
+  color = "currentColor"
+}: SimpleIconProps) => {
   // const icon = SimpleIcons[name as keyof typeof SimpleIcons] as SimpleIconType | undefined;
   // if (!icon) return <span>Icon not found</span>
-  
-  if (name === 'Telegram') {
+
+  if (name === "Telegram") {
     return (
       <svg
         width={size}
@@ -26,7 +37,7 @@ const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps
     )
   }
 
-  if (name === 'Mastodon') {
+  if (name === "Mastodon") {
     return (
       <svg
         width={size}
@@ -41,7 +52,7 @@ const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps
     )
   }
 
-  if (name === 'Reddit') {
+  if (name === "Reddit") {
     return (
       <svg
         width={size}
@@ -56,7 +67,7 @@ const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps
     )
   }
 
-  if (name === 'GitHub') {
+  if (name === "GitHub") {
     return (
       <svg
         width={size}
@@ -71,7 +82,7 @@ const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps
     )
   }
 
-  if (name === 'Facebook') {
+  if (name === "Facebook") {
     return (
       <svg
         width={size}
@@ -86,7 +97,7 @@ const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps
     )
   }
 
-  if (name === 'X') {
+  if (name === "X") {
     return (
       <svg
         width={size}
@@ -101,9 +112,8 @@ const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps
     )
   }
 
-  return null;
-  
-};
+  return null
+}
 
 // import * as SimpleIcons from 'simple-icons'
 // import type { SimpleIcon as SimpleIconType } from 'simple-icons'
@@ -117,7 +127,7 @@ const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps
 // const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps) => {
 //   const icon = SimpleIcons[name as keyof typeof SimpleIcons] as SimpleIconType | undefined;
 //   if (!icon) return <span>Icon not found</span>
-  
+
 //   return (
 //     <svg
 //       width={size}
@@ -130,7 +140,7 @@ const SimpleIcon = ({ name, size = 24, color = 'currentColor' }: SimpleIconProps
 //       <path d={icon.path}></path>
 //     </svg>
 //   )
-  
+
 // };
 
-export default SimpleIcon;
+export default SimpleIcon

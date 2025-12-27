@@ -5,10 +5,10 @@
   /* Tema Escuro (padrão) */
   --background: #282828;
   --foreground: #ebdbb2;
-  --primary: #1E90FF;
+  --primary: #1e90ff;
   --secondary: rgb(255, 75, 75);
   --secondary-background: #412726;
-  --text-color: #FFFFFF;
+  --text-color: #ffffff;
   --body-bg: #121113;
   --body-text: #ffffff;
 }
@@ -17,7 +17,7 @@
   /* Tema Claro */
   --background: #f9f5f0;
   --foreground: #3c3836;
-  --primary: #1E90FF;
+  --primary: #1e90ff;
   --secondary: rgb(220, 50, 50);
   --secondary-background: #fbe4e4;
   --text-color: #282828;
@@ -29,7 +29,9 @@ body {
   font-family: "Nunito", Arial, Helvetica, sans-serif;
   background: var(--background);
   color: var(--foreground);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 @theme inline {
@@ -45,4 +47,3 @@ body {
 @view-transition {
   navigation: auto;
 }
-

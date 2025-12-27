@@ -50,24 +50,22 @@ export default function ContactForm() {
     }
   }
 
-	if (status === "success") {
-		return (
-			<div className="w-full max-w-2xl mx-auto px-4 py-12">
-				<div className="flex items-center gap-2 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 animate-in fade-in slide-in-from-bottom-4 duration-500">
-					<CheckCircle size={20} />
-					<span>Mensagem enviada com sucesso! Responderemos em breve.</span>
-				</div>
-			</div>
-		)
-	}
+  if (status === "success") {
+    return (
+      <div className="w-full max-w-2xl mx-auto px-4 py-12">
+        <div className="flex items-center gap-2 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <CheckCircle size={20} />
+          <span>Mensagem enviada com sucesso! Responderemos em breve.</span>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-12">
       <div className="mb-8">
         {/* <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> */}
-        <h1 className="text-4xl md:text-5xl mb-4">
-          Entre em Contato
-        </h1>
+        <h1 className="text-4xl md:text-5xl mb-4">Entre em Contato</h1>
         <p className="text-gray-400 text-lg">
           Vamos conversar sobre seu próximo projeto
         </p>

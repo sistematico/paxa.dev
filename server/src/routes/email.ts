@@ -10,7 +10,7 @@ app.post("/", async (c) => {
     // Create a Nodemailer transporter
     const transporter = nodemailer.createTransport({
       service: "iCloud",
-			secure: false,
+      secure: false,
       auth: {
         user: process.env.ICLOUD_EMAIL!,
         pass: process.env.ICLOUD_PASSWORD!
