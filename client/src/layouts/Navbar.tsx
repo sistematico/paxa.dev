@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/", label: "Início", icon: Home },
   { href: "/posts", label: "Blog", icon: Newspaper },
   { href: "/snippets", label: "Snippets", icon: SquareBottomDashedScissors },
+  { href: "/cheats", label: "Cheats", icon: SquareBottomDashedScissors },
   { href: "/favoritos", label: "Favoritos", icon: Bookmark },
   { href: "/contato", label: "Contato", icon: Mail }
 ]

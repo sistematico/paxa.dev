@@ -1,0 +1,326 @@
+---
+title: "Yazi"
+date: "2025-12-27"
+slug: "yazi"
+excerpt: ""
+tags: ["linux", "shell"]
+author: "Lucas Saliés Brum"
+draft: false
+---
+
+# Cheatsheet de Keybinds
+
+## Hyprland
+
+### Window Management
+- `SUPER + Q` - Fechar janela ativa
+- `SUPER + V` - Toggle floating
+- `SUPER + P` - Toggle pseudo-tiling
+- `SUPER + J` - Toggle split
+- `SUPER + F` - Toggle fullscreen
+
+### Focus
+- `SUPER + ←/→/↑/↓` - Mover foco (setas)
+- `SUPER + H/J/K/L` - Mover foco (vim-style)
+
+### Move Windows
+- `SUPER + SHIFT + ←/→/↑/↓` - Mover janela (setas)
+- `SUPER + SHIFT + H/J/K/L` - Mover janela (vim-style)
+
+### Workspaces
+- `SUPER + 1-9` - Trocar para workspace 1-9
+- `SUPER + SHIFT + 1-9` - Mover janela para workspace 1-9
+- `SUPER + Mouse_Scroll` - Navegar workspaces
+- `SUPER + S` - Toggle special workspace
+
+### Resize
+- `SUPER + Mouse_Right + Drag` - Redimensionar janela
+- `SUPER + R` - Entrar em modo resize
+  - `H/J/K/L` ou setas para redimensionar
+  - `ESC` para sair
+
+### Applications
+- `SUPER + Return` - Terminal
+- `SUPER + E` - File manager
+- `SUPER + D` - Launcher (rofi/wofi)
+
+### Mouse
+- `SUPER + Mouse_Left + Drag` - Mover janela
+- `SUPER + Mouse_Right + Drag` - Redimensionar janela
+
+---
+
+## Yazi
+
+### Navigation
+- `j/k` - Mover para baixo/cima
+- `h/l` - Entrar diretório pai/filho
+- `gg` - Ir para o topo
+- `G` - Ir para o fim
+- `J/K` - Scroll preview para baixo/cima
+
+### File Operations
+- `y` - Copiar (yank)
+- `x` - Cortar
+- `p` - Colar
+- `d` - Deletar
+- `r` - Renomear
+- `Space` - Selecionar/desselecionar arquivo
+- `v` - Visual mode (seleção)
+- `V` - Visual mode (desselecionar)
+- `Ctrl + a` - Selecionar todos
+
+### Search & Filter
+- `/` - Buscar
+- `f` - Filter
+- `n/N` - Próximo/anterior resultado
+
+### Tabs & Views
+- `t` - Criar nova tab
+- `1-9` - Ir para tab 1-9
+- `[/]` - Tab anterior/próxima
+- `z` - Zoom preview
+
+### System
+- `q` - Sair
+- `~` - Ir para home
+- `.` - Toggle arquivos ocultos
+- `o` - Abrir arquivo
+- `O` - Abrir arquivo com...
+- `Enter` - Entrar diretório ou abrir arquivo
+- `i` - Inspecionar arquivo (metadata)
+
+### Other
+- `c` - Copiar caminho
+- `s` - Shell interativo no diretório atual
+- `:` - Comando mode
+- `?` - Ajuda
+
+---
+
+## Git
+
+### Basic
+- `git init` - Inicializar repositório
+- `git clone <url>` - Clonar repositório
+- `git status` - Ver status
+- `git add <file>` - Adicionar arquivo
+- `git add .` - Adicionar todos
+- `git commit -m "msg"` - Commit com mensagem
+- `git commit -am "msg"` - Add + commit (tracked files)
+
+### Branches
+- `git branch` - Listar branches
+- `git branch <name>` - Criar branch
+- `git checkout <branch>` - Trocar branch
+- `git checkout -b <name>` - Criar e trocar branch
+- `git switch <branch>` - Trocar branch (novo)
+- `git switch -c <name>` - Criar e trocar (novo)
+- `git merge <branch>` - Merge branch
+- `git branch -d <name>` - Deletar branch
+- `git branch -D <name>` - Forçar delete branch
+
+### Remote
+- `git remote -v` - Ver remotes
+- `git remote add origin <url>` - Adicionar remote
+- `git push` - Push para remote
+- `git push -u origin <branch>` - Push e set upstream
+- `git pull` - Pull do remote
+- `git fetch` - Fetch sem merge
+
+### History
+- `git log` - Ver commits
+- `git log --oneline` - Log compacto
+- `git log --graph` - Log com gráfico
+- `git diff` - Ver mudanças
+- `git diff --staged` - Ver mudanças staged
+- `git show <commit>` - Ver commit específico
+
+### Undo
+- `git restore <file>` - Descartar mudanças
+- `git restore --staged <file>` - Unstage arquivo
+- `git reset HEAD~1` - Desfazer último commit (manter mudanças)
+- `git reset --hard HEAD~1` - Desfazer último commit (descartar mudanças)
+- `git revert <commit>` - Reverter commit (criar novo commit)
+
+### Stash
+- `git stash` - Salvar mudanças temporariamente
+- `git stash pop` - Aplicar e remover stash
+- `git stash list` - Listar stashes
+- `git stash apply` - Aplicar stash (manter na lista)
+
+---
+
+## Vim
+
+### Modes
+- `i` - Insert mode (antes do cursor)
+- `I` - Insert no início da linha
+- `a` - Insert (depois do cursor)
+- `A` - Insert no fim da linha
+- `o` - Nova linha abaixo + insert
+- `O` - Nova linha acima + insert
+- `ESC` ou `Ctrl + [` - Normal mode
+- `v` - Visual mode
+- `V` - Visual line mode
+- `Ctrl + v` - Visual block mode
+- `:` - Command mode
+
+### Navigation
+- `h/j/k/l` - Esquerda/baixo/cima/direita
+- `w` - Próxima palavra
+- `b` - Palavra anterior
+- `e` - Fim da palavra
+- `0` - Início da linha
+- `^` - Primeiro caractere não-branco
+- `$` - Fim da linha
+- `gg` - Início do arquivo
+- `G` - Fim do arquivo
+- `<number>G` - Ir para linha
+- `%` - Ir para bracket/parênteses correspondente
+- `Ctrl + d` - Meia página abaixo
+- `Ctrl + u` - Meia página acima
+- `Ctrl + f` - Página abaixo
+- `Ctrl + b` - Página acima
+
+### Editing
+- `x` - Deletar caractere
+- `dd` - Deletar linha
+- `D` - Deletar até fim da linha
+- `dw` - Deletar palavra
+- `d$` - Deletar até fim da linha
+- `yy` - Copiar linha
+- `yw` - Copiar palavra
+- `p` - Colar depois
+- `P` - Colar antes
+- `u` - Undo
+- `Ctrl + r` - Redo
+- `.` - Repetir último comando
+- `r` - Substituir caractere
+- `cc` - Mudar linha inteira
+- `cw` - Mudar palavra
+- `C` - Mudar até fim da linha
+
+### Search & Replace
+- `/pattern` - Buscar para frente
+- `?pattern` - Buscar para trás
+- `n` - Próximo resultado
+- `N` - Resultado anterior
+- `*` - Buscar palavra sob cursor (frente)
+- `#` - Buscar palavra sob cursor (trás)
+- `:%s/old/new/g` - Substituir no arquivo todo
+- `:s/old/new/g` - Substituir na linha
+
+### Files
+- `:w` - Salvar
+- `:q` - Sair
+- `:wq` ou `:x` - Salvar e sair
+- `:q!` - Sair sem salvar
+- `:e <file>` - Abrir arquivo
+- `:bn` - Próximo buffer
+- `:bp` - Buffer anterior
+
+### Other
+- `>>` - Indentar linha
+- `<<` - Desindentar linha
+- `==` - Auto-indentar linha
+- `~` - Toggle case
+- `J` - Juntar linhas
+- `Ctrl + g` - Mostrar info do arquivo
+- `:set number` - Mostrar números de linha
+- `:set nonumber` - Esconder números
+
+---
+
+## Neovim
+
+### Modes (igual Vim)
+- `i/I/a/A/o/O` - Insert modes
+- `ESC` - Normal mode
+- `v/V/Ctrl+v` - Visual modes
+- `:` - Command mode
+
+### Navigation (igual Vim)
+- `h/j/k/l` - Movimento básico
+- `w/b/e` - Palavras
+- `0/^/$` - Linha
+- `gg/G` - Arquivo
+- `Ctrl + d/u` - Scroll
+
+### Editing (igual Vim)
+- `x/dd/D` - Delete
+- `yy/yw` - Yank
+- `p/P` - Paste
+- `u/Ctrl+r` - Undo/redo
+- `.` - Repetir
+
+### LSP (Language Server Protocol)
+- `gd` - Ir para definição
+- `gD` - Ir para declaração
+- `gr` - Ir para referências
+- `gi` - Ir para implementação
+- `K` - Hover documentation
+- `<leader>rn` - Rename
+- `<leader>ca` - Code action
+- `[d` - Diagnóstico anterior
+- `]d` - Próximo diagnóstico
+
+### Telescope (se instalado)
+- `<leader>ff` - Find files
+- `<leader>fg` - Live grep
+- `<leader>fb` - Buffers
+- `<leader>fh` - Help tags
+
+### File Explorer (Netrw/NvimTree)
+- `:Ex` - Abrir netrw
+- `<leader>e` - Toggle file explorer (comum)
+- `a` - Criar arquivo
+- `d` - Deletar
+- `r` - Renomear
+
+### Tabs & Splits
+- `:sp <file>` - Split horizontal
+- `:vsp <file>` - Split vertical
+- `Ctrl + w + h/j/k/l` - Navegar splits
+- `Ctrl + w + w` - Próximo split
+- `Ctrl + w + q` - Fechar split
+- `Ctrl + w + =` - Equalizar splits
+- `:tabnew` - Nova tab
+- `gt` - Próxima tab
+- `gT` - Tab anterior
+
+### Terminal (Neovim-specific)
+- `:terminal` - Abrir terminal
+- `Ctrl + \, Ctrl + n` - Sair do terminal mode
+- `i` ou `a` - Entrar em terminal mode
+
+### Search & Replace (igual Vim)
+- `/` ou `?` - Buscar
+- `n/N` - Navegar resultados
+- `:%s/old/new/g` - Substituir
+
+### Buffers
+- `:ls` - Listar buffers
+- `:b <number>` - Ir para buffer
+- `:bd` - Deletar buffer
+- `Ctrl + 6` - Alternar último buffer
+
+### Common Leader Key Mappings (variam por config)
+- `<leader>` geralmente é `Space` ou `,`
+- `<leader>w` - Salvar
+- `<leader>q` - Sair
+- `<leader>h` - Clear highlight
+
+### Clipboard
+- `"+y` - Copiar para clipboard do sistema
+- `"+p` - Colar do clipboard do sistema
+- `"*y` - Copiar para selection clipboard
+
+### Marks
+- `m<letter>` - Criar mark
+- `'<letter>` - Ir para mark
+- `''` - Ir para posição anterior
+
+---
+
+**Nota:** Muitos keybinds de Neovim e Hyprland dependem da sua configuração específica. Esta cheatsheet mostra os defaults mais comuns.
