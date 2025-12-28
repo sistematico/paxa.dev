@@ -1,10 +1,4 @@
-import {
-  Home,
-  Newspaper,
-  SquareBottomDashedScissors,
-  Bookmark,
-  Mail
-} from "lucide-react"
+import { Home, Newspaper, SquareBottomDashedScissors, SquareAsterisk, Bookmark, Mail } from "lucide-react"
 import { Link, useLocation } from "react-router"
 import ThemeToggle from "../components/ThemeToggle"
 
@@ -12,7 +6,7 @@ const navLinks = [
   { href: "/", label: "Início", icon: Home },
   { href: "/posts", label: "Blog", icon: Newspaper },
   { href: "/snippets", label: "Snippets", icon: SquareBottomDashedScissors },
-  { href: "/cheats", label: "Cheats", icon: SquareBottomDashedScissors },
+  { href: "/cheats", label: "Cheats", icon: SquareAsterisk },
   { href: "/favoritos", label: "Favoritos", icon: Bookmark },
   { href: "/contato", label: "Contato", icon: Mail }
 ]

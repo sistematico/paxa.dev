@@ -161,6 +161,24 @@
       "category": "Ferramentas",
       "tags": ["javascript", "packages", "nodejs"],
       "addedAt": "2024-10-20T09:00:00Z"
+    },
+    {
+      "id": "tuxmate",
+      "title": "tuxmate",
+      "url": "https://tuxmate.com",
+      "description": "",
+      "category": "Ferramentas",
+      "tags": ["linux"],
+      "addedAt": "2025-12-28T10:51:55Z"
+    },
+    {
+      "id": "privacytools",
+      "title": "privacytools",
+      "url": "https://www.privacytools.io/",
+      "description": "Registro de pacotes JavaScript",
+      "category": "Ferramentas",
+      "tags": ["linux"],
+      "addedAt": "2025-12-28T10:51:29Z"
     }
   ]
 }
