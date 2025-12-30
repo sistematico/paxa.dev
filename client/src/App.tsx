@@ -3,6 +3,8 @@ import Layout from "./layouts/MainLayout"
 import Home from "./components/Home"
 import PostList from "./components/Blog"
 import Post from "./components/Post"
+import Cheats from "./components/Cheats"
+import Cheat from "./components/Cheat"
 import Bookmarks from "./components/Bookmarks"
 import Snippets from "./components/Snippets"
 import Snippet from "./components/Snippet"
@@ -33,6 +35,8 @@ const router = createBrowserRouter([
           { path: "/contato", element: <ContactForm /> },
           { path: "/posts", element: <PostList /> },
           { path: "/post/:slug", element: <Post /> },
+          { path: "/cheats", element: <Cheats /> },
+          { path: "/cheat/:slug", element: <Cheat /> },
           { path: "/snippets", element: <Snippets /> },
           { path: "/snippet/:slug", element: <Snippet /> },
           { path: "/favoritos", element: <Bookmarks /> },

@@ -1,0 +1,403 @@
+---
+title: "Incus"
+date: "2025-12-30"
+slug: "incus"
+excerpt: ""
+tags: ["lxc", "linux", "incus"]
+author: "Lucas Brum"
+draft: false
+---
+
+<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
+
+# Faça um guia simples porem completo do incus em mdx para que eu possa postar no meu blog.
+
+```mdx
+---
+title: "Guia simples de Incus para containers e VMs"
+description: "Introdução prática ao Incus: instalação, conceitos básicos, containers, VMs, rede e limites de recursos."
+date: "2025-12-30"
+---
+
+# Introdução
+
+Incus é um gerenciador de **containers** e máquinas virtuais (VMs) focado em rodar sistemas Linux completos, usando LXC para containers e QEMU para VMs. [web:41][web:39]  
+Ele oferece uma CLI única (`incus`) e uma API REST para criar, configurar e administrar ambientes isolados de forma consistente. [web:41][web:50]
+
+---
+
+## Conceitos básicos
+
+- **System containers**: instâncias leves que compartilham o kernel do host, ideais para serviços, labs e ambientes de desenvolvimento. [web:33][web:39]  
+- **Virtual machines**: instâncias mais pesadas com hardware virtualizado, boas para testar kernels diferentes ou cenários que exigem isolamento forte. [web:33]  
+
+Algumas ideias importantes:
+
+- *Instância*: qualquer container ou VM gerenciado pelo Incus. [web:33][web:41]  
+- *Perfil*: conjunto de configurações reaproveitáveis (rede, disco, limites, etc.) aplicáveis a múltiplas instâncias. [web:45][web:42]
+
+---
+
+## Instalação e inicialização
+
+### Arch Linux (exemplo)
+
+No Arch Linux, o Incus está no repositório oficial como `incus`. [web:22][web:40]
+
+```
+
+sudo pacman -S incus
+
+```
+
+Depois de instalar, garanta que seu usuário está no grupo `incus-admin` e inicialize o daemon:
+
+```
+
+sudo usermod -aG incus-admin "\$USER"
+
+# (faça logout/login ou reinicie a sessão gráfica)
+
+# inicializar o servidor Incus
+
+sudo incus admin init
+
+```
+
+O comando `incus admin init` cria o storage pool padrão, redes e configurações necessárias para começar. [web:22][web:34]
+
+---
+
+## Seu primeiro container
+
+### Listando imagens
+
+Incus usa servidores de imagens, como `images:` (público) com vários sistemas (Debian, Ubuntu, Rocky, etc.). [web:34][web:37]
+
+```
+
+
+# listar algumas imagens disponíveis
+
+incus image list images:
+
+```
+
+### Criando um container
+
+A forma mais comum é com `incus launch`, que cria e já inicia o container. [web:37]
+
+```
+
+
+# criar um container Debian
+
+incus launch images:debian/12 meu-debian
+
+```
+
+Comandos básicos do dia a dia:
+
+```
+
+
+# listar instâncias (containers e VMs)
+
+incus list
+
+# entrar em um shell dentro do container
+
+incus exec meu-debian -- bash
+
+# parar e iniciar
+
+incus stop meu-debian
+incus start meu-debian
+
+# ver detalhes da instância
+
+incus info meu-debian
+
+```
+
+Esses comandos cobrem o ciclo básico: criar, acessar, parar, iniciar e inspecionar containers. [web:34][web:37]
+
+---
+
+## Criando uma VM
+
+Para criar uma VM, adicione a flag `--vm` ao `launch` ou `init`. [web:34][web:37]
+
+```
+
+
+# VM Debian
+
+incus launch images:debian/12 minha-vm --vm
+
+```
+
+Principais diferenças em relação a containers:
+
+- VMs usam discos virtuais dedicados e emulam hardware completo via QEMU. [web:33]  
+- É comum precisar alocar mais CPU, RAM e espaço em disco para a VM na criação. [web:37]
+
+Exemplo com mais recursos:
+
+```
+
+incus init images:debian/12 vm-pesada --vm \
+-c limits.cpu=2 \
+-c limits.memory=4GiB \
+-d root,size=50GiB
+
+incus start vm-pesada
+
+```
+
+---
+
+## Limites de recursos (CPU, RAM, disco)
+
+Limitar recursos é útil para simular VPS ou evitar que uma instância consuma tudo do host. [web:38][web:6]
+
+### Definindo limites na criação
+
+```
+
+
+# container com 1 vCPU e 1GiB RAM
+
+incus launch images:debian/12 lab-debian \
+-c limits.cpu=1 \
+-c limits.memory=1GiB
+
+```
+
+Principais chaves:
+
+- `limits.cpu`: número de CPUs visíveis. [web:6]  
+- `limits.memory`: quantidade de RAM permitida, por exemplo `512MiB`, `1GiB`, `2GiB`. [web:6]  
+
+### Ajustando limites depois
+
+```
+
+
+# ajustar limites em uma instância existente
+
+incus config set lab-debian limits.cpu=2
+incus config set lab-debian limits.memory=2GiB
+
+```
+
+É possível verificar o resultado de limites de memória usando ferramentas como `free -m` dentro do container. [web:34]
+
+---
+
+## Rede básica
+
+Por padrão, o assistente de inicialização cria uma bridge (geralmente `incusbr0`) com NAT, permitindo que containers acessem a internet. [web:34][web:47]
+
+Para ver a rede:
+
+```
+
+incus network list
+incus network show incusbr0
+
+```
+
+Ao criar uma instância, ela será conectada automaticamente à rede padrão (`profile` default), que adiciona uma interface de rede virtual ligada à bridge. [web:45][web:42]
+
+---
+
+## Perfis (profiles)
+
+Perfis permitem definir configurações padrão e reaproveitáveis. [web:45]
+
+### Ver e editar o profile `default`
+
+```
+
+
+# ver o profile padrão
+
+incus profile show default
+
+```
+
+Você pode adicionar limites ou dispositivos (como discos extras e redes) ao profile e reutilizar em novas instâncias. [web:45][web:42]
+
+### Usando um profile na criação
+
+```
+
+incus launch images:debian/12 app-web -p default
+
+```
+
+Também é possível aplicar ou remover profiles em instâncias já criadas:
+
+```
+
+incus profile add app-web default
+incus profile remove app-web default
+
+```
+
+---
+
+## Discos e volumes
+
+Incus gerencia storage pools (como `default`) e volumes, que podem ser anexados a containers e VMs. [web:34][web:37]
+
+### Ver storage pools
+
+```
+
+incus storage list
+incus storage info default
+
+```
+
+### Criar volume de dados e anexar
+
+```
+
+
+# criar volume
+
+incus storage volume create default dados-web
+
+# anexar ao container
+
+incus config device add app-web dados-web disk \
+pool=default source=dados-web path=/mnt/dados
+
+```
+
+Volumes são úteis para persistir dados separados do root filesystem da instância. [web:37][web:42]
+
+---
+
+## Backup, snapshot e clone
+
+Incus facilita snapshots, backups e clones de instâncias. [web:34]
+
+### Snapshot
+
+```
+
+
+# criar snapshot
+
+incus snapshot meu-debian antes-update
+
+# listar snapshots
+
+incus info meu-debian
+
+# restaurar snapshot
+
+incus restore meu-debian antes-update
+
+```
+
+### Exportar e importar instância
+
+```
+
+
+# exportar para tarball
+
+incus export meu-debian meu-debian-backup.tar.gz
+
+# importar
+
+incus import meu-debian-backup.tar.gz
+
+```
+
+### Clonar instância
+
+```
+
+incus copy meu-debian debian-clone
+
+```
+
+Esses recursos ajudam a montar fluxos de backup, testes e distribuição de ambientes. [web:34][web:37]
+
+---
+
+## API e automação
+
+Além da CLI, Incus expõe uma API REST estável em `/1.0`, permitindo automação via `curl`, `incus query` ou bibliotecas em várias linguagens. [web:41][web:38]
+
+Exemplo simples para alterar configuração via API:
+
+```
+
+incus query --request PATCH /1.0/instances/meu-debian \
+--data '{"config":{"limits.cpu":"2"}}'
+
+```
+
+Isso permite integrar Incus com scripts, pipelines CI/CD e painéis personalizados. [web:38][web:50]
+
+---
+
+## Referências recomendadas
+
+Para se aprofundar:
+
+- Documentação oficial do Incus (instalação, tutoriais, referência completa). [web:50]  
+- Guia “First steps with Incus”, com exemplos práticos bem detalhados. [web:34]  
+- Página da ArchWiki sobre Incus (para usuários Arch). [web:47]  
+```
+
+<span style="display:none">[^1][^10][^11][^12][^13][^14][^15][^16][^17][^18][^19][^2][^20][^3][^4][^5][^6][^7][^8][^9]</span>
+
+<div align="center">⁂</div>
+
+[^1]: https://linuxcontainers.org/incus/docs/main/explanation/containers_and_vms/
+
+[^2]: https://linuxcontainers.org/incus/docs/main/tutorial/first_steps/
+
+[^3]: https://linuxcontainers.org/incus-os/docs/main/getting-started/
+
+[^4]: https://www.youtube.com/watch?v=CZjT1jKb5eQ
+
+[^5]: https://linuxcontainers.org/incus/docs/main/howto/instances_create/
+
+[^6]: https://incus.pzea.com/documentation/howto/instances_configure/
+
+[^7]: https://linuxcontainers.org/incus/docs/main/installing/
+
+[^8]: https://habeuk.com/en/installation-container-and-virtual-machine-manager-incus
+
+[^9]: https://linuxcontainers.org/incus/docs/main/reference/instance_options/
+
+[^10]: https://github.com/lxc/incus/blob/main/doc/installing.md
+
+[^11]: https://linuxcontainers.org/incus/
+
+[^12]: https://linuxcontainers.org/incus/docs/main/explanation/instance_config/
+
+[^13]: https://discuss.linuxcontainers.org/t/trouble-installing-incus-on-arch-linux/22398
+
+[^14]: https://www.youtube.com/watch?v=ULPuU9aKyoU
+
+[^15]: https://github.com/lxc/incus/blob/main/doc/profiles.md
+
+[^16]: https://linux-packages.com/arch-linux/package/incus
+
+[^17]: https://wiki.archlinux.org/title/Incus
+
+[^18]: https://incus.pzea.com/documentation/reference/manpages/incus/config/
+
+[^19]: https://archlinux.org/packages/extra/x86_64/incus/
+
+[^20]: https://linuxcontainers.org/incus/docs/main/
+

@@ -1,0 +1,218 @@
+import { useState, useEffect } from "react"
+import { useParams, Link } from "react-router"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import CodeBlock from "./CodeBlock"
+import PostStats from "./PostStats"
+import Giscus from "@giscus/react"
+import type { PostMetadata } from "shared/dist"
+import { ArrowLeft } from "lucide-react"
+
+const SERVER_URL = import.meta.env.VITE_API_URL!
+
+export default function Cheat() {
+  const { slug } = useParams()
+  const [post, setPost] = useState<PostMetadata | null>(null)
+  const [content, setContent] = useState<string>("")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      if (!slug) return
+
+      try {
+        const response = await fetch(`${SERVER_URL}/posts/${slug}/content`)
+
+        if (!response.ok) {
+          throw new Error("Post not found")
+        }
+
+        const data = await response.json()
+        setPost(data.post)
+        setContent(data.content)
+        setLoading(false)
+      } catch (err) {
+        console.error("Error fetching post:", err)
+        setError("Post não encontrado")
+        setLoading(false)
+      }
+    }
+
+    fetchPost()
+  }, [slug])
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">Carregando...</div>
+      </div>
+    )
+  }
+
+  if (error || !post) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center text-red-500 mb-4">{error}</div>
+        <div className="text-center">
+          <Link
+            to="/posts"
+            className="border-2 border-black/50 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-black/20 transition-colors"
+          >
+            <ArrowLeft /> Voltar
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  const contentWithoutFrontmatter = content.replace(
+    /^---\s*\n[\s\S]*?\n---\s*\n/,
+    ""
+  )
+
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mb-12">
+      <Link
+        to="/posts"
+        className="border-2 border-black/50 py-2 ps-1.5 pe-4 rounded-lg inline-flex items-center gap-2 hover:bg-black/20 transition-colors duration-800 mb-8 uppercase"
+      >
+        <ArrowLeft /> Voltar
+      </Link>
+
+      <div className="flex flex-col lg:flex-row gap-8">
+        <article className="flex-1 w-full lg:max-w-4xl">
+          <header className="mb-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 break-words">
+              {post.title}
+            </h1>
+
+            <div className="flex items-center gap-1 text-sm text-gray-400 mb-4">
+              <time dateTime={post.date}>
+                {new Date(post.date).toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric"
+                })}
+              </time>
+
+              {post.author && <span>por {post.author}</span>}
+            </div>
+
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-6">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {post.excerpt && (
+              <p className="text-base sm:text-lg text-gray-300 italic border-l-4 border-gray-700 pl-4 break-words">
+                {post.excerpt}
+              </p>
+            )}
+          </header>
+
+          <div className="prose prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none w-full overflow-hidden">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: (props) => (
+                  <h1
+                    className="text-2xl sm:text-3xl font-bold mb-4 mt-8 break-words"
+                    {...props}
+                  />
+                ),
+                h2: (props) => (
+                  <h2
+                    className="text-xl sm:text-2xl font-bold mb-3 mt-6 break-words"
+                    {...props}
+                  />
+                ),
+                h3: (props) => (
+                  <h3
+                    className="text-lg sm:text-xl font-bold mb-2 mt-4 break-words"
+                    {...props}
+                  />
+                ),
+                p: (props) => <p className="mb-4 leading-relaxed" {...props} />,
+                code: ({ children, className }) => {
+                  const match = /language-(\w+)/.exec(className || "")
+                  const language = match ? match[1] : ""
+
+                  return match ? (
+                    <CodeBlock language={language}>
+                      {String(children).replace(/\n$/, "")}
+                    </CodeBlock>
+                  ) : (
+                    <code className="bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono">
+                      {children}
+                    </code>
+                  )
+                },
+                pre: (props) => <pre className="my-4" {...props} />,
+                ul: (props) => (
+                  <ul
+                    className="list-disc list-inside mb-4 space-y-2 ml-4"
+                    {...props}
+                  />
+                ),
+                ol: (props) => (
+                  <ol
+                    className="list-decimal list-inside mb-4 space-y-2 ml-4"
+                    {...props}
+                  />
+                ),
+                li: (props) => <li className="ml-2" {...props} />,
+                blockquote: (props) => (
+                  <blockquote
+                    className="border-l-4 border-gray-700 pl-4 italic my-4 text-gray-300"
+                    {...props}
+                  />
+                ),
+                a: (props) => (
+                  <a
+                    className="text-blue-400 hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    {...props}
+                  />
+                )
+              }}
+            >
+              {contentWithoutFrontmatter}
+            </ReactMarkdown>
+          </div>
+
+          <div className="mt-12">
+            <Giscus
+              id="comments"
+              repo="sistematico/paxa.dev"
+              repoId="R_kgDOPykAIw"
+              category="General"
+              categoryId="DIC_kwDOPykAI84CxVJ1"
+              mapping="pathname"
+              term="Welcome to @giscus/react component!"
+              reactionsEnabled="1"
+              emitMetadata="0"
+              inputPosition="top"
+              theme="dark"
+              lang="pt"
+              loading="lazy"
+            />
+          </div>
+        </article>
+
+        <PostStats slug={slug!} />
+      </div>
+    </div>
+  )
+}
+
+
