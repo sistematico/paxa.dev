@@ -22,7 +22,7 @@ export default function Cheat() {
       if (!slug) return
 
       try {
-        const response = await fetch(`${SERVER_URL}/posts/${slug}/content`)
+        const response = await fetch(`${SERVER_URL}/cheats/${slug}/content`)
 
         if (!response.ok) {
           throw new Error("Post not found")
@@ -33,8 +33,8 @@ export default function Cheat() {
         setContent(data.content)
         setLoading(false)
       } catch (err) {
-        console.error("Error fetching post:", err)
-        setError("Post não encontrado")
+        console.error("Error fetching cheat:", err)
+        setError("Cheat não encontrado")
         setLoading(false)
       }
     }
