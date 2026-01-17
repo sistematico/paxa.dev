@@ -17,8 +17,7 @@ git clean -fxd
 #  -e client/.env \
 #  -e server/.env
 
-bun install --production
-#bunx drizzle-kit push 
+bun install
 bun run build || exit 1
 
 sudo /usr/bin/systemctl stop $SERVICE

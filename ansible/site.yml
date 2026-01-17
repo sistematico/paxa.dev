@@ -13,6 +13,38 @@
         state: present
       tags: [nginx]
 
+    - name: (optional) Ensure Node.js 20.x is installed (prevents CI/runtime engine errors)
+      when: install_node is defined and install_node | bool
+      block:
+        - name: Add NodeSource APT repo (Debian/Ubuntu)
+          apt_key:
+            url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+            state: present
+          when: ansible_os_family == 'Debian'
+
+        - name: Add NodeSource repository
+          apt_repository:
+            repo: 'deb https://deb.nodesource.com/node_20.x {{ ansible_lsb.codename }} main'
+            state: present
+          when: ansible_os_family == 'Debian'
+
+        - name: Install nodejs
+          package:
+            name: nodejs
+            state: present
+      tags: [runtime]
+
+    - name: (optional) Ensure Bun is installed for deploy user
+      when: install_bun is defined and install_bun | bool
+      become: true
+      become_user: "{{ deploy_user | default('nginx') }}"
+      environment:
+        HOME: "/home/{{ deploy_user | default('nginx') }}"
+      shell: |
+        set -euo pipefail
+        [ -d "$HOME/.bun" ] || curl -fsSL https://bun.sh/install | bash
+      tags: [runtime]
+
     - name: Ensure nginx config directory exists
       file:
         path: "{{ nginx_conf_dir }}"
