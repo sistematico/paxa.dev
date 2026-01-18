@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "bun",
+      "script": "format",
+      "problemMatcher": [],
+      "label": "bun run format",
+      "detail": "biome format --write"
+    }
+  ]
+}
