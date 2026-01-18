@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme {
+:root {
   /* Gruvbox Dark — simple theme */
   --grv-fg: #cac1ba;
   --grv-bg: #282828;
@@ -8,7 +8,7 @@
   --grv-surface: #32302f;
   --grv-muted: #7c6f64;
   --grv-faded: #a89984;
-
+  
   --grv-red: #fb4934;
   --grv-green: #b8bb26;
   --grv-yellow: #fabd2f;
@@ -16,7 +16,9 @@
   --grv-purple: #d3869b;
   --grv-aqua: #8ec07c;
   --grv-orange: #fe8019;
+}
 
+@theme {
   /* semantic tokens */
   --color-foreground: var(--grv-fg);
   --color-background: var(--grv-bg);

@@ -33,6 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={nunito.className}>
+      <head>
+        <link rel="shortcut icon" href="/images/favicon.svg" type="image/svg+xml" sizes="any" />
+      </head>
       <body>{children}</body>
     </html>
   );
