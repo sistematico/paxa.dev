@@ -2,9 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function Header() {
-  const links = [
-    { href: "/", label: "Início" },
-  ];
+  const links = [{ href: "/", label: "Início" }];
 
   return (
     <header className="sticky z-50 bg-background border-b-2 border-black/50 top-0">
