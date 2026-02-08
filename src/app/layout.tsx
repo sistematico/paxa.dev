@@ -18,9 +18,7 @@ export default function RootLayout({
           <header className="sticky z-50 bg-gray-300 top-0 p-4">
             header contents
           </header>
-          <main className="flex-1">
-            {children}
-          </main>
+          <main className="flex-1">{children}</main>
           <footer className="sticky z-50 bg-gray-300 bottom-0 p-4">
             footer contents
           </footer>
