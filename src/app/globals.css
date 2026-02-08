@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@theme {
+  --color-foreground: #c0c5ce;
+  --color-background: #343d46;
+  --color-background-alt: #343d46;
+}
+
+body {
+  @apply bg-background-alt text-foreground;
+}
