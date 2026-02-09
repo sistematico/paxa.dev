@@ -42,7 +42,13 @@ function RoundedImage(props: React.ComponentProps<typeof Image>) {
   return <Image className="rounded-lg" {...props} />;
 }
 
-function Code({ children, ...props }: { children: string; [key: string]: unknown }) {
+function Code({
+  children,
+  ...props
+}: {
+  children: string;
+  [key: string]: unknown;
+}) {
   const codeHTML = highlight(children);
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
@@ -68,10 +74,10 @@ function createHeading(level: number) {
         React.createElement("a", {
           href: `#${slug}`,
           key: `link-${slug}`,
-          className: "anchor"
-        })
+          className: "anchor",
+        }),
       ],
-      children
+      children,
     );
   };
 
@@ -90,9 +96,14 @@ const components = {
   Image: RoundedImage,
   a: CustomLink,
   code: Code,
-  Table
+  Table,
 };
 
 export function CustomMDX(props: { source: string; components?: object }) {
-  return <MDXRemote {...props} components={{ ...components, ...(props.components || {}) }} />;
+  return (
+    <MDXRemote
+      {...props}
+      components={{ ...components, ...(props.components || {}) }}
+    />
+  );
 }
