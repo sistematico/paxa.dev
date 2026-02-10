@@ -1,18 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-import { z } from 'zod';
+import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
+import { z } from "zod";
 
 const contactSchema = z.object({
-  name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-  email: z.email('E-mail inválido'),
-  subject: z.string().min(5, 'Assunto deve ter pelo menos 5 caracteres'),
-  message: z.string().min(10, 'Mensagem deve ter pelo menos 10 caracteres'),
+  name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+  email: z.email("E-mail inválido"),
+  subject: z.string().min(5, "Assunto deve ter pelo menos 5 caracteres"),
+  message: z.string().min(10, "Mensagem deve ter pelo menos 10 caracteres"),
 });
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     // Validação
     const validatedData = contactSchema.parse(body);
 
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     await transporter.sendMail({
       from: process.env.SMTP_USER,
       to: validatedData.email,
-      subject: 'Mensagem recebida - Paxá.dev',
+      subject: "Mensagem recebida - Paxá.dev",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #d97706;">Olá ${validatedData.name}!</h2>
@@ -69,21 +69,21 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { message: 'Mensagem enviada com sucesso!' },
-      { status: 200 }
+      { message: "Mensagem enviada com sucesso!" },
+      { status: 200 },
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: error.issues?.[0]?.message || 'Erro de validação' },
-        { status: 400 }
+        { error: error.issues?.[0]?.message || "Erro de validação" },
+        { status: 400 },
       );
     }
 
-    console.error('Erro ao enviar e-mail:', error);
+    console.error("Erro ao enviar e-mail:", error);
     return NextResponse.json(
-      { error: 'Erro ao enviar mensagem. Tente novamente.' },
-      { status: 500 }
+      { error: "Erro ao enviar mensagem. Tente novamente." },
+      { status: 500 },
     );
   }
 }

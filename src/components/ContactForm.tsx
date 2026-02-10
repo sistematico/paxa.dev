@@ -4,7 +4,10 @@ import { useActionState } from "react";
 import { submitContactForm, type ContactFormState } from "@/actions/contact";
 
 export default function ContactForm() {
-  const [state, formAction, isPending] = useActionState<ContactFormState, FormData>(submitContactForm, {
+  const [state, formAction, isPending] = useActionState<
+    ContactFormState,
+    FormData
+  >(submitContactForm, {
     status: "idle",
     message: "",
   });

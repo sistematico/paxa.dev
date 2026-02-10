@@ -17,7 +17,7 @@ export type ContactFormState = {
 
 export async function submitContactForm(
   _prevState: ContactFormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ContactFormState> {
   try {
     const data = {
