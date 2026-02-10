@@ -1,25 +1,39 @@
-import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-import { z } from 'zod';
+"use server";
+
+import nodemailer from "nodemailer";
+import { z } from "zod";
 
 const contactSchema = z.object({
-  name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-  email: z.email('E-mail inválido'),
-  subject: z.string().min(5, 'Assunto deve ter pelo menos 5 caracteres'),
-  message: z.string().min(10, 'Mensagem deve ter pelo menos 10 caracteres'),
+  name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+  email: z.email("E-mail inválido"),
+  subject: z.string().min(5, "Assunto deve ter pelo menos 5 caracteres"),
+  message: z.string().min(10, "Mensagem deve ter pelo menos 10 caracteres"),
 });
 
-export async function POST(request: NextRequest) {
+export type ContactFormState = {
+  status: "idle" | "success" | "error";
+  message: string;
+};
+
+export async function submitContactForm(
+  _prevState: ContactFormState,
+  formData: FormData
+): Promise<ContactFormState> {
   try {
-    const body = await request.json();
-    
+    const data = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      subject: formData.get("subject") as string,
+      message: formData.get("message") as string,
+    };
+
     // Validação
-    const validatedData = contactSchema.parse(body);
+    const validatedData = contactSchema.parse(data);
 
     // Configurar transporter
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT!),
+      port: Number(process.env.SMTP_PORT || "587"),
       secure: false,
       auth: {
         user: process.env.SMTP_USER,
@@ -55,7 +69,7 @@ export async function POST(request: NextRequest) {
     await transporter.sendMail({
       from: process.env.SMTP_USER,
       to: validatedData.email,
-      subject: 'Mensagem recebida - Paxá.dev',
+      subject: "Mensagem recebida - Paxá.dev",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #d97706;">Olá ${validatedData.name}!</h2>
@@ -68,22 +82,22 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    return NextResponse.json(
-      { message: 'Mensagem enviada com sucesso!' },
-      { status: 200 }
-    );
+    return {
+      status: "success",
+      message: "Mensagem enviada com sucesso!",
+    };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: error.issues?.[0]?.message || 'Erro de validação' },
-        { status: 400 }
-      );
+      return {
+        status: "error",
+        message: error.issues?.[0]?.message || "Erro de validação",
+      };
     }
 
-    console.error('Erro ao enviar e-mail:', error);
-    return NextResponse.json(
-      { error: 'Erro ao enviar mensagem. Tente novamente.' },
-      { status: 500 }
-    );
+    console.error("Erro ao enviar e-mail:", error);
+    return {
+      status: "error",
+      message: "Erro ao enviar mensagem. Tente novamente.",
+    };
   }
 }

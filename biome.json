@@ -23,6 +23,9 @@
       },
       "security": {
         "noDangerouslySetInnerHtml": "off"
+      },
+      "style": {
+        "useImportType": "off"
       }
     },
     "domains": {
