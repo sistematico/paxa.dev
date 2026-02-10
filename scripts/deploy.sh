@@ -13,15 +13,11 @@ echo "📦 Preparando ambiente de deploy..."
 cd $TMPDIR || exit 1
 
 git clean -fxd
-#git clean -fxd -e .env
-#cp .env .env.production
 
 echo "📥 Instalando dependências..."
 pnpm install
 
 #echo "🗃️ Sincronizando banco de dados..."
-#pnpm run push
-#pnpm run seed
 
 if pnpm run build; then
   echo "✅ Build concluído com sucesso!"
