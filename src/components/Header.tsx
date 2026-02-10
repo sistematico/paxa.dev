@@ -4,8 +4,8 @@ import Navbar from "./Navbar";
 
 export default function Header() {
   return (
-    <header className="sticky z-50 bg-background border-b-3 border-black/40 top-0 p-4">
-      <div className="flex items-center justify-between max-w-2xl mx-auto w-full">
+    <header className="sticky z-50 bg-background border-b-3 border-black/40 top-0">
+      <div className="md:flex items-center justify-between container mx-auto p-2">
         <Link
           href="/"
           className="flex items-center gap-2 text-4xl font-semibold text-foreground/80"
