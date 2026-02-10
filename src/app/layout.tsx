@@ -40,7 +40,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="shortcut icon" href="/images/favicon.svg" type="image/svg+xml" sizes="any" />
+        <link
+          rel="shortcut icon"
+          href="/images/favicon.svg"
+          type="image/svg+xml"
+          sizes="any"
+        />
       </head>
       <body className={`${nunito.variable} font-(family-name:--font-nunito)`}>
         <div className="flex flex-col min-h-screen">

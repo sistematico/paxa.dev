@@ -9,11 +9,9 @@ export default function Home() {
       <Link
         className="flex items-center gap-1 rounded px-2 py-1 border-3 border-black/40 bg-black/30 inline-block text-primary group"
         href="/"
-        >
+      >
         <ArrowLeft className="size-6 inline-block group-hover:-translate-x-1 transition-transform duration-300 ease-in-out" />
-        <span className="-mt-1">
-          Voltar
-        </span>
+        <span className="-mt-1">Voltar</span>
       </Link>
     </div>
   );
