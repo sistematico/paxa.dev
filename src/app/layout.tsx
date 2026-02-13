@@ -1,3 +1,4 @@
+import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
 import { Nunito } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -48,11 +49,13 @@ export default function RootLayout({
         />
       </head>
       <body className={`${nunito.variable} font-(family-name:--font-nunito)`}>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-1 container mx-auto p-2">{children}</main>
-          <Footer />
-        </div>
+        <AudioPlayerProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1 container mx-auto p-2">{children}</main>
+            <Footer />
+          </div>
+        </AudioPlayerProvider>
       </body>
     </html>
   );

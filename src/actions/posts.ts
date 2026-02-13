@@ -1,3 +1,4 @@
+// src/actions/posts.ts
 import fs from "node:fs";
 import path from "node:path";
 
@@ -6,6 +7,8 @@ type Metadata = {
   publishedAt: string;
   summary: string;
   image?: string;
+  category?: string;
+  tags?: string[];
 };
 
 function parseFrontmatter(fileContent: string) {
@@ -19,8 +22,16 @@ function parseFrontmatter(fileContent: string) {
   frontMatterLines.forEach((line) => {
     const [key, ...valueArr] = line.split(": ");
     let value = valueArr.join(": ").trim();
-    value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
-    metadata[key.trim() as keyof Metadata] = value;
+    value = value.replace(/^['"](.*)['"]$/, "$1");
+
+    const trimmedKey = key.trim() as keyof Metadata;
+
+    // Handle arrays (tags)
+    if (trimmedKey === "tags" && value.startsWith("[")) {
+      metadata.tags = JSON.parse(value.replace(/'/g, '"'));
+    } else {
+      (metadata as any)[trimmedKey] = value;
+    }
   });
 
   return { metadata: metadata as Metadata, content };
@@ -41,12 +52,46 @@ function getMDXData(dir: string) {
     const { metadata, content } = readMDXFile(path.join(dir, file));
     const slug = path.basename(file, path.extname(file));
 
-    return { metadata, slug, content };
+    return {
+      metadata: {
+        ...metadata,
+        category: metadata.category || "Sem categoria",
+        tags: metadata.tags || [],
+      },
+      slug,
+      content,
+    };
   });
 }
 
 export function getPosts() {
-  return getMDXData(path.join(process.cwd(), "src", "posts"));
+  const posts = getMDXData(path.join(process.cwd(), "src", "posts"));
+  return posts.sort((a, b) => {
+    if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
+      return -1;
+    }
+    return 1;
+  });
+}
+
+export function getPostsByCategory(category: string) {
+  return getPosts().filter((post) => post.metadata.category === category);
+}
+
+export function getPostsByTag(tag: string) {
+  return getPosts().filter((post) => post.metadata.tags?.includes(tag));
+}
+
+export function getAllCategories() {
+  const posts = getPosts();
+  const categories = [...new Set(posts.map((post) => post.metadata.category))];
+  return categories.filter(Boolean) as string[];
+}
+
+export function getAllTags() {
+  const posts = getPosts();
+  const allTags = posts.flatMap((post) => post.metadata.tags || []);
+  return [...new Set(allTags)];
 }
 
 export function formatDate(date: string, includeRelative = false) {

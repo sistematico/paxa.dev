@@ -1,0 +1,68 @@
+---
+title: 'React useDebounce Hook'
+publishedAt: '2024-01-15'
+summary: 'Um hook customizado para fazer debounce de valores no React'
+category: 'React'
+tags: ['React', 'Hooks', 'TypeScript', 'Performance']
+---
+
+## useDebounce Hook
+
+Um hook simples e eficiente para fazer debounce de valores no React. Útil para otimizar chamadas de API em campos de busca.
+
+```typescript
+import { useEffect, useState } from 'react';
+
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
+export default useDebounce;
+```
+
+## Como usar
+
+```typescript
+import { useState } from 'react';
+import useDebounce from './useDebounce';
+
+function SearchComponent() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      // Fazer chamada de API aqui
+      fetchResults(debouncedSearchTerm);
+    }
+  }, [debouncedSearchTerm]);
+
+  return (
+    <input
+      type="text"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      placeholder="Buscar..."
+    />
+  );
+}
+```
+
+## Benefícios
+
+- Reduz o número de chamadas de API
+- Melhora a performance da aplicação
+- Fácil de implementar e reutilizar
+- Type-safe com TypeScript

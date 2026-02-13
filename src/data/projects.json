@@ -1,0 +1,24 @@
+{
+  "projects": [
+    {
+      "id": "reconta",
+      "title": "ReConta",
+      "description": "Aplicativo de controle financeiro pessoal com integração bancária e visualização de dados",
+      "tech": ["Next.js", "React", "Socket.IO", "TypeScript", "Drizzle ORM"],
+      "github": "https://github.com/paxa/reconta",
+      "demo": "https://reconta.app",
+      "image": "/projects/reconta.png",
+      "featured": true
+    },
+    {
+      "id": "som-do-mato",
+      "title": "Som do Mato",
+      "description": "Website de rádio com player em tempo real e gerenciamento de conteúdo",
+      "tech": ["Next.js", "TailwindCSS", "TypeScript"],
+      "github": "https://github.com/paxa/som-do-mato",
+      "demo": "https://somdomato.com.br",
+      "image": "/projects/somdomato.png",
+      "featured": true
+    }
+  ]
+}

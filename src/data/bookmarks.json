@@ -1,0 +1,31 @@
+{
+  "bookmarks": [
+    {
+      "id": "react-docs",
+      "title": "React Documentation",
+      "description": "A documentação oficial do React com guias, referências e exemplos",
+      "url": "https://react.dev",
+      "category": "Documentação",
+      "tags": ["React", "Frontend", "JavaScript"],
+      "featured": true
+    },
+    {
+      "id": "tailwind-css",
+      "title": "Tailwind CSS",
+      "description": "Framework CSS utility-first para desenvolvimento rápido",
+      "url": "https://tailwindcss.com",
+      "category": "CSS",
+      "tags": ["CSS", "Design", "Frontend"],
+      "featured": true
+    },
+    {
+      "id": "github",
+      "title": "GitHub",
+      "description": "Plataforma de hospedagem de código e colaboração",
+      "url": "https://github.com",
+      "category": "Ferramentas",
+      "tags": ["Git", "DevOps", "Colaboração"],
+      "featured": false
+    }
+  ]
+}
