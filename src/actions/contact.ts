@@ -13,6 +13,12 @@ const contactSchema = z.object({
 export type ContactFormState = {
   status: "idle" | "success" | "error";
   message: string;
+  formData?: {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+  };
 };
 
 export async function submitContactForm(
@@ -31,9 +37,18 @@ export async function submitContactForm(
     const validatedData = contactSchema.parse(data);
 
     // Configurar transporter
+    // const transporter = nodemailer.createTransport({
+    //   host: process.env.SMTP_HOST,
+    //   port: Number(process.env.SMTP_PORT || "587"),
+    //   secure: false,
+    //   auth: {
+    //     user: process.env.SMTP_USER,
+    //     pass: process.env.SMTP_PASS,
+    //   },
+    // });
+
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || "587"),
+      service: "iCloud", // Use any Service ID from the table below (case-insensitive)
       secure: false,
       auth: {
         user: process.env.SMTP_USER,
@@ -87,10 +102,18 @@ export async function submitContactForm(
       message: "Mensagem enviada com sucesso!",
     };
   } catch (error) {
+    const data = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      subject: formData.get("subject") as string,
+      message: formData.get("message") as string,
+    };
+
     if (error instanceof z.ZodError) {
       return {
         status: "error",
         message: error.issues?.[0]?.message || "Erro de validação",
+        formData: data,
       };
     }
 
@@ -98,6 +121,7 @@ export async function submitContactForm(
     return {
       status: "error",
       message: "Erro ao enviar mensagem. Tente novamente.",
+      formData: data,
     };
   }
 }
