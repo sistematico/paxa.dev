@@ -21,7 +21,11 @@ export default function ContactForm() {
         Tem um projeto em mente? Vamos conversar! 🌙
       </p>
 
-      <form action={formAction} className="space-y-6" key={state.status === "success" ? Date.now() : undefined}>
+      <form
+        action={formAction}
+        className="space-y-6"
+        key={state.status === "success" ? Date.now() : undefined}
+      >
         <div>
           <label
             htmlFor="name"

@@ -16,7 +16,10 @@ export default function ContatoPage() {
             Contato
           </h1>
           <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto">
-            Como um{" "}<span className="text-amber-600 dark:text-amber-400 font-semibold">nômade digital</span>
+            Como um{" "}
+            <span className="text-amber-600 dark:text-amber-400 font-semibold">
+              nômade digital
+            </span>
             , estou sempre aberto para novas jornadas. Seja para um projeto,
             colaboração ou apenas para trocar ideias sobre o universo do
             desenvolvimento web.
