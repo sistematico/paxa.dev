@@ -14,11 +14,11 @@ export default function ContactForm() {
 
   return (
     <div className="max-w-2xl mx-auto px-6">
-      <h2 className="text-4xl font-bold text-center mb-4 bg-linear-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+      <h2 className="text-3xl font-bold text-center mb-4 text-foreground">
         Envie uma Mensagem
       </h2>
-      <p className="text-center text-slate-600 dark:text-slate-400 mb-12">
-        Tem um projeto em mente? Vamos conversar! 🌙
+      <p className="text-center text-muted mb-12">
+        Tem um projeto em mente? Vamos conversar!
       </p>
 
       <form
@@ -29,7 +29,7 @@ export default function ContactForm() {
         <div>
           <label
             htmlFor="name"
-            className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
+            className="block text-sm font-semibold text-foreground mb-2"
           >
             Nome
           </label>
@@ -39,14 +39,14 @@ export default function ContactForm() {
             name="name"
             required
             defaultValue={state.formData?.name || ""}
-            className="w-full px-4 py-3 rounded-lg border-2 border-amber-200 dark:border-amber-800 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none transition-colors"
+            className="w-full px-4 py-3 rounded-lg border border-border bg-surface text-foreground focus:border-accent focus:outline-none transition-colors"
           />
         </div>
 
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
+            className="block text-sm font-semibold text-foreground mb-2"
           >
             E-mail
           </label>
@@ -56,14 +56,14 @@ export default function ContactForm() {
             name="email"
             required
             defaultValue={state.formData?.email || ""}
-            className="w-full px-4 py-3 rounded-lg border-2 border-amber-200 dark:border-amber-800 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none transition-colors"
+            className="w-full px-4 py-3 rounded-lg border border-border bg-surface text-foreground focus:border-accent focus:outline-none transition-colors"
           />
         </div>
 
         <div>
           <label
             htmlFor="subject"
-            className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
+            className="block text-sm font-semibold text-foreground mb-2"
           >
             Assunto
           </label>
@@ -73,14 +73,14 @@ export default function ContactForm() {
             name="subject"
             required
             defaultValue={state.formData?.subject || ""}
-            className="w-full px-4 py-3 rounded-lg border-2 border-amber-200 dark:border-amber-800 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none transition-colors"
+            className="w-full px-4 py-3 rounded-lg border border-border bg-surface text-foreground focus:border-accent focus:outline-none transition-colors"
           />
         </div>
 
         <div>
           <label
             htmlFor="message"
-            className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
+            className="block text-sm font-semibold text-foreground mb-2"
           >
             Mensagem
           </label>
@@ -90,7 +90,7 @@ export default function ContactForm() {
             required
             rows={6}
             defaultValue={state.formData?.message || ""}
-            className="w-full px-4 py-3 rounded-lg border-2 border-amber-200 dark:border-amber-800 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none transition-colors resize-none"
+            className="w-full px-4 py-3 rounded-lg border border-border bg-surface text-foreground focus:border-accent focus:outline-none transition-colors resize-none"
           />
         </div>
 
@@ -98,8 +98,8 @@ export default function ContactForm() {
           <div
             className={`p-4 rounded-lg ${
               state.status === "success"
-                ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
-                : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
+                ? "bg-green-900/30 text-green-300 border border-green-800"
+                : "bg-red-900/30 text-red-300 border border-red-800"
             }`}
           >
             {state.message}
@@ -109,7 +109,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full px-8 py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-lg font-semibold hover:from-amber-700 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-8 py-4 bg-accent text-background rounded-lg font-semibold hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPending ? "Enviando..." : "Enviar Mensagem"}
         </button>

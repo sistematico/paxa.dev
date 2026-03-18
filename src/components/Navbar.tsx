@@ -13,7 +13,7 @@ export default function Navbar() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded bg-black/50 hover:bg-black/70 transition-colors duration-300"
+        className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded bg-surface-alt hover:bg-border transition-colors duration-300"
         aria-label="Toggle menu"
       >
         <span
@@ -42,7 +42,7 @@ export default function Navbar() {
         {navLinks.map((link) => (
           <Link
             key={link.name}
-            className={`flex items-center gap-1 rounded bg-black/50 w-full px-2 py-1 transition-colors duration-300 ease-in-out ${link.className}`}
+            className={`flex items-center gap-1 rounded bg-surface-alt w-full px-2 py-1 transition-colors duration-300 ease-in-out ${link.className}`}
             href={link.href}
             onClick={() => setIsOpen(false)}
           >
@@ -57,7 +57,7 @@ export default function Navbar() {
         {navLinks.map((link) => (
           <Link
             key={link.name}
-            className={`flex items-center gap-1 rounded bg-black/50 px-2 py-1 transition-colors duration-300 ease-in-out ${link.className}`}
+            className={`flex items-center gap-1 rounded bg-surface-alt px-2 py-1 transition-colors duration-300 ease-in-out ${link.className}`}
             href={link.href}
           >
             <link.icon className="size-5" />

@@ -1,34 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# paxa.dev
 
-## Getting Started
+Site pessoal, blog e portfólio — [paxa.dev](https://paxa.dev)
 
-First, run the development server:
+## Stack
+
+- **Framework**: Next.js 16 (App Router) + React 19
+- **Linguagem**: TypeScript 5
+- **Estilo**: Tailwind CSS v4
+- **Conteúdo**: MDX (next-mdx-remote, @next/mdx)
+- **Banco de dados**: Drizzle ORM + better-sqlite3 (SQLite)
+- **Validação**: Zod
+- **E-mail**: Nodemailer
+- **Ícones**: lucide-react
+- **Lint/Format**: Biome 2
+- **Gerenciador**: pnpm
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm db:migrate   # cria/atualiza o banco SQLite
+pnpm dev           # inicia o servidor de desenvolvimento
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Comando            | Descrição                        |
+| ------------------ | -------------------------------- |
+| `pnpm dev`         | Dev server                       |
+| `pnpm build`       | Build de produção                |
+| `pnpm start`       | Serve build (porta 3001)         |
+| `pnpm lint`        | Biome check                      |
+| `pnpm format`      | Biome format                     |
+| `pnpm db:generate` | Drizzle Kit generate migrations  |
+| `pnpm db:migrate`  | Drizzle Kit migrate              |
 
-## Learn More
+## Estrutura
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  actions/       # Server actions e data fetching
+  app/           # App Router pages e API routes
+  components/    # React components
+  contexts/      # React contexts
+  data/          # JSON data files (projetos, bookmarks)
+  db/            # Drizzle ORM (schema, conexão)
+  posts/         # MDX blog posts
+  snippets/      # MDX code snippets
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Convenções
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- UI em **português brasileiro**; código e commits em **inglês**
+- Tema dark permanente — sem light mode
+- Paleta de cores via tokens em `src/app/globals.css`
+- Preferir Server Components; `"use client"` só quando necessário
+- Formulários: `useActionState` + Server Actions

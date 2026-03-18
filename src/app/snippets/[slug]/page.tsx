@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx-components";
+import Breadcrumb from "@/components/Breadcrumb";
 import { formatDate } from "@/actions/posts";
 import { getSnippets } from "@/actions/snippets";
 import { baseUrl } from "@/sitemap";
@@ -63,7 +64,13 @@ export default async function SnippetPage({
   }
 
   return (
-    <section>
+    <section className="px-4 py-6">
+      <Breadcrumb
+        items={[
+          { label: "Snippets", href: "/snippets" },
+          { label: snippet.metadata.title },
+        ]}
+      />
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -84,43 +91,22 @@ export default async function SnippetPage({
         }}
       />
 
-      {/* Breadcrumb */}
-      <nav className="mb-8 text-sm">
-        <ol className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-          <li>
-            <Link
-              href="/snippets"
-              className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-            >
-              Snippets
-            </Link>
-          </li>
-          <li>/</li>
-          <li className="text-neutral-900 dark:text-neutral-100">
-            {snippet.metadata.title}
-          </li>
-        </ol>
-      </nav>
-
       {/* Header */}
       <h1 className="title font-semibold text-2xl tracking-tighter">
         {snippet.metadata.title}
       </h1>
 
       <div className="flex items-center gap-3 mt-2 mb-8 text-sm">
-        <time
-          dateTime={snippet.metadata.publishedAt}
-          className="text-neutral-600 dark:text-neutral-400"
-        >
+        <time dateTime={snippet.metadata.publishedAt} className="text-muted">
           {formatDate(snippet.metadata.publishedAt, false)}
         </time>
 
         {snippet.metadata.category && (
           <>
-            <span className="text-neutral-400 dark:text-neutral-600">•</span>
+            <span className="text-border">•</span>
             <Link
               href={`/snippets?category=${encodeURIComponent(snippet.metadata.category)}`}
-              className="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs rounded hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+              className="px-2 py-0.5 bg-surface text-foreground text-xs rounded hover:bg-surface-alt transition-colors"
             >
               {snippet.metadata.category}
             </Link>
@@ -135,7 +121,7 @@ export default async function SnippetPage({
             <Link
               key={tag}
               href={`/snippets?tag=${encodeURIComponent(tag)}`}
-              className="text-xs text-neutral-500 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              className="text-xs text-muted hover:text-accent transition-colors"
             >
               #{tag}
             </Link>
@@ -144,15 +130,15 @@ export default async function SnippetPage({
       )}
 
       {/* Content */}
-      <article className="prose dark:prose-invert">
+      <article className="prose">
         <CustomMDX source={snippet.content} />
       </article>
 
       {/* Back link */}
-      <div className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
+      <div className="mt-12 pt-8 border-t border-border">
         <Link
           href="/snippets"
-          className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+          className="text-sm text-muted hover:text-accent transition-colors"
         >
           ← Voltar para snippets
         </Link>

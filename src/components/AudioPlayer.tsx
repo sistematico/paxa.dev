@@ -30,12 +30,11 @@ export default function AudioPlayer() {
     handleVolumeChange,
     toggleMute,
     handleSeek,
-    setCurrentTrack,
     playTrack,
   } = useAudioPlayer();
 
   const formatTime = (time: number) => {
-    if (isNaN(time)) return "0:00";
+    if (Number.isNaN(time)) return "0:00";
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
@@ -47,7 +46,7 @@ export default function AudioPlayer() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+        className="relative p-2 rounded-lg hover:bg-surface-alt transition-colors"
         aria-label="Player de áudio"
       >
         <Music className="w-5 h-5" />
@@ -58,15 +57,14 @@ export default function AudioPlayer() {
 
       {/* Player expandido */}
       {isOpen && (
-        <div className="fixed top-16 right-4 w-80 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow-2xl p-4 z-50">
+        <div className="fixed top-16 right-4 w-80 bg-surface border border-border rounded-lg shadow-2xl p-4 z-50">
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-sm">Player de Áudio</h3>
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-              aria-label="Fechar player"
+              className="p-1 rounded hover:bg-surface-alt transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -77,7 +75,7 @@ export default function AudioPlayer() {
             <h4 className="font-medium text-sm truncate">
               {playlist[currentTrack].title}
             </h4>
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate">
+            <p className="text-xs text-muted truncate">
               {playlist[currentTrack].artist}
             </p>
           </div>
@@ -90,9 +88,9 @@ export default function AudioPlayer() {
               max={duration || 0}
               value={currentTime}
               onChange={(e) => handleSeek(parseFloat(e.target.value))}
-              className="w-full h-1 bg-neutral-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer slider"
+              className="w-full h-1 bg-border rounded-lg appearance-none cursor-pointer slider"
             />
-            <div className="flex justify-between text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+            <div className="flex justify-between text-xs text-muted mt-1">
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
@@ -103,7 +101,7 @@ export default function AudioPlayer() {
             <button
               type="button"
               onClick={handlePrevious}
-              className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              className="p-2 rounded-full hover:bg-surface-alt transition-colors"
               aria-label="Música anterior"
             >
               <SkipBack className="w-5 h-5" />
@@ -112,26 +110,23 @@ export default function AudioPlayer() {
             <button
               type="button"
               onClick={togglePlay}
-              className="p-3 rounded-full bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
+              className="p-3 rounded-full bg-accent hover:bg-accent-hover transition-colors"
               aria-label={isPlaying ? "Pausar" : "Reproduzir"}
             >
               {isPlaying ? (
                 <Pause
-                  className="w-5 h-5 text-white dark:text-black"
+                  className="w-5 h-5 text-background"
                   fill="currentColor"
                 />
               ) : (
-                <Play
-                  className="w-5 h-5 text-white dark:text-black"
-                  fill="currentColor"
-                />
+                <Play className="w-5 h-5 text-background" fill="currentColor" />
               )}
             </button>
 
             <button
               type="button"
               onClick={handleNext}
-              className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              className="p-2 rounded-full hover:bg-surface-alt transition-colors"
               aria-label="Próxima música"
             >
               <SkipForward className="w-5 h-5" />
@@ -143,8 +138,7 @@ export default function AudioPlayer() {
             <button
               type="button"
               onClick={toggleMute}
-              className="p-1 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-              aria-label={isMuted ? "Ativar som" : "Silenciar"}
+              className="p-1 rounded hover:bg-surface-alt transition-colors"
             >
               {isMuted || volume === 0 ? (
                 <VolumeX className="w-4 h-4" />
@@ -159,15 +153,13 @@ export default function AudioPlayer() {
               step="0.01"
               value={isMuted ? 0 : volume}
               onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
-              className="flex-1 h-1 bg-neutral-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer slider"
+              className="flex-1 h-1 bg-border rounded-lg appearance-none cursor-pointer slider"
             />
           </div>
 
           {/* Playlist */}
-          <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-800">
-            <h4 className="text-xs font-semibold mb-2 text-neutral-600 dark:text-neutral-400">
-              PLAYLIST
-            </h4>
+          <div className="mt-4 pt-4 border-t border-border">
+            <h4 className="text-xs font-semibold mb-2 text-muted">PLAYLIST</h4>
             <div className="space-y-1 max-h-32 overflow-y-auto">
               {playlist.map((track, index) => (
                 <button
@@ -176,14 +168,12 @@ export default function AudioPlayer() {
                   onClick={() => playTrack(index)}
                   className={`w-full text-left px-2 py-1.5 rounded text-xs transition-colors ${
                     index === currentTrack
-                      ? "bg-neutral-100 dark:bg-neutral-800 font-medium"
-                      : "hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                      ? "bg-surface-alt font-medium"
+                      : "hover:bg-surface-alt/50"
                   }`}
                 >
                   <div className="truncate">{track.title}</div>
-                  <div className="text-neutral-500 dark:text-neutral-400 truncate">
-                    {track.artist}
-                  </div>
+                  <div className="text-muted truncate">{track.artist}</div>
                 </button>
               ))}
             </div>

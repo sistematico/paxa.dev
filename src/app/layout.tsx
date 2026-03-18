@@ -52,7 +52,9 @@ export default function RootLayout({
         <AudioPlayerProvider>
           <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-1 container mx-auto p-2">{children}</main>
+            <main className="flex-1 container mx-auto px-4 py-6">
+              {children}
+            </main>
             <Footer />
           </div>
         </AudioPlayerProvider>

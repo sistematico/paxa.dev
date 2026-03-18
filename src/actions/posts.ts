@@ -30,7 +30,7 @@ function parseFrontmatter(fileContent: string) {
     if (trimmedKey === "tags" && value.startsWith("[")) {
       metadata.tags = JSON.parse(value.replace(/'/g, '"'));
     } else {
-      (metadata as any)[trimmedKey] = value;
+      (metadata as Record<string, string>)[trimmedKey] = value;
     }
   });
 

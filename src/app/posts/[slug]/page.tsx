@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx-components";
+import Breadcrumb from "@/components/Breadcrumb";
+import PostViewCounter from "@/components/PostViewCounter";
 import { formatDate, getPosts } from "@/actions/posts";
 import { baseUrl } from "@/sitemap";
 
@@ -61,7 +63,13 @@ export default async function Post({
   if (!post) notFound();
 
   return (
-    <section>
+    <section className="px-4 py-6">
+      <Breadcrumb
+        items={[
+          { label: "Blog", href: "/posts" },
+          { label: post.metadata.title },
+        ]}
+      />
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -88,9 +96,10 @@ export default async function Post({
         {post.metadata.title}
       </h1>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-muted">
           {formatDate(post.metadata.publishedAt)}
         </p>
+        <PostViewCounter slug={post.slug} />
       </div>
       <article className="prose">
         <CustomMDX source={post.content} />

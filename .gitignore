@@ -43,3 +43,7 @@ next-env.d.ts
 
 # custom
 *.old*
+
+# database
+data/**
+!data/.gitkeep

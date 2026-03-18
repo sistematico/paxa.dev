@@ -7,7 +7,7 @@
       "tech": ["Next.js", "React", "Socket.IO", "TypeScript", "Drizzle ORM"],
       "github": "https://github.com/paxa/reconta",
       "demo": "https://reconta.app",
-      "image": "/projects/reconta.png",
+      "icon": "Calculator",
       "featured": true
     },
     {
@@ -17,7 +17,7 @@
       "tech": ["Next.js", "TailwindCSS", "TypeScript"],
       "github": "https://github.com/paxa/som-do-mato",
       "demo": "https://somdomato.com.br",
-      "image": "/projects/somdomato.png",
+      "icon": "Radio",
       "featured": true
     }
   ]

@@ -3,11 +3,16 @@
 @theme {
   --color-foreground: #c0c5ce;
   --color-background: #343d46;
-  --color-background-alt: #343d46;
+  --color-surface: #2b3039;
+  --color-surface-alt: #3d4652;
+  --color-border: #4f5b66;
+  --color-muted: #65737e;
+  --color-accent: #8fa1b3;
+  --color-accent-hover: #a7bbd0;
 }
 
 body {
-  @apply bg-background-alt text-foreground;
+  @apply bg-background text-foreground;
 }
 
 h1 {

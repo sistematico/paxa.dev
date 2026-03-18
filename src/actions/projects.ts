@@ -9,7 +9,7 @@ export type Project = {
   tech: string[];
   github?: string;
   demo?: string;
-  image?: string;
+  icon?: string;
   featured?: boolean;
 };
 
