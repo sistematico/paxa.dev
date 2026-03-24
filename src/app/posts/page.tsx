@@ -1,8 +1,13 @@
 // src/app/posts/page.tsx
 import Posts from "@/components/Posts";
 import Breadcrumb from "@/components/Breadcrumb";
-import { getAllCategories, getAllTags } from "@/actions/posts";
-import Link from "next/link";
+import { getAllCategories, getAllTags, getPosts } from "@/actions/posts";
+import {
+  ActiveFilters,
+  CategoryList,
+  PillCloud,
+  Stats,
+} from "@/components/FilterSidebar";
 
 export const metadata = {
   title: "Blog - Paxá",
@@ -17,106 +22,68 @@ export default async function BlogPage({
   const params = await searchParams;
   const categories = getAllCategories();
   const tags = getAllTags();
+  const allPosts = getPosts();
+
+  const activeFilters = [
+    ...(params.category
+      ? [
+          {
+            label: "Categoria",
+            value: params.category,
+            clearHref: params.tag
+              ? `/posts?tag=${encodeURIComponent(params.tag)}`
+              : "/posts",
+          },
+        ]
+      : []),
+    ...(params.tag
+      ? [
+          {
+            label: "Tag",
+            value: `#${params.tag}`,
+            clearHref: params.category
+              ? `/posts?category=${encodeURIComponent(params.category)}`
+              : "/posts",
+          },
+        ]
+      : []),
+  ];
 
   return (
     <div className="px-4 py-6">
       <Breadcrumb items={[{ label: "Blog" }]} />
 
       <div className="grid lg:grid-cols-4 gap-8">
-        {/* Sidebar */}
-        <aside className="lg:col-span-1 space-y-6">
-          {/* Filtros ativos */}
-          {(params.category || params.tag) && (
-            <div className="bg-surface rounded-lg p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-sm">Filtros ativos</h3>
-                <Link
-                  href="/posts"
-                  className="text-xs text-muted hover:text-accent transition-colors"
-                >
-                  Limpar
-                </Link>
-              </div>
-              <div className="space-y-2">
-                {params.category && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted">Categoria:</span>
-                    <span className="px-2 py-0.5 bg-surface-alt text-xs rounded">
-                      {params.category}
-                    </span>
-                  </div>
-                )}
-                {params.tag && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted">Tag:</span>
-                    <span className="px-2 py-0.5 bg-surface-alt text-xs rounded">
-                      #{params.tag}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+        <aside className="lg:col-span-1 space-y-4">
+          <ActiveFilters filters={activeFilters} clearAllHref="/posts" />
 
-          {/* Categorias */}
-          {categories.length > 0 && (
-            <div className="bg-surface rounded-lg p-4">
-              <h3 className="font-semibold mb-3">Categorias</h3>
-              <ul className="space-y-1">
-                <li>
-                  <Link
-                    href="/posts"
-                    className={`block px-2 py-1.5 rounded text-sm transition-colors ${
-                      !params.category
-                        ? "bg-surface-alt font-medium"
-                        : "hover:bg-surface-alt"
-                    }`}
-                  >
-                    Todas
-                  </Link>
-                </li>
-                {categories.map((cat) => (
-                  <li key={cat}>
-                    <Link
-                      href={`/posts?category=${encodeURIComponent(cat)}${params.tag ? `&tag=${encodeURIComponent(params.tag)}` : ""}`}
-                      className={`block px-2 py-1.5 rounded text-sm transition-colors ${
-                        params.category === cat
-                          ? "bg-surface-alt font-medium"
-                          : "hover:bg-surface-alt"
-                      }`}
-                    >
-                      {cat}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <CategoryList
+            items={categories.map((cat) => ({
+              label: cat,
+              href: `/posts?category=${encodeURIComponent(cat)}${params.tag ? `&tag=${encodeURIComponent(params.tag)}` : ""}`,
+              active: params.category === cat,
+            }))}
+            allHref="/posts"
+            allActive={!params.category}
+          />
 
-          {/* Tags */}
-          {tags.length > 0 && (
-            <div className="bg-surface rounded-lg p-4">
-              <h3 className="font-semibold mb-3">Tags</h3>
-              <div className="flex flex-wrap gap-2">
-                {tags.map((t) => (
-                  <Link
-                    key={t}
-                    href={`/posts?${params.category ? `category=${encodeURIComponent(params.category)}&` : ""}tag=${encodeURIComponent(t)}`}
-                    className={`px-2.5 py-1 rounded-full text-xs transition-colors ${
-                      params.tag === t
-                        ? "bg-accent text-background font-medium"
-                        : "bg-surface-alt hover:bg-border"
-                    }`}
-                  >
-                    {t}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
+          <PillCloud
+            items={tags.map((t) => ({
+              label: t,
+              href: `/posts?${params.category ? `category=${encodeURIComponent(params.category)}&` : ""}tag=${encodeURIComponent(t)}`,
+              active: params.tag === t,
+            }))}
+          />
+
+          <Stats
+            items={[
+              { label: "Total de posts:", value: allPosts.length },
+              { label: "Categorias:", value: categories.length },
+              { label: "Tags:", value: tags.length },
+            ]}
+          />
         </aside>
 
-        {/* Posts agrupados por ano */}
         <section className="lg:col-span-3">
           <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Blog</h1>
           <Posts category={params.category} tag={params.tag} />

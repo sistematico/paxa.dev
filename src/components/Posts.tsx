@@ -92,7 +92,7 @@ export default function Posts({
             {postsByYear[year].map((post) => (
               <article key={post.slug} className="group relative">
                 {/* Ponto na linha do tempo */}
-                <div className="absolute -left-[29px] top-2 w-3 h-3 rounded-full bg-muted group-hover:bg-accent transition-colors" />
+                <div className="absolute -left-7.25 top-2 w-3 h-3 rounded-full bg-muted group-hover:bg-accent transition-colors" />
 
                 <Link href={`/posts/${post.slug}`} className="block">
                   {/* Data e categoria */}

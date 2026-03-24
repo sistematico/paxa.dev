@@ -12,6 +12,9 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
   const pathname = rawPathname.replace(/^\/(pt|en)/, "") || "/";
 
   function switchTo(target: Locale) {
+    if (process.env.NODE_ENV !== "production") {
+      return `/${target}${pathname === "/" ? "" : pathname}`;
+    }
     const host = target === "en" ? "en.paxa.dev" : "paxa.dev";
     return `https://${host}${pathname}`;
   }
