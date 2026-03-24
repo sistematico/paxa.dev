@@ -26,7 +26,7 @@ export default function GiscusComments() {
       <Giscus
         repo="lucaspaxa/paxa.dev"
         repoId={process.env.GISCUS_REPO_ID!}
-        category="Comments"
+        category={process.env.GISCUS_CATEGORY!}
         categoryId={process.env.GISCUS_CATEGORY_ID!}
         mapping="pathname"
         strict="0"
