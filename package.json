@@ -24,7 +24,7 @@
     "next": "16.1.7",
     "next-mdx-remote": "^6.0.0",
     "nextjs-toploader": "^3.9.17",
-    "nodemailer": "^8.0.1",
+    "nodemailer": "^8.0.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "shiki": "^4.0.2",

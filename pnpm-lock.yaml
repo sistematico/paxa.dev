@@ -45,8 +45,8 @@ importers:
         specifier: ^3.9.17
         version: 3.9.17(next@16.1.7(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       nodemailer:
-        specifier: ^8.0.1
-        version: 8.0.1
+        specifier: ^8.0.3
+        version: 8.0.3
       react:
         specifier: 19.2.3
         version: 19.2.3
@@ -1686,8 +1686,8 @@ packages:
     resolution: {integrity: sha512-6u9UwL0HlAl21+agMN3YAMXcKByMqwGx+pq+P76vii5f7hTPtKDp08/H9py6DY+cfDw7kQNTGEj/rly3IgbNQA==}
     engines: {node: '>=10'}
 
-  nodemailer@8.0.1:
-    resolution: {integrity: sha512-5kcldIXmaEjZcHR6F28IKGSgpmZHaF1IXLWFTG+Xh3S+Cce4MiakLtWY+PlBU69fLbRa8HlaGIrC/QolUpHkhg==}
+  nodemailer@8.0.3:
+    resolution: {integrity: sha512-JQNBqvK+bj3NMhUFR3wmCl3SYcOeMotDiwDBvIoCuQdF0PvlIY0BH+FJ2CG7u4cXKPChplE78oowlH/Otsc4ZQ==}
     engines: {node: '>=6.0.0'}
 
   nprogress@0.2.0:
@@ -3431,7 +3431,7 @@ snapshots:
     dependencies:
       semver: 7.7.4
 
-  nodemailer@8.0.1: {}
+  nodemailer@8.0.3: {}
 
   nprogress@0.2.0: {}
 
