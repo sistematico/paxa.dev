@@ -15,7 +15,7 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
 
   return (
     <header className="sticky z-50 bg-surface border-b border-border top-0">
-      <div className="flex flex-wrap items-center gap-3 container mx-auto px-4 py-2">
+      <div className="relative flex items-center gap-2 container mx-auto px-2 md:px-4 py-2">
         <Link
           href={homeHref}
           className="mr-auto flex items-center gap-2 text-4xl font-semibold text-foreground/80"

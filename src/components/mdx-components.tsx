@@ -3,6 +3,7 @@ import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { highlight } from "sugar-high";
 import React from "react";
+import CodeBlock from "./CodeBlock";
 
 function Table({ data }: { data: { headers: string[]; rows: string[][] } }) {
   const headers = data.headers.map((header) => <th key={header}>{header}</th>);
@@ -53,6 +54,20 @@ function Code({
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
 
+function Pre({ children }: { children: React.ReactNode }) {
+  // Extract language from <code className="language-xxx">
+  let language: string | undefined;
+  if (React.isValidElement(children)) {
+    const className = (children.props as { className?: string }).className;
+    if (className) {
+      const match = className.match(/language-(\w+)/);
+      if (match) language = match[1];
+    }
+  }
+
+  return <CodeBlock language={language}>{children}</CodeBlock>;
+}
+
 function slugify(str: string) {
   return str
     .toString()
@@ -96,6 +111,7 @@ const components = {
   Image: RoundedImage,
   a: CustomLink,
   code: Code,
+  pre: Pre,
   Table,
 };
 

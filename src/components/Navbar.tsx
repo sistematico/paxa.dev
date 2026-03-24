@@ -87,8 +87,8 @@ export default function Navbar({ dict }: NavbarProps) {
 
       {/* Mobile Menu */}
       <nav
-        className={`md:hidden w-full basis-full flex flex-col gap-3 overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-96 opacity-100 mt-3" : "max-h-0 opacity-0"
+        className={`md:hidden absolute left-0 right-0 top-full z-40 bg-surface border-b border-border px-4 flex flex-col gap-3 overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-96 opacity-100 py-3" : "max-h-0 opacity-0 py-0"
         }`}
       >
         {navLinks.map((link) => (

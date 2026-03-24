@@ -17,13 +17,13 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
   }
 
   return (
-    <div className="flex items-center gap-1 rounded-full bg-surface-alt px-1.5 py-1">
-      <Globe className="size-3.5 text-muted ml-0.5" />
+    <div className="flex items-center gap-1 rounded-lg bg-surface-alt p-1">
+      <Globe className="size-3.5 text-muted" />
       {locales.map((l) =>
         l === locale ? (
           <span
             key={l}
-            className="rounded-full bg-accent/20 text-accent px-2 py-0.5 text-xs font-semibold uppercase leading-none"
+            className="rounded-lg bg-accent/20 text-accent px-2 py-0.5 text-xs font-semibold uppercase leading-none"
           >
             {l}
           </span>
@@ -31,7 +31,7 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
           <a
             key={l}
             href={switchTo(l)}
-            className="rounded-full px-2 py-0.5 text-xs font-medium uppercase leading-none text-muted hover:text-foreground transition-colors"
+            className="rounded-lg px-2 py-0.5 text-xs font-medium uppercase leading-none text-muted hover:text-foreground transition-colors"
           >
             {l}
           </a>
