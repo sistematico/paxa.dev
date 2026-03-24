@@ -3,6 +3,8 @@
 @theme {
   --color-foreground: #c0c5ce;
   --color-background: #343d46;
+  /* --color-background-alt: #2b3039; */
+  --color-background-alt: #21242b;
   --color-surface: #2b3039;
   --color-surface-alt: #3d4652;
   --color-border: #4f5b66;
@@ -15,6 +17,7 @@
 [data-theme="light"] {
   --color-foreground: #2b3039;
   --color-background: #f5f7fa;
+  --color-background-alt: #e8ecf0;
   --color-surface: #ffffff;
   --color-surface-alt: #e8ecf0;
   --color-border: #d0d7de;
