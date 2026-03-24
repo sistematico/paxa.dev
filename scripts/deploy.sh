@@ -21,9 +21,15 @@ pnpm install
 echo "🗃️ Sincronizando banco de dados..."
 pnpm run push
 
+if [ $? -ne 0 ]; then
+  echo "⚠️ Falha ao sincronizar banco de dados. Abortando o deploy..."
+  exit 1
+fi
+
 if pnpm run build; then
   echo "✅ Build concluído com sucesso!"
   sudo /usr/bin/systemctl stop $SERVICE
+  
   [ -e $WORKDIR ] && rm -rf $WORKDIR
   [ -e $TMPDIR ] && cp -af $TMPDIR $WORKDIR
 
