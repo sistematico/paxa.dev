@@ -1,4 +1,4 @@
-import { SiReddit  } from '@icons-pack/react-simple-icons';
+import { SiReddit, SiX } from '@icons-pack/react-simple-icons';
 
 export default function Footer() {
   return (
@@ -7,10 +7,13 @@ export default function Footer() {
         <div>
           &copy; {new Date().getFullYear()} Paxá
         </div>
-        <div className="flex items-center gap-1 justify-center md:justify-end">          
+        <div className="flex items-center gap-2 justify-center md:justify-end">          
           <a className="flex items-center gap-1" href="https://reddit.com/u/sistematico" target="_blank" rel="noopener noreferrer">
             <SiReddit className="w-4 h-4" />
-            Reddit
+            {/* Reddit */}
+          </a>
+          <a className="flex items-center gap-1" href="https://x.com/sistematico" target="_blank" rel="noopener noreferrer">
+            <SiX className="w-3.5 h-3.5" />
           </a>
         </div>
       </div>
