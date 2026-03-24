@@ -13,14 +13,12 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 interface ProjectsListProps {
   projects: Project[];
   tech?: string;
-  locale?: string;
   dict?: Dictionary["projects"];
 }
 
 export default function ProjectsList({
   projects,
   tech,
-  locale = "pt",
   dict,
 }: ProjectsListProps) {
   const filteredProjects = tech
@@ -59,7 +57,7 @@ export default function ProjectsList({
                   {project.tech.map((techItem) => (
                     <Link
                       key={techItem}
-                      href={`/${locale}/projetos?tech=${encodeURIComponent(techItem)}`}
+                      href={`/projetos?tech=${encodeURIComponent(techItem)}`}
                       className="px-2 py-0.5 bg-surface text-foreground text-xs rounded hover:bg-surface-alt transition-colors"
                     >
                       {techItem}
@@ -109,7 +107,7 @@ export default function ProjectsList({
           </p>
           {tech && (
             <Link
-              href={`/${locale}/projetos`}
+              href="/projetos"
               className="text-sm text-accent hover:text-accent-hover mt-2 inline-block"
             >
               {dict?.seeAllProjects ?? "Ver todos os projetos →"}

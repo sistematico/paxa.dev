@@ -12,7 +12,7 @@ interface HeaderProps {
 }
 
 export default function Header({ locale = "pt", dict }: HeaderProps) {
-  const homeHref = `/${locale}`;
+  const homeHref = "/";
 
   return (
     <header className="sticky z-50 bg-surface border-b border-border top-0">
@@ -34,7 +34,7 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
           <LocaleSwitcher locale={locale} />
           <AudioPlayer />
         </div>
-        <Navbar locale={locale} dict={dict} />
+        <Navbar dict={dict} />
       </div>
     </header>
   );

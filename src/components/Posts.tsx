@@ -68,7 +68,7 @@ export default function Posts({
         </p>
         {(category || tag) && (
           <Link
-            href={`/${locale}/posts`}
+            href="/posts"
             className="text-sm text-accent hover:text-accent-hover mt-2 inline-block"
           >
             {dict?.seeAllPosts ?? "Ver todos os posts →"}
@@ -94,7 +94,7 @@ export default function Posts({
                 {/* Ponto na linha do tempo */}
                 <div className="absolute -left-[29px] top-2 w-3 h-3 rounded-full bg-muted group-hover:bg-accent transition-colors" />
 
-                <Link href={`/${locale}/posts/${post.slug}`} className="block">
+                <Link href={`/posts/${post.slug}`} className="block">
                   {/* Data e categoria */}
                   <div className="flex flex-wrap items-center gap-2 mb-2 text-sm">
                     <time
@@ -133,7 +133,7 @@ export default function Posts({
                     {post.metadata.tags.map((tagName) => (
                       <Link
                         key={tagName}
-                        href={`/${locale}/posts?tag=${encodeURIComponent(tagName)}`}
+                        href={`/posts?tag=${encodeURIComponent(tagName)}`}
                         className="text-xs text-muted hover:text-accent transition-colors"
                       >
                         #{tagName}

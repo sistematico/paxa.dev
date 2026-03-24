@@ -7,7 +7,7 @@ import { baseUrl } from "@/sitemap";
 import Link from "next/link";
 import { getDictionary } from "@/i18n";
 import type { Locale } from "@/i18n/config";
-import { locales } from "@/i18n/config";
+import { locales, getBaseUrl } from "@/i18n/config";
 
 export async function generateStaticParams() {
   const params: { locale: string; slug: string }[] = [];
@@ -45,7 +45,7 @@ export async function generateMetadata({
       description,
       type: "article",
       publishedTime,
-      url: `${baseUrl}/${locale}/snippets/${snippet.slug}`,
+      url: `${getBaseUrl(locale)}/snippets/${snippet.slug}`,
       images: [{ url: ogImage }],
     },
     twitter: {
@@ -73,11 +73,11 @@ export default async function SnippetPage({
     <section className="px-4 py-6">
       <Breadcrumb
         items={[
-          { label: dict.snippets.title, href: `/${locale}/snippets` },
+          { label: dict.snippets.title, href: "/snippets" },
           { label: snippet.metadata.title },
         ]}
         homeLabel={dict.breadcrumb.home}
-        homeHref={`/${locale}`}
+        homeHref="/"
       />
       <script
         type="application/ld+json"
@@ -90,7 +90,7 @@ export default async function SnippetPage({
             datePublished: snippet.metadata.publishedAt,
             dateModified: snippet.metadata.publishedAt,
             description: snippet.metadata.summary,
-            url: `${baseUrl}/${locale}/snippets/${snippet.slug}`,
+            url: `${getBaseUrl(locale)}/snippets/${snippet.slug}`,
             author: { "@type": "Person", name: "Paxá" },
           }),
         }}
@@ -106,7 +106,7 @@ export default async function SnippetPage({
           <>
             <span className="text-border">•</span>
             <Link
-              href={`/${locale}/snippets?category=${encodeURIComponent(snippet.metadata.category)}`}
+              href={`/snippets?category=${encodeURIComponent(snippet.metadata.category)}`}
               className="px-2 py-0.5 bg-surface text-foreground text-xs rounded hover:bg-surface-alt transition-colors"
             >
               {snippet.metadata.category}
@@ -119,7 +119,7 @@ export default async function SnippetPage({
           {snippet.metadata.tags.map((tag) => (
             <Link
               key={tag}
-              href={`/${locale}/snippets?tag=${encodeURIComponent(tag)}`}
+              href={`/snippets?tag=${encodeURIComponent(tag)}`}
               className="text-xs text-muted hover:text-accent transition-colors"
             >
               #{tag}
@@ -132,7 +132,7 @@ export default async function SnippetPage({
       </article>
       <div className="mt-12 pt-8 border-t border-border">
         <Link
-          href={`/${locale}/snippets`}
+          href="/snippets"
           className="text-sm text-muted hover:text-accent transition-colors"
         >
           {dict.snippets.backToSnippets}

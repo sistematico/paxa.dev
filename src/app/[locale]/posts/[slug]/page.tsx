@@ -6,7 +6,7 @@ import { formatDate, getPosts } from "@/actions/posts";
 import { baseUrl } from "@/sitemap";
 import { getDictionary } from "@/i18n";
 import type { Locale } from "@/i18n/config";
-import { locales } from "@/i18n/config";
+import { locales, getBaseUrl } from "@/i18n/config";
 
 export async function generateStaticParams() {
   const params: { locale: string; slug: string }[] = [];
@@ -47,7 +47,7 @@ export async function generateMetadata({
       description,
       type: "article",
       publishedTime,
-      url: `${baseUrl}/${locale}/posts/${post.slug}`,
+      url: `${getBaseUrl(locale)}/posts/${post.slug}`,
       images: [{ url: ogImage }],
     },
     twitter: {
@@ -75,11 +75,11 @@ export default async function Post({
     <section className="px-4 py-6">
       <Breadcrumb
         items={[
-          { label: dict.posts.title, href: `/${locale}/posts` },
+          { label: dict.posts.title, href: "/posts" },
           { label: post.metadata.title },
         ]}
         homeLabel={dict.breadcrumb.home}
-        homeHref={`/${locale}`}
+        homeHref="/"
       />
       <script
         type="application/ld+json"
@@ -95,7 +95,7 @@ export default async function Post({
             image: post.metadata.image
               ? `${baseUrl}${post.metadata.image}`
               : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-            url: `${baseUrl}/${locale}/posts/${post.slug}`,
+            url: `${getBaseUrl(locale)}/posts/${post.slug}`,
             author: { "@type": "Person", name: "Paxá" },
           }),
         }}

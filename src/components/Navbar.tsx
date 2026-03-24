@@ -10,52 +10,50 @@ import {
   Bookmark,
   SquareBottomDashedScissors,
 } from "lucide-react";
-import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n";
 
 interface NavbarProps {
-  locale?: Locale;
   dict?: Dictionary;
 }
 
-export default function Navbar({ locale = "pt", dict }: NavbarProps) {
+export default function Navbar({ dict }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const n = dict?.nav;
 
   const navLinks = [
     {
       name: n?.home ?? "Início",
-      href: `/${locale}`,
+      href: "/",
       icon: Home,
       className: "hover:text-blue-500/80",
     },
     {
       name: n?.blog ?? "Blog",
-      href: `/${locale}/posts`,
+      href: "/posts",
       icon: ScrollText,
       className: "hover:text-red-500/80",
     },
     {
       name: n?.projects ?? "Projetos",
-      href: `/${locale}/projetos`,
+      href: "/projetos",
       icon: HardHat,
       className: "hover:text-cyan-500/80",
     },
     {
       name: n?.snippets ?? "Snippets",
-      href: `/${locale}/snippets`,
+      href: "/snippets",
       icon: SquareBottomDashedScissors,
       className: "hover:text-green-500/80",
     },
     {
       name: n?.bookmarks ?? "Favoritos",
-      href: `/${locale}/favoritos`,
+      href: "/favoritos",
       icon: Bookmark,
       className: "hover:text-indigo-500/80",
     },
     {
       name: n?.contact ?? "Contato",
-      href: `/${locale}/contato`,
+      href: "/contato",
       icon: Mail,
       className: "hover:text-yellow-500/80",
     },

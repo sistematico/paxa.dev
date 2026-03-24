@@ -3,7 +3,7 @@ import { Nunito } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
-import { locales, type Locale, defaultLocale } from "@/i18n/config";
+import { locales, type Locale, defaultLocale, getBaseUrl } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import "../globals.css";
 
@@ -33,7 +33,7 @@ export async function generateMetadata({
     openGraph: {
       title: "Paxá",
       description: dict.home.tagline,
-      url: "https://paxa.dev",
+      url: getBaseUrl(safeLocale),
       siteName: "Paxá",
       images: [
         {

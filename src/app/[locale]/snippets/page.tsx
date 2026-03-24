@@ -40,7 +40,7 @@ export default async function SnippetsPage({
       <Breadcrumb
         items={[{ label: dict.snippets.title }]}
         homeLabel={dict.breadcrumb.home}
-        homeHref={`/${locale}`}
+        homeHref="/"
       />
 
       <div className="grid lg:grid-cols-4 gap-8">
@@ -51,7 +51,7 @@ export default async function SnippetsPage({
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-sm">{d.activeFilters}</h3>
                 <Link
-                  href={`/${locale}/snippets`}
+                  href="/snippets"
                   className="text-xs text-muted hover:text-accent transition-colors"
                 >
                   {d.clearFilters}
@@ -86,7 +86,7 @@ export default async function SnippetsPage({
               <ul className="space-y-1">
                 <li>
                   <Link
-                    href={`/${locale}/snippets`}
+                    href="/snippets"
                     className={`block px-2 py-1.5 rounded text-sm transition-colors ${!sp.category ? "bg-surface-alt font-medium" : "hover:bg-surface-alt"}`}
                   >
                     {d.all}
@@ -95,7 +95,7 @@ export default async function SnippetsPage({
                 {categories.map((cat) => (
                   <li key={cat}>
                     <Link
-                      href={`/${locale}/snippets?category=${encodeURIComponent(cat)}${sp.tag ? `&tag=${encodeURIComponent(sp.tag)}` : ""}`}
+                      href={`/snippets?category=${encodeURIComponent(cat)}${sp.tag ? `&tag=${encodeURIComponent(sp.tag)}` : ""}`}
                       className={`block px-2 py-1.5 rounded text-sm transition-colors ${sp.category === cat ? "bg-surface-alt font-medium" : "hover:bg-surface-alt"}`}
                     >
                       {cat}
@@ -113,7 +113,7 @@ export default async function SnippetsPage({
                 {tags.map((t) => (
                   <Link
                     key={t}
-                    href={`/${locale}/snippets?${sp.category ? `category=${encodeURIComponent(sp.category)}&` : ""}tag=${encodeURIComponent(t)}`}
+                    href={`/snippets?${sp.category ? `category=${encodeURIComponent(sp.category)}&` : ""}tag=${encodeURIComponent(t)}`}
                     className={`px-2.5 py-1 rounded-full text-xs transition-colors ${sp.tag === t ? "bg-accent text-background font-medium" : "bg-surface-alt hover:bg-border"}`}
                   >
                     {t}

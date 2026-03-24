@@ -15,16 +15,25 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check if the pathname already starts with a valid locale
+  // Determine locale from hostname: en.paxa.dev → "en", otherwise → "pt"
+  const host = request.headers.get("host") || "";
+  const locale = host.startsWith("en.") ? "en" : defaultLocale;
+
+  // If the pathname starts with /pt or /en, redirect to the correct domain without prefix
   const firstSegment = pathname.split("/")[1];
   if (isValidLocale(firstSegment)) {
-    return NextResponse.next();
+    const cleanPath = pathname.replace(/^\/(pt|en)/, "") || "/";
+    const targetHost = firstSegment === "en" ? "en.paxa.dev" : "paxa.dev";
+    const url = request.nextUrl.clone();
+    url.host = targetHost;
+    url.pathname = cleanPath;
+    return NextResponse.redirect(url);
   }
 
-  // Redirect to the default locale
+  // Rewrite internally to the [locale] route (URL stays clean in the browser)
   const url = request.nextUrl.clone();
-  url.pathname = `/${defaultLocale}${pathname}`;
-  return NextResponse.redirect(url);
+  url.pathname = `/${locale}${pathname}`;
+  return NextResponse.rewrite(url);
 }
 
 export const config = {

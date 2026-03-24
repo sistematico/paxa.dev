@@ -33,7 +33,7 @@ export default async function ContatoPage({
       <Breadcrumb
         items={[{ label: d.title }]}
         homeLabel={dict.breadcrumb.home}
-        homeHref={`/${locale}`}
+        homeHref="/"
       />
 
       <div className="max-w-4xl mx-auto">

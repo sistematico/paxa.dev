@@ -78,7 +78,7 @@ export default function Projects() {
 
         <div className="text-center mt-10">
           <Link
-            href="/pt/projetos"
+            href="/projetos"
             className="text-accent hover:text-accent-hover transition-colors"
           >
             Ver todos os projetos →

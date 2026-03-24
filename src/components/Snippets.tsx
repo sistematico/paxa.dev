@@ -69,7 +69,7 @@ export default function Snippets({
           </div>
 
           {/* Título */}
-          <Link href={`/${locale}/snippets/${snippet.slug}`}>
+          <Link href={`/snippets/${snippet.slug}`}>
             <h2 className="text-lg font-semibold text-foreground tracking-tight group-hover:text-accent transition-colors mb-2">
               {snippet.metadata.title}
             </h2>
@@ -88,7 +88,7 @@ export default function Snippets({
               {snippet.metadata.tags.map((tagName) => (
                 <Link
                   key={tagName}
-                  href={`/${locale}/snippets?tag=${encodeURIComponent(tagName)}`}
+                  href={`/snippets?tag=${encodeURIComponent(tagName)}`}
                   className="text-xs text-muted hover:text-accent transition-colors"
                 >
                   #{tagName}
@@ -113,7 +113,7 @@ export default function Snippets({
           </p>
           {(category || tag) && (
             <Link
-              href={`/${locale}/snippets`}
+              href="/snippets"
               className="text-sm text-accent hover:text-accent-hover mt-2 inline-block"
             >
               {dict?.seeAllSnippets ?? "Ver todos os snippets →"}

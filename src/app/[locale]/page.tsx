@@ -96,13 +96,13 @@ export default async function Home({
 
       <div className="mt-12 flex gap-4 justify-center flex-wrap">
         <Link
-          href={`/${locale}/projetos`}
+          href="/projetos"
           className="px-8 py-3 bg-accent text-background rounded-lg font-semibold hover:bg-accent-hover transition-colors"
         >
           {d.exploreProjects}
         </Link>
         <Link
-          href={`/${locale}/contato`}
+          href="/contato"
           className="px-8 py-3 border border-border text-foreground rounded-lg font-semibold hover:border-accent/40 transition-colors"
         >
           {d.sendMessage}

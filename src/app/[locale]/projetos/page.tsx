@@ -39,7 +39,7 @@ export default async function ProjectsPage({
       <Breadcrumb
         items={[{ label: dict.projects.title }]}
         homeLabel={dict.breadcrumb.home}
-        homeHref={`/${locale}`}
+        homeHref="/"
       />
 
       <div className="grid lg:grid-cols-4 gap-8">
@@ -49,7 +49,7 @@ export default async function ProjectsPage({
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-sm">{d.activeFilters}</h3>
                 <Link
-                  href={`/${locale}/projetos`}
+                  href="/projetos"
                   className="text-xs text-muted hover:text-accent transition-colors"
                 >
                   {d.clearFilters}
@@ -75,7 +75,7 @@ export default async function ProjectsPage({
                 {techs.map((tech) => (
                   <Link
                     key={tech}
-                    href={`/${locale}/projetos?tech=${encodeURIComponent(tech)}`}
+                    href={`/projetos?tech=${encodeURIComponent(tech)}`}
                     className={`px-2.5 py-1 rounded-full text-xs transition-colors ${sp.tech === tech ? "bg-accent text-background font-medium" : "bg-surface-alt hover:bg-border"}`}
                   >
                     {tech}
@@ -109,7 +109,6 @@ export default async function ProjectsPage({
           <ProjectsList
             projects={projects}
             tech={sp.tech}
-            locale={locale}
             dict={dict.projects}
           />
         </section>

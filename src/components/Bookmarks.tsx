@@ -7,7 +7,6 @@ interface BookmarksProps {
   bookmarks: Bookmark[];
   category?: string;
   tag?: string;
-  locale?: string;
   dict?: Dictionary["bookmarks"];
 }
 
@@ -15,7 +14,6 @@ export default function Bookmarks({
   bookmarks,
   category,
   tag,
-  locale = "pt",
   dict,
 }: BookmarksProps) {
   // Filtrar por categoria e tag se especificados
@@ -61,7 +59,7 @@ export default function Bookmarks({
               {/* Categoria e Tags */}
               <div className="flex flex-wrap items-center gap-2">
                 <Link
-                  href={`/${locale}/favoritos?category=${encodeURIComponent(bookmark.category)}`}
+                  href={`/favoritos?category=${encodeURIComponent(bookmark.category)}`}
                   className="px-2 py-0.5 bg-surface text-foreground text-xs rounded hover:bg-surface-alt transition-colors"
                 >
                   {bookmark.category}
@@ -70,7 +68,7 @@ export default function Bookmarks({
                 {bookmark.tags.map((tagItem) => (
                   <Link
                     key={tagItem}
-                    href={`/${locale}/favoritos?tag=${encodeURIComponent(tagItem)}`}
+                    href={`/favoritos?tag=${encodeURIComponent(tagItem)}`}
                     className="text-xs text-muted hover:text-accent transition-colors"
                   >
                     #{tagItem}
@@ -107,7 +105,7 @@ export default function Bookmarks({
           </p>
           {(category || tag) && (
             <Link
-              href={`/${locale}/favoritos`}
+              href="/favoritos"
               className="text-sm text-accent hover:text-accent-hover mt-2 inline-block"
             >
               {dict?.seeAllBookmarks ?? "Ver todos os favoritos →"}

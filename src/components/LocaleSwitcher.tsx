@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import { locales } from "@/i18n/config";
 
@@ -9,8 +8,9 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname();
 
   function switchTo(target: Locale) {
-    // Replace /[currentLocale] prefix with /[targetLocale]
-    return pathname.replace(`/${locale}`, `/${target}`);
+    // Same path, different domain
+    const host = target === "en" ? "en.paxa.dev" : "paxa.dev";
+    return `https://${host}${pathname}`;
   }
 
   return (
@@ -21,12 +21,12 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
           {l === locale ? (
             <span className="text-accent uppercase">{l}</span>
           ) : (
-            <Link
+            <a
               href={switchTo(l)}
               className="text-muted hover:text-accent transition-colors uppercase"
             >
               {l}
-            </Link>
+            </a>
           )}
         </span>
       ))}

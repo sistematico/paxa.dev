@@ -39,7 +39,7 @@ export default async function BlogPage({
       <Breadcrumb
         items={[{ label: dict.posts.title }]}
         homeLabel={dict.breadcrumb.home}
-        homeHref={`/${locale}`}
+        homeHref="/"
       />
 
       <div className="grid lg:grid-cols-4 gap-8">
@@ -51,7 +51,7 @@ export default async function BlogPage({
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-sm">{d.activeFilters}</h3>
                 <Link
-                  href={`/${locale}/posts`}
+                  href="/posts"
                   className="text-xs text-muted hover:text-accent transition-colors"
                 >
                   {d.clearFilters}
@@ -87,7 +87,7 @@ export default async function BlogPage({
               <ul className="space-y-1">
                 <li>
                   <Link
-                    href={`/${locale}/posts`}
+                    href="/posts"
                     className={`block px-2 py-1.5 rounded text-sm transition-colors ${
                       !sp.category
                         ? "bg-surface-alt font-medium"
@@ -100,7 +100,7 @@ export default async function BlogPage({
                 {categories.map((cat) => (
                   <li key={cat}>
                     <Link
-                      href={`/${locale}/posts?category=${encodeURIComponent(cat)}${sp.tag ? `&tag=${encodeURIComponent(sp.tag)}` : ""}`}
+                      href={`/posts?category=${encodeURIComponent(cat)}${sp.tag ? `&tag=${encodeURIComponent(sp.tag)}` : ""}`}
                       className={`block px-2 py-1.5 rounded text-sm transition-colors ${
                         sp.category === cat
                           ? "bg-surface-alt font-medium"
@@ -123,7 +123,7 @@ export default async function BlogPage({
                 {tags.map((t) => (
                   <Link
                     key={t}
-                    href={`/${locale}/posts?${sp.category ? `category=${encodeURIComponent(sp.category)}&` : ""}tag=${encodeURIComponent(t)}`}
+                    href={`/posts?${sp.category ? `category=${encodeURIComponent(sp.category)}&` : ""}tag=${encodeURIComponent(t)}`}
                     className={`px-2.5 py-1 rounded-full text-xs transition-colors ${
                       sp.tag === t
                         ? "bg-accent text-background font-medium"

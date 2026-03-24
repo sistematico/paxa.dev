@@ -36,29 +36,18 @@ export async function submitContactForm(
     // Validação
     const validatedData = contactSchema.parse(data);
 
-    // Configurar transporter
-    // const transporter = nodemailer.createTransport({
-    //   host: process.env.SMTP_HOST,
-    //   port: Number(process.env.SMTP_PORT || "587"),
-    //   secure: false,
-    //   auth: {
-    //     user: process.env.SMTP_USER,
-    //     pass: process.env.SMTP_PASS,
-    //   },
-    // });
-
     const transporter = nodemailer.createTransport({
       service: "iCloud", // Use any Service ID from the table below (case-insensitive)
       secure: false,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     // E-mail para você
     await transporter.sendMail({
-      from: process.env.SMTP_USER,
+      from: process.env.EMAIL_USER,
       to: process.env.CONTACT_EMAIL,
       replyTo: validatedData.email,
       subject: `[Paxá.dev] ${validatedData.subject}`,
