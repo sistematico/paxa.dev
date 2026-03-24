@@ -11,8 +11,23 @@
   --color-accent-hover: #a7bbd0;
 }
 
+/* ── Light theme overrides ── */
+[data-theme="light"] {
+  --color-foreground: #2b3039;
+  --color-background: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-surface-alt: #e8ecf0;
+  --color-border: #d0d7de;
+  --color-muted: #6b7b8d;
+  --color-accent: #5a7a9b;
+  --color-accent-hover: #476a8a;
+}
+
 body {
   @apply bg-background text-foreground;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 h1 {
@@ -25,6 +40,22 @@ h2 {
 
 p {
   @apply mb-2;
+}
+
+/* Shiki code blocks */
+.shiki-wrapper code {
+  @apply font-mono;
+  counter-reset: line;
+}
+
+.shiki-wrapper .line {
+  @apply inline-block w-full;
+}
+
+/* Giscus container */
+.giscus,
+.giscus-frame {
+  @apply w-full;
 }
 
 /* ── Prose typography (posts & snippets) ── */

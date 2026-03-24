@@ -1,28 +1,27 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Copy, Check } from "lucide-react";
 
 export default function CodeBlock({
-  children,
+  html,
+  code,
   language,
 }: {
-  children: React.ReactNode;
+  html: string;
+  code: string;
   language?: string;
 }) {
   const [copied, setCopied] = useState(false);
-  const preRef = useRef<HTMLPreElement>(null);
 
   const handleCopy = useCallback(() => {
-    const text = preRef.current?.textContent ?? "";
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  }, []);
+  }, [code]);
 
   return (
     <div className="group relative rounded-lg border border-border bg-[#1e2429] overflow-hidden">
-      {/* Header bar */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-border/50 bg-[#1a1f24]">
         <span className="text-xs font-mono text-muted select-none">
           {language || "code"}
@@ -46,10 +45,10 @@ export default function CodeBlock({
           )}
         </button>
       </div>
-      {/* Code content */}
-      <pre ref={preRef} className="overflow-x-auto p-4 text-sm leading-relaxed">
-        {children}
-      </pre>
+      <div
+        className="shiki-wrapper overflow-x-auto [&>pre]:p-4 [&>pre]:text-sm [&>pre]:leading-relaxed [&>pre]:!bg-transparent [&>pre]:m-0"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
     </div>
   );
 }

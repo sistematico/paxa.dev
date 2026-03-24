@@ -5,6 +5,7 @@ import { formatDate } from "@/actions/posts";
 import { getSnippets } from "@/actions/snippets";
 import { baseUrl } from "@/sitemap";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export async function generateStaticParams() {
   const snippets = getSnippets();
@@ -140,7 +141,7 @@ export default async function SnippetPage({
           href="/snippets"
           className="text-sm text-muted hover:text-accent transition-colors"
         >
-          ← Voltar para snippets
+          <ArrowLeft size={24} className="inline-block" /> Voltar para snippets
         </Link>
       </div>
     </section>

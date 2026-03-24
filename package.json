@@ -12,6 +12,7 @@
     "push": "drizzle-kit push"
   },
   "dependencies": {
+    "@giscus/react": "^3.1.0",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.1.6",
@@ -20,11 +21,11 @@
     "drizzle-orm": "^0.45.1",
     "lucide-react": "^0.563.0",
     "next": "16.1.7",
-    "next-mdx-remote": "^5.0.0",
+    "next-mdx-remote": "^6.0.0",
     "nodemailer": "^8.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "sugar-high": "^0.9.5",
+    "shiki": "^4.0.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -44,6 +45,11 @@
     "onlyBuiltDependencies": [
       "better-sqlite3",
       "esbuild"
+    ],
+    "ignoredBuiltDependencies": [
+      "@esbuild-kit/core-utils",
+      "@esbuild-kit/esm-loader",
+      "prebuild-install"
     ]
   }
 }

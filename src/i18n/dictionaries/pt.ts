@@ -50,7 +50,7 @@ const pt: Dictionary = {
     metaDesc: "Coleção de snippets de código úteis",
     noSnippetsFound: "Nenhum snippet encontrado",
     seeAllSnippets: "Ver todos os snippets →",
-    backToSnippets: "← Voltar para snippets",
+    backToSnippets: "Voltar para snippets",
     totalSnippets: "Total de snippets:",
   },
   projects: {

@@ -7,6 +7,7 @@ import { baseUrl } from "@/sitemap";
 import { getDictionary } from "@/i18n";
 import type { Locale } from "@/i18n/config";
 import { locales, getBaseUrl } from "@/i18n/config";
+import GiscusComments from "@/components/GiscusComments";
 
 export async function generateStaticParams() {
   const params: { locale: string; slug: string }[] = [];
@@ -112,6 +113,7 @@ export default async function Post({
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>
+      <GiscusComments />
     </section>
   );
 }

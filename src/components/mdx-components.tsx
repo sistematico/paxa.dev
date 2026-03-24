@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { highlight } from "sugar-high";
+import { codeToHtml } from "shiki";
 import React from "react";
 import CodeBlock from "./CodeBlock";
 
@@ -45,27 +45,57 @@ function RoundedImage(props: React.ComponentProps<typeof Image>) {
 
 function Code({
   children,
+  className,
   ...props
 }: {
   children: string;
+  className?: string;
   [key: string]: unknown;
 }) {
-  const codeHTML = highlight(children);
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
+  // Block code (inside <pre>) — pass through raw, Pre handles highlighting
+  if (className?.includes("language-")) {
+    return (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
+  }
+
+  // Inline code — just render plain (CSS styles it)
+  return (
+    <code className={className} {...props}>
+      {children}
+    </code>
+  );
 }
 
-function Pre({ children }: { children: React.ReactNode }) {
-  // Extract language from <code className="language-xxx">
+async function Pre({ children }: { children: React.ReactNode }) {
   let language: string | undefined;
+  let codeString = "";
+
   if (React.isValidElement(children)) {
-    const className = (children.props as { className?: string }).className;
-    if (className) {
-      const match = className.match(/language-(\w+)/);
+    const props = children.props as {
+      className?: string;
+      children?: string;
+    };
+    if (props.className) {
+      const match = props.className.match(/language-(\w+)/);
       if (match) language = match[1];
+    }
+    if (typeof props.children === "string") {
+      codeString = props.children;
     }
   }
 
-  return <CodeBlock language={language}>{children}</CodeBlock>;
+  // Remove trailing newline that MDX adds
+  codeString = codeString.replace(/\n$/, "");
+
+  const html = await codeToHtml(codeString, {
+    lang: language || "text",
+    theme: "nord",
+  });
+
+  return <CodeBlock language={language} html={html} code={codeString} />;
 }
 
 function slugify(str: string) {

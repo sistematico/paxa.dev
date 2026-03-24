@@ -69,17 +69,17 @@ export default function Navbar({ dict }: NavbarProps) {
         aria-label="Toggle menu"
       >
         <span
-          className={`block w-6 h-0.5 bg-white transition-all duration-300 ease-in-out ${
+          className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ease-in-out ${
             isOpen ? "rotate-45 translate-y-1.5" : ""
           }`}
         />
         <span
-          className={`block w-6 h-0.5 bg-white my-1 transition-all duration-300 ease-in-out ${
+          className={`block w-6 h-0.5 bg-foreground my-1 transition-all duration-300 ease-in-out ${
             isOpen ? "opacity-0" : ""
           }`}
         />
         <span
-          className={`block w-6 h-0.5 bg-white transition-all duration-300 ease-in-out ${
+          className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ease-in-out ${
             isOpen ? "-rotate-45 -translate-y-1.5" : ""
           }`}
         />

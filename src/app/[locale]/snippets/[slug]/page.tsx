@@ -8,6 +8,7 @@ import Link from "next/link";
 import { getDictionary } from "@/i18n";
 import type { Locale } from "@/i18n/config";
 import { locales, getBaseUrl } from "@/i18n/config";
+import { ArrowLeft } from "lucide-react";
 
 export async function generateStaticParams() {
   const params: { locale: string; slug: string }[] = [];
@@ -133,8 +134,9 @@ export default async function SnippetPage({
       <div className="mt-12 pt-8 border-t border-border">
         <Link
           href="/snippets"
-          className="text-sm text-muted hover:text-accent transition-colors"
+          className="text-muted hover:text-accent transition-colors"
         >
+          <ArrowLeft size={24} className="inline-block" />{" "}
           {dict.snippets.backToSnippets}
         </Link>
       </div>

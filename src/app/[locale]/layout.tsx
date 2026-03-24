@@ -1,4 +1,5 @@
 import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { Nunito } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -69,8 +70,13 @@ export default async function LocaleLayout({
   const htmlLang = safeLocale === "pt" ? "pt-BR" : "en";
 
   return (
-    <html lang={htmlLang}>
+    <html lang={htmlLang} data-theme="dark" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("paxa-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`,
+          }}
+        />
         <link
           rel="shortcut icon"
           href="/images/favicon.svg"
@@ -79,15 +85,17 @@ export default async function LocaleLayout({
         />
       </head>
       <body className={`${nunito.variable} font-(family-name:--font-nunito)`}>
-        <AudioPlayerProvider>
-          <div className="flex flex-col min-h-screen">
-            <Header locale={safeLocale} dict={dict} />
-            <main className="flex-1 container mx-auto px-4 py-6">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </AudioPlayerProvider>
+        <ThemeProvider>
+          <AudioPlayerProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header locale={safeLocale} dict={dict} />
+              <main className="flex-1 container mx-auto px-4 py-6">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </AudioPlayerProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

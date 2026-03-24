@@ -1,5 +1,6 @@
 // src/components/Bookmarks.tsx
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 import type { Bookmark } from "@/actions/bookmarks";
 import type { Dictionary } from "@/i18n";
 
@@ -50,7 +51,7 @@ export default function Bookmarks({
                 >
                   {bookmark.title}
                 </a>
-                <span className="text-xs text-muted">↗</span>
+                <ExternalLink size={16} className="text-muted" />
               </div>
 
               {/* Descrição */}

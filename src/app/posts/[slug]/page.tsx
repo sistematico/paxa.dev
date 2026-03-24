@@ -4,6 +4,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import PostViewCounter from "@/components/PostViewCounter";
 import { formatDate, getPosts } from "@/actions/posts";
 import { baseUrl } from "@/sitemap";
+import GiscusComments from "@/components/GiscusComments";
 
 export async function generateStaticParams() {
   const posts = getPosts();
@@ -104,6 +105,7 @@ export default async function Post({
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>
+      <GiscusComments />
     </section>
   );
 }

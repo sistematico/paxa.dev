@@ -50,7 +50,7 @@ const en: Dictionary = {
     metaDesc: "A collection of useful code snippets",
     noSnippetsFound: "No snippets found",
     seeAllSnippets: "See all snippets →",
-    backToSnippets: "← Back to snippets",
+    backToSnippets: "Back to snippets",
     totalSnippets: "Total snippets:",
   },
   projects: {

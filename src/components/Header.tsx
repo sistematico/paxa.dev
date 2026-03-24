@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "./Navbar";
 import LocaleSwitcher from "./LocaleSwitcher";
+import ThemeSwitcher from "./ThemeSwitcher";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n";
 
@@ -29,6 +30,7 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
           />
           <span className="mt-1">Paxá</span>
         </Link>
+        <ThemeSwitcher />
         <LocaleSwitcher locale={locale} />
         <Navbar dict={dict} />
       </div>
