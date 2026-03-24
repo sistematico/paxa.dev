@@ -1,35 +1,42 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { Globe } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { locales } from "@/i18n/config";
 
 export default function LocaleSwitcher({ locale }: { locale: Locale }) {
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+
+  // Strip the locale prefix added by the middleware rewrite (e.g. /pt/posts → /posts)
+  const pathname = rawPathname.replace(/^\/(pt|en)/, "") || "/";
 
   function switchTo(target: Locale) {
-    // Same path, different domain
     const host = target === "en" ? "en.paxa.dev" : "paxa.dev";
     return `https://${host}${pathname}`;
   }
 
   return (
-    <div className="flex items-center gap-1 text-xs font-medium">
-      {locales.map((l, i) => (
-        <span key={l} className="flex items-center gap-1">
-          {i > 0 && <span className="text-border">|</span>}
-          {l === locale ? (
-            <span className="text-accent uppercase">{l}</span>
-          ) : (
-            <a
-              href={switchTo(l)}
-              className="text-muted hover:text-accent transition-colors uppercase"
-            >
-              {l}
-            </a>
-          )}
-        </span>
-      ))}
+    <div className="flex items-center gap-1 rounded-full bg-surface-alt px-1.5 py-1">
+      <Globe className="size-3.5 text-muted ml-0.5" />
+      {locales.map((l) =>
+        l === locale ? (
+          <span
+            key={l}
+            className="rounded-full bg-accent/20 text-accent px-2 py-0.5 text-xs font-semibold uppercase leading-none"
+          >
+            {l}
+          </span>
+        ) : (
+          <a
+            key={l}
+            href={switchTo(l)}
+            className="rounded-full px-2 py-0.5 text-xs font-medium uppercase leading-none text-muted hover:text-foreground transition-colors"
+          >
+            {l}
+          </a>
+        ),
+      )}
     </div>
   );
 }

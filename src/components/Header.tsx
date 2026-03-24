@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "./Navbar";
-import AudioPlayer from "./AudioPlayer";
 import LocaleSwitcher from "./LocaleSwitcher";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n";
@@ -16,10 +15,10 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
 
   return (
     <header className="sticky z-50 bg-surface border-b border-border top-0">
-      <div className="flex flex-wrap items-center justify-between container mx-auto px-4 py-2">
+      <div className="flex flex-wrap items-center gap-3 container mx-auto px-4 py-2">
         <Link
           href={homeHref}
-          className="flex items-center gap-2 text-4xl font-semibold text-foreground/80"
+          className="mr-auto flex items-center gap-2 text-4xl font-semibold text-foreground/80"
         >
           <Image
             className="w-12 h-12"
@@ -30,10 +29,7 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
           />
           <span className="mt-1">Paxá</span>
         </Link>
-        <div className="flex items-center gap-3">
-          <LocaleSwitcher locale={locale} />
-          <AudioPlayer />
-        </div>
+        <LocaleSwitcher locale={locale} />
         <Navbar dict={dict} />
       </div>
     </header>
