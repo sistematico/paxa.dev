@@ -13,6 +13,7 @@ interface HeaderProps {
 
 export default function Header({ locale = "pt", dict }: HeaderProps) {
   const homeHref = "/";
+  const n = dict?.base;
 
   return (
     <header className="sticky z-50 bg-surface border-b border-border top-0">
@@ -24,11 +25,11 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
           <Image
             className="w-12 h-12"
             src="/images/logo.svg"
-            alt="Paxá Logo"
+            alt={n?.title!}
             width={50}
             height={50}
           />
-          <span className="mt-1">Paxá</span>
+          <span className="mt-1">{n?.title}</span>
         </Link>
         <ThemeSwitcher />
         <LocaleSwitcher locale={locale} />

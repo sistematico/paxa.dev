@@ -12,8 +12,8 @@ echo "📦 Preparando ambiente de deploy..."
 [ -e $WORKDIR ] && cp -af $WORKDIR $TMPDIR
 cd $TMPDIR || exit 1
 
-git clean -fxd
-cp .env.production .env
+git clean -fxd -e .env -e data/paxa.db
+cp .env .env.production
 
 echo "📥 Instalando dependências..."
 pnpm install

@@ -1,4 +1,7 @@
 export interface Dictionary {
+  base: {
+    title: string;
+  };
   nav: {
     home: string;
     blog: string;

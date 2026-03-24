@@ -1,6 +1,9 @@
 import type { Dictionary } from "../types";
 
 const pt: Dictionary = {
+  base: {
+    title: "Paxá",
+  },
   nav: {
     home: "Início",
     blog: "Blog",

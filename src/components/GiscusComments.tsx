@@ -25,9 +25,9 @@ export default function GiscusComments() {
     <div className="mt-12 pt-8 border-t border-border">
       <Giscus
         repo="lucaspaxa/paxa.dev"
-        repoId={process.env.GISCUS_REPO_ID!}
-        category={process.env.GISCUS_CATEGORY!}
-        categoryId={process.env.GISCUS_CATEGORY_ID!}
+        repoId={process.env.NEXT_PUBLIC_GISCUS_REPO_ID!}
+        category={process.env.NEXT_PUBLIC_GISCUS_CATEGORY!}
+        categoryId={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID!}
         mapping="pathname"
         strict="0"
         reactionsEnabled="1"

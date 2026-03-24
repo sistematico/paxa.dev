@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getDictionary } from "@/i18n";
 import type { Locale } from "@/i18n/config";
+import HomepageViewCounter from "@/components/HomepageViewCounter";
 
 export default async function Home({
   params,
@@ -107,6 +108,10 @@ export default async function Home({
         >
           {d.sendMessage}
         </Link>
+      </div>
+
+      <div className="mt-8 flex justify-center">
+        <HomepageViewCounter />
       </div>
     </div>
   );
