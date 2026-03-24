@@ -1,0 +1,439 @@
+---
+title: 'Gnome CheatSheet'
+publishedAt: '2026-03-23'
+summary: ''
+---
+
+# GNOME gsettings Cheatsheet
+
+> Guia de referência rápida com comandos `gsettings` para configurações ocultas do GNOME que não estão expostas na interface gráfica.
+
+---
+
+## Fundamentos
+
+```bash
+# Listar TODAS as configurações e seus valores atuais
+gsettings list-recursively
+
+# Listar configurações de um schema específico
+gsettings list-recursively org.gnome.desktop.interface
+
+# Obter o valor atual de uma chave
+gsettings get org.gnome.desktop.interface gtk-theme
+
+# Ver valores possíveis de uma chave
+gsettings range org.gnome.desktop.peripherals.touchpad click-method
+
+# Resetar uma chave para o valor padrão
+gsettings reset org.gnome.desktop.interface gtk-theme
+
+# Monitorar mudanças em tempo real (ótimo para descobrir chaves)
+gsettings monitor org.gnome.desktop.interface
+```
+
+### Truque: Descobrir qual chave mudou via GUI
+
+```bash
+#!/bin/bash
+# Salva estado atual, você faz a mudança na GUI, e ele mostra o diff
+BEFORE=$(mktemp)
+gsettings list-recursively > "$BEFORE"
+echo "Faça a mudança na GUI e pressione Enter..."
+read
+AFTER=$(mktemp)
+gsettings list-recursively > "$AFTER"
+diff -u "$BEFORE" "$AFTER"
+rm "$BEFORE" "$AFTER"
+```
+
+---
+
+## Aparência & Temas
+
+```bash
+# Tema GTK
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+
+# Tema de ícones
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+
+# Tema do cursor
+gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
+
+# Tamanho do cursor
+gsettings set org.gnome.desktop.interface cursor-size 32
+
+# Esquema de cores (dark mode global — afeta GTK3 e GTK4)
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+# Opções: 'default', 'prefer-dark', 'prefer-light'
+
+# Fonte da interface
+gsettings set org.gnome.desktop.interface font-name 'Noto Sans 11'
+
+# Fonte de documentos
+gsettings set org.gnome.desktop.interface document-font-name 'Noto Sans 11'
+
+# Fonte monospace
+gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono 10'
+
+# Fator de escala do texto (útil para HiDPI parcial)
+gsettings set org.gnome.desktop.interface text-scaling-factor 1.25
+
+# Fator de escala da interface (somente inteiros: 1 ou 2)
+gsettings set org.gnome.desktop.interface scaling-factor 2
+
+# Hinting de fontes
+gsettings set org.gnome.desktop.interface font-hinting 'slight'
+# Opções: 'none', 'slight', 'medium', 'full'
+
+# Anti-aliasing de fontes
+gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
+# Opções: 'none', 'grayscale', 'rgba'
+```
+
+---
+
+## Wallpaper & Background
+
+```bash
+# Definir wallpaper
+gsettings set org.gnome.desktop.background picture-uri 'file:///caminho/para/imagem.jpg'
+
+# Wallpaper para modo escuro
+gsettings set org.gnome.desktop.background picture-uri-dark 'file:///caminho/para/imagem-dark.jpg'
+
+# Modo de exibição
+gsettings set org.gnome.desktop.background picture-options 'zoom'
+# Opções: 'none', 'wallpaper', 'centered', 'scaled', 'stretched', 'zoom', 'spanned'
+
+# Cor primária de fundo (quando sem imagem)
+gsettings set org.gnome.desktop.background primary-color '#1a1a2e'
+
+# Cor secundária (para gradientes)
+gsettings set org.gnome.desktop.background secondary-color '#16213e'
+
+# Tipo de sombreamento
+gsettings set org.gnome.desktop.background color-shading-type 'horizontal'
+# Opções: 'solid', 'horizontal', 'vertical'
+
+# Wallpaper da tela de bloqueio
+gsettings set org.gnome.desktop.screensaver picture-uri 'file:///caminho/para/lock.jpg'
+```
+
+---
+
+## Janelas & Gerenciador de Janelas
+
+```bash
+# Botões da barra de título (adicionar minimizar e maximizar)
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+
+# Só botão fechar (padrão GNOME)
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:close'
+
+# Botões à esquerda (estilo macOS)
+gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:appmenu'
+
+# Ação ao clicar na barra de título
+gsettings set org.gnome.desktop.wm.preferences action-double-click-titlebar 'toggle-maximize'
+gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar 'minimize'
+gsettings set org.gnome.desktop.wm.preferences action-right-click-titlebar 'menu'
+
+# Focar janela ao passar o mouse (focus-follows-mouse)
+gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
+# Opções: 'click', 'sloppy', 'mouse'
+
+# Levantar janela automaticamente ao focar
+gsettings set org.gnome.desktop.wm.preferences auto-raise true
+
+# Redimensionar com botão direito + Super
+gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
+
+# Modificador para arrastar janelas (padrão: Super)
+gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "'<Alt>'"
+
+# Desabilitar animações (performance)
+gsettings set org.gnome.desktop.interface enable-animations false
+
+# Attach modal dialogs à janela pai
+gsettings set org.gnome.mutter attach-modal-dialogs true
+
+# Edge tiling (snap janelas nas bordas)
+gsettings set org.gnome.mutter edge-tiling true
+
+# Workspaces dinâmicos
+gsettings set org.gnome.mutter dynamic-workspaces true
+
+# Número fixo de workspaces
+gsettings set org.gnome.mutter dynamic-workspaces false
+gsettings set org.gnome.desktop.wm.preferences num-workspaces 6
+
+# Workspaces apenas no monitor primário
+gsettings set org.gnome.mutter workspaces-only-on-primary true
+```
+
+---
+
+## Atalhos de Teclado & Keybindings
+
+```bash
+# Alt+Tab troca entre JANELAS (não aplicações agrupadas)
+gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-applications "['<Super>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "['<Shift><Super>Tab']"
+
+# Trocar workspace com Super+Número
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
+
+# Mover janela para workspace
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Shift><Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Shift><Super>2']"
+
+# Mudar a tecla overlay (Super) para outra tecla
+gsettings set org.gnome.mutter overlay-key 'Super_L'
+
+# Desativar a tecla overlay completamente
+gsettings set org.gnome.mutter overlay-key ''
+
+# Caps Lock como Ctrl
+gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+
+# Caps Lock como Escape (ótimo para Vim)
+gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
+
+# Swap Caps Lock e Escape
+gsettings set org.gnome.desktop.input-sources xkb-options "['caps:swapescape']"
+
+# Mostrar desktop (minimizar tudo)
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+```
+
+---
+
+## Touchpad & Mouse
+
+```bash
+# Tap-to-click
+gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
+
+# Scroll natural (invertido)
+gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll true
+
+# Scroll com dois dedos
+gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
+
+# Desabilitar edge scrolling
+gsettings set org.gnome.desktop.peripherals.touchpad edge-scrolling-enabled false
+
+# Método de clique (dedos ou áreas)
+gsettings set org.gnome.desktop.peripherals.touchpad click-method 'fingers'
+# Opções: 'default', 'none', 'areas', 'fingers'
+
+# Velocidade do touchpad (-1.0 a 1.0)
+gsettings set org.gnome.desktop.peripherals.touchpad speed 0.5
+
+# Desativar touchpad enquanto digita
+gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing true
+
+# Desativar touchpad quando mouse externo conectado
+gsettings set org.gnome.desktop.peripherals.touchpad send-events 'disabled-on-external-mouse'
+# Opções: 'enabled', 'disabled', 'disabled-on-external-mouse'
+
+# Tap and drag
+gsettings set org.gnome.desktop.peripherals.touchpad tap-and-drag true
+gsettings set org.gnome.desktop.peripherals.touchpad tap-and-drag-lock true
+
+# Mouse — scroll natural
+gsettings set org.gnome.desktop.peripherals.mouse natural-scroll false
+
+# Mouse — velocidade (-1.0 a 1.0)
+gsettings set org.gnome.desktop.peripherals.mouse speed 0.0
+
+# Middle click emulation (clique esquerdo + direito = middle)
+gsettings set org.gnome.desktop.peripherals.mouse middle-click-emulation true
+```
+
+---
+
+## Energia & Tela
+
+```bash
+# Tempo para suspensão automática (segundos, 0 = nunca)
+gsettings set org.gnome.desktop.session idle-delay 0
+
+# Night Light (luz noturna / filtro de luz azul)
+gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+
+# Temperatura da Night Light (Kelvin — menor = mais quente)
+gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 4000
+
+# Horário manual da Night Light
+gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-automatic false
+gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-from 20.0
+gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-to 6.0
+
+# Remover prompt de logout (elimina o delay de 60s)
+gsettings set org.gnome.SessionManager logout-prompt false
+
+# Duração máxima de screencast (0 = ilimitado)
+gsettings set org.gnome.settings-daemon.plugins.media-keys max-screencast-length 0
+```
+
+---
+
+## Nautilus (Gerenciador de Arquivos)
+
+```bash
+# Busca recursiva (desabilitar busca em subpastas)
+gsettings set org.gnome.nautilus.preferences recursive-search 'never'
+# Opções: 'always', 'local-only', 'never'
+
+# Mostrar arquivos ocultos por padrão
+gsettings set org.gnome.nautilus.preferences show-hidden-files true
+
+# Visualização padrão (lista ou grade)
+gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
+# Opções: 'icon-view', 'list-view'
+
+# Ordenar diretórios primeiro
+gsettings set org.gnome.nautilus.preferences default-sort-order 'name'
+
+# Caminho editável na barra de endereço
+gsettings set org.gnome.nautilus.preferences always-use-location-entry true
+
+# Ação de clique (simples ou duplo para abrir)
+gsettings set org.gnome.nautilus.preferences click-policy 'double'
+# Opções: 'single', 'double'
+
+# Mostrar thumbnails
+gsettings set org.gnome.nautilus.preferences show-image-thumbnails 'always'
+# Opções: 'always', 'local-only', 'never'
+```
+
+---
+
+## Terminal
+
+```bash
+# Desativar cursor piscante
+gsettings set org.gnome.desktop.interface cursor-blink false
+
+# Cursor piscante apenas no terminal
+PROFILE=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'")
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${PROFILE}/" cursor-blink-mode 'off'
+
+# Desativar confirmação ao fechar terminal
+gsettings set org.gnome.Terminal.Legacy.Settings confirm-close false
+```
+
+---
+
+## Privacidade & Segurança
+
+```bash
+# Bloquear tela automaticamente (delay em segundos após idle)
+gsettings set org.gnome.desktop.screensaver lock-delay 0
+
+# Bloquear ao suspender
+gsettings set org.gnome.desktop.screensaver lock-enabled true
+
+# Tempo para limpar arquivos da lixeira (dias, 0 = nunca)
+gsettings set org.gnome.desktop.privacy old-files-age 30
+
+# Limpar lixeira automaticamente
+gsettings set org.gnome.desktop.privacy remove-old-trash-files true
+
+# Limpar arquivos temporários automaticamente
+gsettings set org.gnome.desktop.privacy remove-old-temp-files true
+
+# Desabilitar relatório de uso (telemetria)
+gsettings set org.gnome.desktop.privacy report-technical-problems false
+
+# Histórico de arquivos recentes
+gsettings set org.gnome.desktop.privacy remember-recent-files true
+gsettings set org.gnome.desktop.privacy recent-files-max-age 30
+```
+
+---
+
+## GNOME Shell
+
+```bash
+# Hot corners (ativar/desativar)
+gsettings set org.gnome.desktop.interface enable-hot-corners true
+
+# Relógio — mostrar segundos
+gsettings set org.gnome.desktop.interface clock-show-seconds true
+
+# Relógio — mostrar data
+gsettings set org.gnome.desktop.interface clock-show-date true
+
+# Relógio — formato 24h
+gsettings set org.gnome.desktop.interface clock-format '24h'
+# Opções: '12h', '24h'
+
+# Mostrar número da semana no calendário
+gsettings set org.gnome.desktop.calendar show-weekdate true
+
+# Mostrar porcentagem da bateria
+gsettings set org.gnome.desktop.interface show-battery-percentage true
+
+# Listar extensões habilitadas
+gsettings get org.gnome.shell enabled-extensions
+
+# Desabilitar todas as extensões
+gsettings set org.gnome.shell disable-user-extensions true
+
+# Apps favoritos no dock/dash
+gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Terminal.desktop']"
+```
+
+---
+
+## Custom Keybindings (Atalhos Personalizados)
+
+```bash
+# Registrar um atalho customizado (slot 0)
+gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings \
+  "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+
+# Configurar nome, comando e tecla
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+  name 'Abrir Terminal'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+  command 'gnome-terminal'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+  binding '<Super>Return'
+```
+
+---
+
+## Dicas Úteis
+
+```bash
+# Exportar TODAS as configurações (backup)
+dconf dump / > gnome-backup.conf
+
+# Restaurar configurações
+dconf load / < gnome-backup.conf
+
+# Exportar apenas um schema específico
+dconf dump /org/gnome/desktop/interface/ > interface-backup.conf
+
+# Resetar TUDO de um schema para padrão
+dconf reset -f /org/gnome/desktop/interface/
+
+# Ver alterações em tempo real (qualquer mudança no dconf)
+dconf watch /
+```
+
+---
+
+> **Atenção:** Alterar valores diretamente via `gsettings` ou `dconf` pode quebrar
+> comportamentos do desktop se valores inválidos forem inseridos. Use `gsettings range`
+> para verificar os valores aceitos antes de modificar.
