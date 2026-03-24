@@ -1,6 +1,7 @@
 export interface Dictionary {
   base: {
     title: string;
+    subtitle: string;
   };
   nav: {
     home: string;

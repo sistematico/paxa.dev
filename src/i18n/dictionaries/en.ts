@@ -3,6 +3,7 @@ import type { Dictionary } from "../types";
 const en: Dictionary = {
   base: {
     title: "Pasha",
+    subtitle: "The Code Nomad",
   },
   nav: {
     home: "Home",

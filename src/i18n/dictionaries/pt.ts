@@ -3,6 +3,7 @@ import type { Dictionary } from "../types";
 const pt: Dictionary = {
   base: {
     title: "Paxá",
+    subtitle: "O Nômade do Código",
   },
   nav: {
     home: "Início",

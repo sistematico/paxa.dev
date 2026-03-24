@@ -23,7 +23,7 @@ export default function GiscusComments() {
 
   return (
     <div className="mt-12 pt-8 border-t border-border">
-      <Giscus
+      {/* <Giscus
         repo="lucaspaxa/paxa.dev"
         repoId={process.env.NEXT_PUBLIC_GISCUS_REPO_ID!}
         category={process.env.NEXT_PUBLIC_GISCUS_CATEGORY!}
@@ -36,7 +36,23 @@ export default function GiscusComments() {
         theme={theme}
         lang="pt"
         loading="lazy"
-      />
+      /> */}
+
+      <Giscus 
+        repo="sistematico/paxa.dev"
+        repoId="R_kgDORLW2kA"
+        category="Comentários"
+        categoryId="DIC_kwDORLW2kM4C5JZK"
+        mapping="url"
+        strict="0"
+        reactionsEnabled="1"
+        emitMetadata="0"
+        inputPosition="top"
+        theme={theme}
+        lang="pt"
+        loading="lazy"
+        />
+
     </div>
   );
 }
