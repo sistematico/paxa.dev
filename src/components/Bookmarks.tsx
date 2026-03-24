@@ -1,17 +1,22 @@
 // src/components/Bookmarks.tsx
 import Link from "next/link";
 import type { Bookmark } from "@/actions/bookmarks";
+import type { Dictionary } from "@/i18n";
 
 interface BookmarksProps {
   bookmarks: Bookmark[];
   category?: string;
   tag?: string;
+  locale?: string;
+  dict?: Dictionary["bookmarks"];
 }
 
 export default function Bookmarks({
   bookmarks,
   category,
   tag,
+  locale = "pt",
+  dict,
 }: BookmarksProps) {
   // Filtrar por categoria e tag se especificados
   let filteredBookmarks = bookmarks;
@@ -56,7 +61,7 @@ export default function Bookmarks({
               {/* Categoria e Tags */}
               <div className="flex flex-wrap items-center gap-2">
                 <Link
-                  href={`/favoritos?category=${encodeURIComponent(bookmark.category)}`}
+                  href={`/${locale}/favoritos?category=${encodeURIComponent(bookmark.category)}`}
                   className="px-2 py-0.5 bg-surface text-foreground text-xs rounded hover:bg-surface-alt transition-colors"
                 >
                   {bookmark.category}
@@ -65,7 +70,7 @@ export default function Bookmarks({
                 {bookmark.tags.map((tagItem) => (
                   <Link
                     key={tagItem}
-                    href={`/favoritos?tag=${encodeURIComponent(tagItem)}`}
+                    href={`/${locale}/favoritos?tag=${encodeURIComponent(tagItem)}`}
                     className="text-xs text-muted hover:text-accent transition-colors"
                   >
                     #{tagItem}
@@ -90,21 +95,22 @@ export default function Bookmarks({
       {filteredBookmarks.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted">
-            Nenhum favorito encontrado
+            {dict?.noBookmarksFound ?? "Nenhum favorito encontrado"}
             {(category || tag) && (
               <>
                 {" "}
-                para {category && <strong>{category}</strong>}
+                {dict?.noBookmarksFor ?? "para"}{" "}
+                {category && <strong>{category}</strong>}
                 {tag && <strong>#{tag}</strong>}
               </>
             )}
           </p>
           {(category || tag) && (
             <Link
-              href="/favoritos"
+              href={`/${locale}/favoritos`}
               className="text-sm text-accent hover:text-accent-hover mt-2 inline-block"
             >
-              Ver todos os favoritos →
+              {dict?.seeAllBookmarks ?? "Ver todos os favoritos →"}
             </Link>
           )}
         </div>

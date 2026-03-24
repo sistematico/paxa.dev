@@ -2,8 +2,13 @@
 
 import { useActionState } from "react";
 import { submitContactForm, type ContactFormState } from "@/actions/contact";
+import type { Dictionary } from "@/i18n";
 
-export default function ContactForm() {
+interface ContactFormProps {
+  dict?: Dictionary["contact"];
+}
+
+export default function ContactForm({ dict }: ContactFormProps) {
   const [state, formAction, isPending] = useActionState<
     ContactFormState,
     FormData
@@ -15,10 +20,10 @@ export default function ContactForm() {
   return (
     <div className="max-w-2xl mx-auto px-6">
       <h2 className="text-3xl font-bold text-center mb-4 text-foreground">
-        Envie uma Mensagem
+        {dict?.formTitle ?? "Envie uma Mensagem"}
       </h2>
       <p className="text-center text-muted mb-12">
-        Tem um projeto em mente? Vamos conversar!
+        {dict?.formDesc ?? "Tem um projeto em mente? Vamos conversar!"}
       </p>
 
       <form
@@ -31,7 +36,7 @@ export default function ContactForm() {
             htmlFor="name"
             className="block text-sm font-semibold text-foreground mb-2"
           >
-            Nome
+            {dict?.nameLabel ?? "Nome"}
           </label>
           <input
             type="text"
@@ -48,7 +53,7 @@ export default function ContactForm() {
             htmlFor="email"
             className="block text-sm font-semibold text-foreground mb-2"
           >
-            E-mail
+            {dict?.emailLabel ?? "E-mail"}
           </label>
           <input
             type="email"
@@ -65,7 +70,7 @@ export default function ContactForm() {
             htmlFor="subject"
             className="block text-sm font-semibold text-foreground mb-2"
           >
-            Assunto
+            {dict?.subjectLabel ?? "Assunto"}
           </label>
           <input
             type="text"
@@ -82,7 +87,7 @@ export default function ContactForm() {
             htmlFor="message"
             className="block text-sm font-semibold text-foreground mb-2"
           >
-            Mensagem
+            {dict?.messageLabel ?? "Mensagem"}
           </label>
           <textarea
             id="message"
@@ -111,7 +116,9 @@ export default function ContactForm() {
           disabled={isPending}
           className="w-full px-8 py-4 bg-accent text-background rounded-lg font-semibold hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isPending ? "Enviando..." : "Enviar Mensagem"}
+          {isPending
+            ? (dict?.sendingButton ?? "Enviando...")
+            : (dict?.submitButton ?? "Enviar Mensagem")}
         </button>
       </form>
     </div>

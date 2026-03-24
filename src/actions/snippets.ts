@@ -52,7 +52,13 @@ function readMDXFile(filePath: string) {
   return parseFrontmatter(rawContent);
 }
 
-function getMDXData(dir: string) {
+const DEFAULT_CATEGORY: Record<string, string> = {
+  pt: "Sem categoria",
+  en: "Uncategorized",
+};
+
+function getMDXData(dir: string, locale = "pt") {
+  if (!fs.existsSync(dir)) return [];
   const mdxFiles = getMDXFiles(dir);
   return mdxFiles.map((file) => {
     const { metadata, content } = readMDXFile(path.join(dir, file));
@@ -61,7 +67,8 @@ function getMDXData(dir: string) {
     return {
       metadata: {
         ...metadata,
-        category: metadata.category || "Sem categoria",
+        category:
+          metadata.category || DEFAULT_CATEGORY[locale] || "Uncategorized",
         tags: metadata.tags || [],
       },
       slug,
@@ -70,8 +77,11 @@ function getMDXData(dir: string) {
   });
 }
 
-export function getSnippets() {
-  const snippets = getMDXData(path.join(process.cwd(), "src", "snippets"));
+export function getSnippets(locale = "pt") {
+  const snippets = getMDXData(
+    path.join(process.cwd(), "src", "snippets", locale),
+    locale,
+  );
   return snippets.sort((a, b) => {
     if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
       return -1;
@@ -80,28 +90,28 @@ export function getSnippets() {
   });
 }
 
-export function getSnippetsByCategory(category: string) {
-  return getSnippets().filter(
+export function getSnippetsByCategory(category: string, locale = "pt") {
+  return getSnippets(locale).filter(
     (snippet) => snippet.metadata.category === category,
   );
 }
 
-export function getSnippetsByTag(tag: string) {
-  return getSnippets().filter((snippet) =>
+export function getSnippetsByTag(tag: string, locale = "pt") {
+  return getSnippets(locale).filter((snippet) =>
     snippet.metadata.tags?.includes(tag),
   );
 }
 
-export function getAllCategories() {
-  const snippets = getSnippets();
+export function getAllCategories(locale = "pt") {
+  const snippets = getSnippets(locale);
   const categories = [
     ...new Set(snippets.map((snippet) => snippet.metadata.category)),
   ];
   return categories.filter(Boolean) as string[];
 }
 
-export function getAllTags() {
-  const snippets = getSnippets();
+export function getAllTags(locale = "pt") {
+  const snippets = getSnippets(locale);
   const allTags = snippets.flatMap((snippet) => snippet.metadata.tags || []);
   return [...new Set(allTags)];
 }

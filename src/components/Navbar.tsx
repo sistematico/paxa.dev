@@ -2,10 +2,64 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { navLinks } from "../config";
+import {
+  Home,
+  ScrollText,
+  Mail,
+  HardHat,
+  Bookmark,
+  SquareBottomDashedScissors,
+} from "lucide-react";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n";
 
-export default function Navbar() {
+interface NavbarProps {
+  locale?: Locale;
+  dict?: Dictionary;
+}
+
+export default function Navbar({ locale = "pt", dict }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const n = dict?.nav;
+
+  const navLinks = [
+    {
+      name: n?.home ?? "Início",
+      href: `/${locale}`,
+      icon: Home,
+      className: "hover:text-blue-500/80",
+    },
+    {
+      name: n?.blog ?? "Blog",
+      href: `/${locale}/posts`,
+      icon: ScrollText,
+      className: "hover:text-red-500/80",
+    },
+    {
+      name: n?.projects ?? "Projetos",
+      href: `/${locale}/projetos`,
+      icon: HardHat,
+      className: "hover:text-cyan-500/80",
+    },
+    {
+      name: n?.snippets ?? "Snippets",
+      href: `/${locale}/snippets`,
+      icon: SquareBottomDashedScissors,
+      className: "hover:text-green-500/80",
+    },
+    {
+      name: n?.bookmarks ?? "Favoritos",
+      href: `/${locale}/favoritos`,
+      icon: Bookmark,
+      className: "hover:text-indigo-500/80",
+    },
+    {
+      name: n?.contact ?? "Contato",
+      href: `/${locale}/contato`,
+      icon: Mail,
+      className: "hover:text-yellow-500/80",
+    },
+  ];
 
   return (
     <>

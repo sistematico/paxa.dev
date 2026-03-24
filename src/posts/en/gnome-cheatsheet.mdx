@@ -1,0 +1,438 @@
+---
+title: 'GNOME gsettings Cheatsheet'
+publishedAt: '2026-03-23'
+summary: 'Quick reference guide with gsettings commands for hidden GNOME settings not exposed in the GUI.'
+---
+
+# GNOME gsettings Cheatsheet
+
+> Quick reference guide with `gsettings` commands for hidden GNOME settings not exposed in the graphical interface.
+
+---
+
+## Basics
+
+```bash
+# List ALL settings and their current values
+gsettings list-recursively
+
+# List settings for a specific schema
+gsettings list-recursively org.gnome.desktop.interface
+
+# Get the current value of a key
+gsettings get org.gnome.desktop.interface gtk-theme
+
+# See possible values for a key
+gsettings range org.gnome.desktop.peripherals.touchpad click-method
+
+# Reset a key to its default value
+gsettings reset org.gnome.desktop.interface gtk-theme
+
+# Monitor changes in real time (great for discovering keys)
+gsettings monitor org.gnome.desktop.interface
+```
+
+### Trick: Discover which key changed via GUI
+
+```bash
+#!/bin/bash
+# Saves current state, you make the change in GUI, then it shows the diff
+BEFORE=$(mktemp)
+gsettings list-recursively > "$BEFORE"
+echo "Make the change in GUI and press Enter..."
+read
+AFTER=$(mktemp)
+gsettings list-recursively > "$AFTER"
+diff -u "$BEFORE" "$AFTER"
+rm "$BEFORE" "$AFTER"
+```
+
+---
+
+## Appearance & Themes
+
+```bash
+# GTK theme
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+
+# Icon theme
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+
+# Cursor theme
+gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
+
+# Cursor size
+gsettings set org.gnome.desktop.interface cursor-size 32
+
+# Color scheme (global dark mode — affects GTK3 and GTK4)
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+# Options: 'default', 'prefer-dark', 'prefer-light'
+
+# Interface font
+gsettings set org.gnome.desktop.interface font-name 'Noto Sans 11'
+
+# Document font
+gsettings set org.gnome.desktop.interface document-font-name 'Noto Sans 11'
+
+# Monospace font
+gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono 10'
+
+# Text scaling factor (useful for partial HiDPI)
+gsettings set org.gnome.desktop.interface text-scaling-factor 1.25
+
+# Interface scaling factor (integers only: 1 or 2)
+gsettings set org.gnome.desktop.interface scaling-factor 2
+
+# Font hinting
+gsettings set org.gnome.desktop.interface font-hinting 'slight'
+# Options: 'none', 'slight', 'medium', 'full'
+
+# Font anti-aliasing
+gsettings set org.gnome.desktop.interface font-antialiasing 'rgba'
+# Options: 'none', 'grayscale', 'rgba'
+```
+
+---
+
+## Wallpaper & Background
+
+```bash
+# Set wallpaper
+gsettings set org.gnome.desktop.background picture-uri 'file:///path/to/image.jpg'
+
+# Wallpaper for dark mode
+gsettings set org.gnome.desktop.background picture-uri-dark 'file:///path/to/image-dark.jpg'
+
+# Display mode
+gsettings set org.gnome.desktop.background picture-options 'zoom'
+# Options: 'none', 'wallpaper', 'centered', 'scaled', 'stretched', 'zoom', 'spanned'
+
+# Primary background color (when no image)
+gsettings set org.gnome.desktop.background primary-color '#1a1a2e'
+
+# Secondary color (for gradients)
+gsettings set org.gnome.desktop.background secondary-color '#16213e'
+
+# Shading type
+gsettings set org.gnome.desktop.background color-shading-type 'horizontal'
+# Options: 'solid', 'horizontal', 'vertical'
+
+# Lock screen wallpaper
+gsettings set org.gnome.desktop.screensaver picture-uri 'file:///path/to/lock.jpg'
+```
+
+---
+
+## Windows & Window Manager
+
+```bash
+# Title bar buttons (add minimize and maximize)
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+
+# Close button only (GNOME default)
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:close'
+
+# Buttons on the left (macOS style)
+gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:appmenu'
+
+# Action on titlebar click
+gsettings set org.gnome.desktop.wm.preferences action-double-click-titlebar 'toggle-maximize'
+gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar 'minimize'
+gsettings set org.gnome.desktop.wm.preferences action-right-click-titlebar 'menu'
+
+# Focus window on hover (focus-follows-mouse)
+gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
+# Options: 'click', 'sloppy', 'mouse'
+
+# Auto-raise window when focused
+gsettings set org.gnome.desktop.wm.preferences auto-raise true
+
+# Resize with right button + Super
+gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
+
+# Modifier for dragging windows (default: Super)
+gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "'<Alt>'"
+
+# Disable animations (performance)
+gsettings set org.gnome.desktop.interface enable-animations false
+
+# Attach modal dialogs to parent window
+gsettings set org.gnome.mutter attach-modal-dialogs true
+
+# Edge tiling (snap windows to edges)
+gsettings set org.gnome.mutter edge-tiling true
+
+# Dynamic workspaces
+gsettings set org.gnome.mutter dynamic-workspaces true
+
+# Fixed number of workspaces
+gsettings set org.gnome.mutter dynamic-workspaces false
+gsettings set org.gnome.desktop.wm.preferences num-workspaces 6
+
+# Workspaces on primary monitor only
+gsettings set org.gnome.mutter workspaces-only-on-primary true
+```
+
+---
+
+## Keyboard Shortcuts & Keybindings
+
+```bash
+# Alt+Tab switches between WINDOWS (not grouped applications)
+gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-applications "['<Super>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "['<Shift><Super>Tab']"
+
+# Switch workspace with Super+Number
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
+
+# Move window to workspace
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Shift><Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Shift><Super>2']"
+
+# Change the overlay key (Super) to another key
+gsettings set org.gnome.mutter overlay-key 'Super_L'
+
+# Disable the overlay key completely
+gsettings set org.gnome.mutter overlay-key ''
+
+# Caps Lock as Ctrl
+gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+
+# Caps Lock as Escape (great for Vim)
+gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
+
+# Swap Caps Lock and Escape
+gsettings set org.gnome.desktop.input-sources xkb-options "['caps:swapescape']"
+
+# Show desktop (minimize all)
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+```
+
+---
+
+## Touchpad & Mouse
+
+```bash
+# Tap-to-click
+gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
+
+# Natural scroll (inverted)
+gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll true
+
+# Two-finger scrolling
+gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
+
+# Disable edge scrolling
+gsettings set org.gnome.desktop.peripherals.touchpad edge-scrolling-enabled false
+
+# Click method (fingers or areas)
+gsettings set org.gnome.desktop.peripherals.touchpad click-method 'fingers'
+# Options: 'default', 'none', 'areas', 'fingers'
+
+# Touchpad speed (-1.0 to 1.0)
+gsettings set org.gnome.desktop.peripherals.touchpad speed 0.5
+
+# Disable touchpad while typing
+gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing true
+
+# Disable touchpad when external mouse connected
+gsettings set org.gnome.desktop.peripherals.touchpad send-events 'disabled-on-external-mouse'
+# Options: 'enabled', 'disabled', 'disabled-on-external-mouse'
+
+# Tap and drag
+gsettings set org.gnome.desktop.peripherals.touchpad tap-and-drag true
+gsettings set org.gnome.desktop.peripherals.touchpad tap-and-drag-lock true
+
+# Mouse — natural scroll
+gsettings set org.gnome.desktop.peripherals.mouse natural-scroll false
+
+# Mouse — speed (-1.0 to 1.0)
+gsettings set org.gnome.desktop.peripherals.mouse speed 0.0
+
+# Middle click emulation (left + right click = middle)
+gsettings set org.gnome.desktop.peripherals.mouse middle-click-emulation true
+```
+
+---
+
+## Power & Display
+
+```bash
+# Auto-suspend delay (seconds, 0 = never)
+gsettings set org.gnome.desktop.session idle-delay 0
+
+# Night Light (blue light filter)
+gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+
+# Night Light temperature (Kelvin — lower = warmer)
+gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 4000
+
+# Manual Night Light schedule
+gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-automatic false
+gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-from 20.0
+gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-to 6.0
+
+# Remove logout prompt (eliminates 60s delay)
+gsettings set org.gnome.SessionManager logout-prompt false
+
+# Max screencast duration (0 = unlimited)
+gsettings set org.gnome.settings-daemon.plugins.media-keys max-screencast-length 0
+```
+
+---
+
+## Nautilus (File Manager)
+
+```bash
+# Recursive search (disable searching in subdirectories)
+gsettings set org.gnome.nautilus.preferences recursive-search 'never'
+# Options: 'always', 'local-only', 'never'
+
+# Show hidden files by default
+gsettings set org.gnome.nautilus.preferences show-hidden-files true
+
+# Default view (list or grid)
+gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
+# Options: 'icon-view', 'list-view'
+
+# Sort directories first
+gsettings set org.gnome.nautilus.preferences default-sort-order 'name'
+
+# Editable path in address bar
+gsettings set org.gnome.nautilus.preferences always-use-location-entry true
+
+# Click action (single or double click to open)
+gsettings set org.gnome.nautilus.preferences click-policy 'double'
+# Options: 'single', 'double'
+
+# Show thumbnails
+gsettings set org.gnome.nautilus.preferences show-image-thumbnails 'always'
+# Options: 'always', 'local-only', 'never'
+```
+
+---
+
+## Terminal
+
+```bash
+# Disable blinking cursor
+gsettings set org.gnome.desktop.interface cursor-blink false
+
+# Blinking cursor only in terminal
+PROFILE=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'")
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${PROFILE}/" cursor-blink-mode 'off'
+
+# Disable close confirmation
+gsettings set org.gnome.Terminal.Legacy.Settings confirm-close false
+```
+
+---
+
+## Privacy & Security
+
+```bash
+# Auto screen lock (delay in seconds after idle)
+gsettings set org.gnome.desktop.screensaver lock-delay 0
+
+# Lock on suspend
+gsettings set org.gnome.desktop.screensaver lock-enabled true
+
+# Time to clear trash files (days, 0 = never)
+gsettings set org.gnome.desktop.privacy old-files-age 30
+
+# Auto-empty trash
+gsettings set org.gnome.desktop.privacy remove-old-trash-files true
+
+# Auto-clear temp files
+gsettings set org.gnome.desktop.privacy remove-old-temp-files true
+
+# Disable usage reporting (telemetry)
+gsettings set org.gnome.desktop.privacy report-technical-problems false
+
+# Recent files history
+gsettings set org.gnome.desktop.privacy remember-recent-files true
+gsettings set org.gnome.desktop.privacy recent-files-max-age 30
+```
+
+---
+
+## GNOME Shell
+
+```bash
+# Hot corners (enable/disable)
+gsettings set org.gnome.desktop.interface enable-hot-corners true
+
+# Clock — show seconds
+gsettings set org.gnome.desktop.interface clock-show-seconds true
+
+# Clock — show date
+gsettings set org.gnome.desktop.interface clock-show-date true
+
+# Clock — 24h format
+gsettings set org.gnome.desktop.interface clock-format '24h'
+# Options: '12h', '24h'
+
+# Show week number in calendar
+gsettings set org.gnome.desktop.calendar show-weekdate true
+
+# Show battery percentage
+gsettings set org.gnome.desktop.interface show-battery-percentage true
+
+# List enabled extensions
+gsettings get org.gnome.shell enabled-extensions
+
+# Disable all extensions
+gsettings set org.gnome.shell disable-user-extensions true
+
+# Favorite apps in dock/dash
+gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Terminal.desktop']"
+```
+
+---
+
+## Custom Keybindings
+
+```bash
+# Register a custom shortcut (slot 0)
+gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings \
+  "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+
+# Configure name, command and key
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+  name 'Open Terminal'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+  command 'gnome-terminal'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+  binding '<Super>Return'
+```
+
+---
+
+## Useful Tips
+
+```bash
+# Export ALL settings (backup)
+dconf dump / > gnome-backup.conf
+
+# Restore settings
+dconf load / < gnome-backup.conf
+
+# Export only a specific schema
+dconf dump /org/gnome/desktop/interface/ > interface-backup.conf
+
+# Reset ALL keys of a schema to default
+dconf reset -f /org/gnome/desktop/interface/
+
+# Watch changes in real time (any dconf change)
+dconf watch /
+```
+
+---
+
+> **Warning:** Directly modifying values via `gsettings` or `dconf` can break desktop
+> behaviors if invalid values are inserted. Use `gsettings range` to check valid values for each key before writing.

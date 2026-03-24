@@ -46,7 +46,13 @@ function readMDXFile(filePath: string) {
   return parseFrontmatter(rawContent);
 }
 
-function getMDXData(dir: string) {
+const DEFAULT_CATEGORY: Record<string, string> = {
+  pt: "Sem categoria",
+  en: "Uncategorized",
+};
+
+function getMDXData(dir: string, locale = "pt") {
+  if (!fs.existsSync(dir)) return [];
   const mdxFiles = getMDXFiles(dir);
   return mdxFiles.map((file) => {
     const { metadata, content } = readMDXFile(path.join(dir, file));
@@ -55,7 +61,8 @@ function getMDXData(dir: string) {
     return {
       metadata: {
         ...metadata,
-        category: metadata.category || "Sem categoria",
+        category:
+          metadata.category || DEFAULT_CATEGORY[locale] || "Uncategorized",
         tags: metadata.tags || [],
       },
       slug,
@@ -64,8 +71,9 @@ function getMDXData(dir: string) {
   });
 }
 
-export function getPosts() {
-  const posts = getMDXData(path.join(process.cwd(), "src", "posts"));
+export function getPosts(locale = "pt") {
+  const dir = path.join(process.cwd(), "src", "posts", locale);
+  const posts = getMDXData(dir, locale);
   return posts.sort((a, b) => {
     if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
       return -1;
@@ -74,27 +82,31 @@ export function getPosts() {
   });
 }
 
-export function getPostsByCategory(category: string) {
-  return getPosts().filter((post) => post.metadata.category === category);
+export function getPostsByCategory(category: string, locale = "pt") {
+  return getPosts(locale).filter((post) => post.metadata.category === category);
 }
 
-export function getPostsByTag(tag: string) {
-  return getPosts().filter((post) => post.metadata.tags?.includes(tag));
+export function getPostsByTag(tag: string, locale = "pt") {
+  return getPosts(locale).filter((post) => post.metadata.tags?.includes(tag));
 }
 
-export function getAllCategories() {
-  const posts = getPosts();
+export function getAllCategories(locale = "pt") {
+  const posts = getPosts(locale);
   const categories = [...new Set(posts.map((post) => post.metadata.category))];
   return categories.filter(Boolean) as string[];
 }
 
-export function getAllTags() {
-  const posts = getPosts();
+export function getAllTags(locale = "pt") {
+  const posts = getPosts(locale);
   const allTags = posts.flatMap((post) => post.metadata.tags || []);
   return [...new Set(allTags)];
 }
 
-export function formatDate(date: string, includeRelative = false) {
+export function formatDate(
+  date: string,
+  includeRelative = false,
+  locale = "pt",
+) {
   const currentDate = new Date();
   if (!date.includes("T")) {
     date = `${date}T00:00:00`;
@@ -104,19 +116,26 @@ export function formatDate(date: string, includeRelative = false) {
   const monthsAgo = currentDate.getMonth() - targetDate.getMonth();
   const daysAgo = currentDate.getDate() - targetDate.getDate();
 
+  const intlLocale = locale === "en" ? "en-US" : "pt-BR";
+
   let formattedDate = "";
 
-  if (yearsAgo > 0) {
-    formattedDate = `${yearsAgo}y ago`;
-  } else if (monthsAgo > 0) {
-    formattedDate = `${monthsAgo}mo ago`;
-  } else if (daysAgo > 0) {
-    formattedDate = `${daysAgo}d ago`;
+  if (locale === "en") {
+    if (yearsAgo > 0) formattedDate = `${yearsAgo}y ago`;
+    else if (monthsAgo > 0) formattedDate = `${monthsAgo}mo ago`;
+    else if (daysAgo > 0) formattedDate = `${daysAgo}d ago`;
+    else formattedDate = "Today";
   } else {
-    formattedDate = "Today";
+    if (yearsAgo > 0)
+      formattedDate = `há ${yearsAgo} ano${yearsAgo > 1 ? "s" : ""}`;
+    else if (monthsAgo > 0)
+      formattedDate = `há ${monthsAgo} mês${monthsAgo > 1 ? "es" : ""}`;
+    else if (daysAgo > 0)
+      formattedDate = `há ${daysAgo} dia${daysAgo > 1 ? "s" : ""}`;
+    else formattedDate = "Hoje";
   }
 
-  const fullDate = targetDate.toLocaleString("pt-BR", {
+  const fullDate = targetDate.toLocaleString(intlLocale, {
     month: "long",
     day: "numeric",
     year: "numeric",

@@ -2,13 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "./Navbar";
 import AudioPlayer from "./AudioPlayer";
+import LocaleSwitcher from "./LocaleSwitcher";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n";
 
-export default function Header() {
+interface HeaderProps {
+  locale?: Locale;
+  dict?: Dictionary;
+}
+
+export default function Header({ locale = "pt", dict }: HeaderProps) {
+  const homeHref = `/${locale}`;
+
   return (
     <header className="sticky z-50 bg-surface border-b border-border top-0">
       <div className="flex flex-wrap items-center justify-between container mx-auto px-4 py-2">
         <Link
-          href="/"
+          href={homeHref}
           className="flex items-center gap-2 text-4xl font-semibold text-foreground/80"
         >
           <Image
@@ -20,8 +30,11 @@ export default function Header() {
           />
           <span className="mt-1">Paxá</span>
         </Link>
-        <AudioPlayer />
-        <Navbar />
+        <div className="flex items-center gap-3">
+          <LocaleSwitcher locale={locale} />
+          <AudioPlayer />
+        </div>
+        <Navbar locale={locale} dict={dict} />
       </div>
     </header>
   );

@@ -1,15 +1,24 @@
 // src/components/Posts.tsx
 import Link from "next/link";
 import { formatDate, getPosts } from "@/actions/posts";
+import type { Dictionary } from "@/i18n";
 
 interface PostsProps {
   category?: string;
   tag?: string;
   limit?: number;
+  locale?: string;
+  dict?: Dictionary["posts"];
 }
 
-export default function Posts({ category, tag, limit }: PostsProps) {
-  let allBlogs = getPosts();
+export default function Posts({
+  category,
+  tag,
+  limit,
+  locale = "pt",
+  dict,
+}: PostsProps) {
+  let allBlogs = getPosts(locale);
 
   // Aplicar filtros
   if (category) {
@@ -47,21 +56,22 @@ export default function Posts({ category, tag, limit }: PostsProps) {
     return (
       <div className="text-center py-12">
         <p className="text-muted">
-          Nenhum post encontrado
+          {dict?.noPostsFound ?? "Nenhum post encontrado"}
           {(category || tag) && (
             <>
               {" "}
-              para {category && <strong>{category}</strong>}
+              {dict?.noPostsFor ?? "para"}{" "}
+              {category && <strong>{category}</strong>}
               {tag && <strong>#{tag}</strong>}
             </>
           )}
         </p>
         {(category || tag) && (
           <Link
-            href="/posts"
+            href={`/${locale}/posts`}
             className="text-sm text-accent hover:text-accent-hover mt-2 inline-block"
           >
-            Ver todos os posts →
+            {dict?.seeAllPosts ?? "Ver todos os posts →"}
           </Link>
         )}
       </div>
@@ -84,14 +94,14 @@ export default function Posts({ category, tag, limit }: PostsProps) {
                 {/* Ponto na linha do tempo */}
                 <div className="absolute -left-[29px] top-2 w-3 h-3 rounded-full bg-muted group-hover:bg-accent transition-colors" />
 
-                <Link href={`/posts/${post.slug}`} className="block">
+                <Link href={`/${locale}/posts/${post.slug}`} className="block">
                   {/* Data e categoria */}
                   <div className="flex flex-wrap items-center gap-2 mb-2 text-sm">
                     <time
                       dateTime={post.metadata.publishedAt}
                       className="text-muted tabular-nums font-medium"
                     >
-                      {formatDate(post.metadata.publishedAt, false)}
+                      {formatDate(post.metadata.publishedAt, false, locale)}
                     </time>
 
                     {post.metadata.category && (
@@ -123,7 +133,7 @@ export default function Posts({ category, tag, limit }: PostsProps) {
                     {post.metadata.tags.map((tagName) => (
                       <Link
                         key={tagName}
-                        href={`/posts?tag=${encodeURIComponent(tagName)}`}
+                        href={`/${locale}/posts?tag=${encodeURIComponent(tagName)}`}
                         className="text-xs text-muted hover:text-accent transition-colors"
                       >
                         #{tagName}

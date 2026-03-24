@@ -1,0 +1,93 @@
+import type { Dictionary } from "../types";
+
+const en: Dictionary = {
+  nav: {
+    home: "Home",
+    blog: "Blog",
+    projects: "Projects",
+    snippets: "Snippets",
+    bookmarks: "Bookmarks",
+    contact: "Contact",
+  },
+  common: {
+    activeFilters: "Active filters",
+    clearFilters: "Clear",
+    categories: "Categories",
+    tags: "Tags",
+    all: "All",
+    technologies: "Technologies",
+    stats: "Statistics",
+    categoryLabel: "Category:",
+    tagLabel: "Tag:",
+    technologyLabel: "Technology:",
+  },
+  breadcrumb: {
+    home: "Home",
+  },
+  home: {
+    tagline: "Where code meets the digital desert",
+    p1: "Like a digital nomad crossing the infinite dunes of the web since 1997, I transform lines of code into oases of functionality.",
+    p1Nomad: "digital nomad",
+    p2: "For over two decades, I've navigated the Linux deserts (since 1999), mastering server storms and architecting application caravans that cross from frontend to backend without losing a drop of performance.",
+    p2Decades: "two decades",
+    p3: "My journey through the technological sands has made me a master of TypeScript, React, Next.js, and a keeper of secrets in Docker, Git, Node.js and Bun. Like a true Paxá of code, I command my domains with Shell Script, Python, and even explore the lands of Rust and Go.",
+    p4: "In this digital oasis, you'll find hidden treasures: snippets as precious as rare spices, projects that shine like stars in the desert night sky, and ancestral knowledge (well, since the 90s) about systems administration and web development.",
+    p5: "Welcome to the Paxá's digital tent — where every line of code tells a story.",
+    exploreProjects: "Explore Projects",
+    sendMessage: "Send Message",
+  },
+  posts: {
+    title: "Blog",
+    metaTitle: "Blog - Paxá",
+    metaDesc: "Read my blog",
+    noPostsFound: "No posts found",
+    noPostsFor: "for",
+    seeAllPosts: "See all posts →",
+  },
+  snippets: {
+    title: "Snippets",
+    metaTitle: "Snippets",
+    metaDesc: "A collection of useful code snippets",
+    noSnippetsFound: "No snippets found",
+    seeAllSnippets: "See all snippets →",
+    backToSnippets: "← Back to snippets",
+    totalSnippets: "Total snippets:",
+  },
+  projects: {
+    title: "Projects",
+    metaTitle: "Projects",
+    metaDesc: "See my projects and work",
+    featured: "Featured Projects",
+    noProjectsFound: "No projects found",
+    noProjectsFor: "with",
+    seeAllProjects: "See all projects →",
+    totalProjects: "Total projects:",
+  },
+  bookmarks: {
+    title: "Bookmarks",
+    metaTitle: "Bookmarks",
+    metaDesc: "Favorite links and resources",
+    noBookmarksFound: "No bookmarks found",
+    noBookmarksFor: "for",
+    seeAllBookmarks: "See all bookmarks →",
+    totalBookmarks: "Total bookmarks:",
+  },
+  contact: {
+    title: "Contact",
+    metaTitle: "Contact - Paxá",
+    metaDesc:
+      "Get in touch with me to discuss projects, collaborations, or just to chat about web development.",
+    description:
+      "I'm always open to new journeys. Whether for a project, collaboration, or just to exchange ideas about the world of web development.",
+    formTitle: "Send a Message",
+    formDesc: "Have a project in mind? Let's talk!",
+    nameLabel: "Name",
+    emailLabel: "Email",
+    subjectLabel: "Subject",
+    messageLabel: "Message",
+    submitButton: "Send Message",
+    sendingButton: "Sending...",
+  },
+};
+
+export default en;

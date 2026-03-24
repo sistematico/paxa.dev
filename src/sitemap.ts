@@ -1,17 +1,35 @@
 import { getPosts } from "@/actions/posts";
+import { locales } from "@/i18n/config";
 
 export const baseUrl = "https://paxa.dev";
 
 export default async function sitemap() {
-  const blogs = getPosts().map((post) => ({
-    url: `${baseUrl}/posts/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }));
+  const entries: { url: string; lastModified: string }[] = [];
 
-  const routes = ["", "/posts"].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString().split("T")[0],
-  }));
+  for (const locale of locales) {
+    const posts = getPosts(locale);
+    for (const post of posts) {
+      entries.push({
+        url: `${baseUrl}/${locale}/posts/${post.slug}`,
+        lastModified: post.metadata.publishedAt,
+      });
+    }
 
-  return [...routes, ...blogs];
+    const routes = [
+      "",
+      "/posts",
+      "/snippets",
+      "/projetos",
+      "/favoritos",
+      "/contato",
+    ];
+    for (const route of routes) {
+      entries.push({
+        url: `${baseUrl}/${locale}${route}`,
+        lastModified: new Date().toISOString().split("T")[0],
+      });
+    }
+  }
+
+  return entries;
 }

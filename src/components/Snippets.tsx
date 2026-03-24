@@ -1,6 +1,7 @@
 // src/components/Snippets.tsx
 import Link from "next/link";
 import { formatDate } from "@/actions/posts";
+import type { Dictionary } from "@/i18n";
 
 interface SnippetsProps {
   snippets: Array<{
@@ -15,9 +16,17 @@ interface SnippetsProps {
   }>;
   category?: string;
   tag?: string;
+  locale?: string;
+  dict?: Dictionary["snippets"];
 }
 
-export default function Snippets({ snippets, category, tag }: SnippetsProps) {
+export default function Snippets({
+  snippets,
+  category,
+  tag,
+  locale = "pt",
+  dict,
+}: SnippetsProps) {
   // Filtrar por categoria e tag se especificados
   let filteredSnippets = snippets;
 
@@ -46,7 +55,7 @@ export default function Snippets({ snippets, category, tag }: SnippetsProps) {
               dateTime={snippet.metadata.publishedAt}
               className="text-muted tabular-nums"
             >
-              {formatDate(snippet.metadata.publishedAt, false)}
+              {formatDate(snippet.metadata.publishedAt, false, locale)}
             </time>
 
             {snippet.metadata.category && (
@@ -60,7 +69,7 @@ export default function Snippets({ snippets, category, tag }: SnippetsProps) {
           </div>
 
           {/* Título */}
-          <Link href={`/snippets/${snippet.slug}`}>
+          <Link href={`/${locale}/snippets/${snippet.slug}`}>
             <h2 className="text-lg font-semibold text-foreground tracking-tight group-hover:text-accent transition-colors mb-2">
               {snippet.metadata.title}
             </h2>
@@ -79,7 +88,7 @@ export default function Snippets({ snippets, category, tag }: SnippetsProps) {
               {snippet.metadata.tags.map((tagName) => (
                 <Link
                   key={tagName}
-                  href={`/snippets?tag=${encodeURIComponent(tagName)}`}
+                  href={`/${locale}/snippets?tag=${encodeURIComponent(tagName)}`}
                   className="text-xs text-muted hover:text-accent transition-colors"
                 >
                   #{tagName}
@@ -93,7 +102,7 @@ export default function Snippets({ snippets, category, tag }: SnippetsProps) {
       {filteredSnippets.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted">
-            Nenhum snippet encontrado
+            {dict?.noSnippetsFound ?? "Nenhum snippet encontrado"}
             {(category || tag) && (
               <>
                 {" "}
@@ -104,10 +113,10 @@ export default function Snippets({ snippets, category, tag }: SnippetsProps) {
           </p>
           {(category || tag) && (
             <Link
-              href="/snippets"
+              href={`/${locale}/snippets`}
               className="text-sm text-accent hover:text-accent-hover mt-2 inline-block"
             >
-              Ver todos os snippets →
+              {dict?.seeAllSnippets ?? "Ver todos os snippets →"}
             </Link>
           )}
         </div>

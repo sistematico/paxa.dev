@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Calculator, Radio, FolderGit2 } from "lucide-react";
 import type { Project } from "@/actions/projects";
+import type { Dictionary } from "@/i18n";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Calculator,
@@ -12,9 +13,16 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 interface ProjectsListProps {
   projects: Project[];
   tech?: string;
+  locale?: string;
+  dict?: Dictionary["projects"];
 }
 
-export default function ProjectsList({ projects, tech }: ProjectsListProps) {
+export default function ProjectsList({
+  projects,
+  tech,
+  locale = "pt",
+  dict,
+}: ProjectsListProps) {
   const filteredProjects = tech
     ? projects.filter((project) =>
         project.tech.some((t) => t.toLowerCase() === tech.toLowerCase()),
@@ -51,7 +59,7 @@ export default function ProjectsList({ projects, tech }: ProjectsListProps) {
                   {project.tech.map((techItem) => (
                     <Link
                       key={techItem}
-                      href={`/projetos?tech=${encodeURIComponent(techItem)}`}
+                      href={`/${locale}/projetos?tech=${encodeURIComponent(techItem)}`}
                       className="px-2 py-0.5 bg-surface text-foreground text-xs rounded hover:bg-surface-alt transition-colors"
                     >
                       {techItem}
@@ -91,20 +99,20 @@ export default function ProjectsList({ projects, tech }: ProjectsListProps) {
       {filteredProjects.length === 0 && (
         <div className="col-span-full text-center py-12">
           <p className="text-muted">
-            Nenhum projeto encontrado
+            {dict?.noProjectsFound ?? "Nenhum projeto encontrado"}
             {tech && (
               <>
                 {" "}
-                com <strong>{tech}</strong>
+                {dict?.noProjectsFor ?? "com"} <strong>{tech}</strong>
               </>
             )}
           </p>
           {tech && (
             <Link
-              href="/projetos"
+              href={`/${locale}/projetos`}
               className="text-sm text-accent hover:text-accent-hover mt-2 inline-block"
             >
-              Ver todos os projetos →
+              {dict?.seeAllProjects ?? "Ver todos os projetos →"}
             </Link>
           )}
         </div>

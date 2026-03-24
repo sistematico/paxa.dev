@@ -6,13 +6,21 @@ interface BreadcrumbItem {
   href?: string;
 }
 
-export default function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
+export default function Breadcrumb({
+  items,
+  homeLabel = "Início",
+  homeHref = "/",
+}: {
+  items: BreadcrumbItem[];
+  homeLabel?: string;
+  homeHref?: string;
+}) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6 text-sm">
       <ol className="flex items-center gap-1.5 text-muted">
         <li>
-          <Link href="/" className="hover:text-accent transition-colors">
-            Início
+          <Link href={homeHref} className="hover:text-accent transition-colors">
+            {homeLabel}
           </Link>
         </li>
         {items.map((item, i) => (
