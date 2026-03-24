@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { Nunito } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import NextTopLoader from "nextjs-toploader";
 import type { Metadata } from "next";
 import { locales, type Locale, defaultLocale, getBaseUrl } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
@@ -85,11 +86,12 @@ export default async function LocaleLayout({
         />
       </head>
       <body className={`${nunito.variable} font-(family-name:--font-nunito)`}>
+        <NextTopLoader color="var(--color-accent)" showSpinner={true} />
         <ThemeProvider>
           <AudioPlayerProvider>
             <div className="flex flex-col min-h-screen">
               <Header locale={safeLocale} dict={dict} />
-              <main className="flex-1 container mx-auto px-4 py-6">
+              <main className="flex-1 container mx-auto px-2 md:px-4">
                 {children}
               </main>
               <Footer />

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Eye, Users } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface ViewData {
   totalViews: number;
@@ -10,13 +11,18 @@ interface ViewData {
 
 export default function HomepageViewCounter() {
   const [data, setData] = useState<ViewData | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
-    fetch("/api/homepage-views", { method: "POST" })
+    const isHomepage =
+      pathname === "/" || pathname === "/pt" || pathname === "/en";
+    const method = isHomepage ? "POST" : "GET";
+
+    fetch("/api/homepage-views", { method })
       .then((res) => res.json())
       .then((d) => setData(d))
       .catch(() => {});
-  }, []);
+  }, [pathname]);
 
   if (!data) return null;
 

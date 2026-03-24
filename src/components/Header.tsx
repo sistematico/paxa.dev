@@ -30,9 +30,7 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
             height={50}
           />
           <div className="flex flex-col -gap-2">
-            <div className="text-3xl leading-tight -mb-1">
-              {n?.title}
-            </div>
+            <div className="text-3xl leading-tight -mb-1">{n?.title}</div>
             <div className="text-xs/3 tracking-tighter text-foreground/60 lowercase italic">
               {n?.subtitle}
             </div>

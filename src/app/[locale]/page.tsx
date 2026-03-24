@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getDictionary } from "@/i18n";
 import type { Locale } from "@/i18n/config";
-import HomepageViewCounter from "@/components/HomepageViewCounter";
 
 export default async function Home({
   params,
@@ -14,7 +13,7 @@ export default async function Home({
   const d = dict.home;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 md:px-6 md:py-16">
+    <div className="max-w-4xl mx-auto px-4 py-3 md:px-4 md:py-8">
       <div className="mb-8">
         <div className="text-xl md:text-2xl text-foreground font-semibold mb-1">
           {d.tagline}
@@ -108,10 +107,6 @@ export default async function Home({
         >
           {d.sendMessage}
         </Link>
-      </div>
-
-      <div className="mt-8 flex justify-center">
-        <HomepageViewCounter />
       </div>
     </div>
   );

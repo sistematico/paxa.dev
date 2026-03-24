@@ -38,7 +38,7 @@ export default function GiscusComments() {
         loading="lazy"
       /> */}
 
-      <Giscus 
+      <Giscus
         repo="sistematico/paxa.dev"
         repoId="R_kgDORLW2kA"
         category="Comentários"
@@ -51,8 +51,7 @@ export default function GiscusComments() {
         theme={theme}
         lang="pt"
         loading="lazy"
-        />
-
+      />
     </div>
   );
 }
