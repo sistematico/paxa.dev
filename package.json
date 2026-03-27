@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite dev --port 3001",
     "build": "vinext build",
-    "start": "vinext start",
+    "start": "PORT=3001 vinext start",
     "lint": "biome check",
     "format": "biome format --write",
     "check": "tsc --noEmit",
