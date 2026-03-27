@@ -96,10 +96,8 @@ export default async function Post({
       <h1 className="title font-semibold text-lg md:text-2xl tracking-tighter">
         {post.metadata.title}
       </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm border-4 border-red-500">
+      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
         <div className="text-sm text-muted">
-          aaaaa
-
           {formatDate(post.metadata.publishedAt)}
         </div>
         <PostViewCounter slug={post.slug} />
