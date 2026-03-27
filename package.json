@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite dev --port 3001",
     "build": "vite build",
-    "start": "NODE_ENV=production node dist/server/ssr/index.js",
+    "start": "NODE_ENV=production node dist/server/index.js",
     "lint": "biome check",
     "format": "biome format --write",
     "check": "tsc --noEmit",
