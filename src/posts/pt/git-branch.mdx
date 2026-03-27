@@ -1,0 +1,89 @@
+---
+title: "Como Começar um Projeto do Zero Mantendo o Código Antigo no Git"
+description: "Aprenda a reorganizar seu repositório Git preservando o código antigo em um branch enquanto inicia um novo projeto do zero"
+publishedAt: '2026-03-27'
+tags: ["git", "versionamento", "desenvolvimento"]
+---
+
+Recentemente me deparei com uma situação comum: tinha um projeto no GitHub que queria recomeçar do zero, mas não queria perder todo o código antigo. Afinal, nunca se sabe quando você pode precisar consultar aquela implementação antiga, certo?
+
+Vou compartilhar duas abordagens que uso para resolver isso, dependendo do que você precisa.
+
+## Abordagem 1: Preservando Todo o Histórico
+
+Esta é minha abordagem favorita quando quero manter todo o histórico de commits acessível. É simples e segura:
+```bash
+# 1. Criar um branch para preservar o código antigo
+git checkout -b projeto-antigo
+
+# 2. Fazer push desse branch para o GitHub
+git push -u origin projeto-antigo
+
+# 3. Voltar para a branch principal
+git checkout main  # ou master, dependendo do seu repo
+
+# 4. Remover todos os arquivos (exceto .git)
+git rm -rf .
+
+# Se preferir manter alguns arquivos como .gitignore ou README:
+# git rm -rf $(git ls-files)
+
+# 5. Commit da remoção
+git commit -m "Limpar projeto para recomeçar do zero"
+
+# 6. Agora você pode começar seu novo projeto
+# Adicione seus novos arquivos e faça commit normalmente
+```
+
+Com essa abordagem:
+- ✅ Seu projeto antigo fica preservado no branch `projeto-antigo`
+- ✅ A branch `main` fica limpa para começar do zero
+- ✅ Todo o histórico de commits é mantido
+- ✅ Você pode acessar o código antigo a qualquer momento com `git checkout projeto-antigo`
+
+## Abordagem 2: Histórico Completamente Novo
+
+Se você quer um recomeço total, inclusive no histórico de commits, pode criar um branch órfão:
+```bash
+# Criar um novo branch sem histórico
+git checkout --orphan novo-inicio
+
+# Remover todos os arquivos
+git rm -rf .
+
+# Adicione seus novos arquivos aqui
+# ...
+
+# Primeiro commit do novo projeto
+git commit -m "Início do novo projeto"
+
+# Substituir a branch main
+git branch -D main
+git branch -m main
+
+# Forçar push para o GitHub
+git push -f origin main
+```
+
+⚠️ **Atenção**: Esta abordagem usa `git push -f` (force push), então tenha certeza de que salvou seu código antigo em outro branch antes!
+
+## Qual Abordagem Escolher?
+
+Eu geralmente uso a **Abordagem 1** porque:
+- É mais segura (sem force push)
+- Mantém o histórico completo
+- Permite comparar facilmente o código antigo com o novo
+- É reversível sem complicações
+
+A **Abordagem 2** só uso quando realmente quero um histórico limpo desde o início, tipo quando o projeto mudou completamente de propósito ou tecnologia.
+
+## Dica Extra
+
+Depois de fazer isso, gosto de adicionar uma nota no README do novo projeto mencionando que existe um branch `projeto-antigo` com a versão anterior. Assim, se alguém (ou eu mesmo no futuro) estiver procurando aquele código, sabe onde encontrar.
+```markdown
+## Histórico do Projeto
+
+Este projeto foi recomeçado do zero em [data]. O código da versão anterior está preservado no branch `projeto-antigo`.
+```
+
+E você, já passou por isso? Como costuma reorganizar seus repositórios? Me conta nos comentários!

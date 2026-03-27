@@ -1,0 +1,89 @@
+---
+title: "How to Start a Project from Scratch While Keeping the Old Code in Git"
+description: "Learn how to reorganize your Git repository by preserving old code in a branch while starting a new project from scratch"
+publishedAt: '2026-03-27'
+tags: ["git", "versioning", "development"]
+---
+
+I recently faced a common situation: I had a project on GitHub that I wanted to start over from scratch, but I didn't want to lose all the old code. After all, you never know when you might need to check that old implementation, right?
+
+I'll share two approaches I use to solve this, depending on what you need.
+
+## Approach 1: Preserving the Entire History
+
+This is my favorite approach when I want to keep the full commit history accessible. It's simple and safe:
+```bash
+# 1. Create a branch to preserve the old code
+git checkout -b old-project
+
+# 2. Push this branch to GitHub
+git push -u origin old-project
+
+# 3. Switch back to the main branch
+git checkout main  # or master, depending on your repo
+
+# 4. Remove all files (except .git)
+git rm -rf .
+
+# If you prefer to keep some files like .gitignore or README:
+# git rm -rf $(git ls-files)
+
+# 5. Commit the removal
+git commit -m "Clean up project to start from scratch"
+
+# 6. Now you can start your new project
+# Add your new files and commit as usual
+```
+
+With this approach:
+- ✅ Your old project is preserved in the `old-project` branch
+- ✅ The `main` branch is clean and ready to start from scratch
+- ✅ The entire commit history is kept
+- ✅ You can access the old code at any time with `git checkout old-project`
+
+## Approach 2: A Completely New History
+
+If you want a total fresh start, including the commit history, you can create an orphan branch:
+```bash
+# Create a new branch with no history
+git checkout --orphan fresh-start
+
+# Remove all files
+git rm -rf .
+
+# Add your new files here
+# ...
+
+# First commit of the new project
+git commit -m "Initial commit of new project"
+
+# Replace the main branch
+git branch -D main
+git branch -m main
+
+# Force push to GitHub
+git push -f origin main
+```
+
+⚠️ **Warning**: This approach uses `git push -f` (force push), so make sure you've saved your old code in another branch first!
+
+## Which Approach Should You Choose?
+
+I usually go with **Approach 1** because:
+- It's safer (no force push)
+- It keeps the complete history
+- It makes it easy to compare old and new code
+- It's reversible without complications
+
+I only use **Approach 2** when I truly want a clean history from the start, like when the project has completely changed its purpose or technology.
+
+## Bonus Tip
+
+After doing this, I like to add a note in the new project's README mentioning that there's an `old-project` branch with the previous version. That way, if someone (or my future self) is looking for that code, they know where to find it.
+```markdown
+## Project History
+
+This project was restarted from scratch on [date]. The code from the previous version is preserved in the `old-project` branch.
+```
+
+Have you ever been in this situation? How do you usually reorganize your repositories? Let me know in the comments!
