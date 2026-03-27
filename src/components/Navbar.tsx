@@ -69,25 +69,25 @@ export default function Navbar({ dict }: NavbarProps) {
         aria-label="Toggle menu"
       >
         <span
-          className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ease-in-out ${
-            isOpen ? "rotate-45 translate-y-1.5" : ""
+          className={`block w-6 h-0.5 rounded-full bg-foreground transition-all duration-300 ease-in-out ${
+            isOpen ? "rotate-45 translate-y-2" : ""
           }`}
         />
         <span
-          className={`block w-6 h-0.5 bg-foreground my-1 transition-all duration-300 ease-in-out ${
+          className={`block w-6 h-0.5 rounded-full bg-foreground my-1.5 transition-all duration-300 ease-in-out ${
             isOpen ? "opacity-0" : ""
           }`}
         />
         <span
-          className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ease-in-out ${
-            isOpen ? "-rotate-45 -translate-y-1.5" : ""
+          className={`block w-6 h-0.5 rounded-full bg-foreground transition-all duration-300 ease-in-out ${
+            isOpen ? "-rotate-45 -translate-y-2" : ""
           }`}
         />
       </button>
 
       {/* Mobile Menu */}
       <nav
-        className={`md:hidden absolute left-0 right-0 top-full z-40 bg-surface border-b border-border px-4 flex flex-col gap-3 overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`md:hidden absolute left-0 right-0 top-full z-40 bg-surface border-b-2 border-background-alt px-4 flex flex-col gap-3 overflow-hidden transition-all duration-300 ease-in-out ${
           isOpen ? "max-h-96 opacity-100 py-3" : "max-h-0 opacity-0 py-0"
         }`}
       >

@@ -18,9 +18,9 @@ export default function PostViewCounter({ slug }: { slug: string }) {
   if (views === null) return null;
 
   return (
-    <span className="inline-flex items-center gap-1 text-sm text-muted">
+    <div className="flex items-center gap-1 text-sm text-muted">
       <Eye className="size-4" />
       {views} {views === 1 ? "visualização" : "visualizações"}
-    </span>
+    </div>
   );
 }

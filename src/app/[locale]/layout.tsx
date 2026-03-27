@@ -91,7 +91,7 @@ export default async function LocaleLayout({
           <AudioPlayerProvider>
             <div className="flex flex-col min-h-screen">
               <Header locale={safeLocale} dict={dict} />
-              <main className="flex-1 container mx-auto px-2 md:px-4">
+              <main className="flex-1 container mx-auto px-1 md:px-4">
                 {children}
               </main>
               <Footer />

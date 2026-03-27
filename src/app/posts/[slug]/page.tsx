@@ -64,7 +64,7 @@ export default async function Post({
   if (!post) notFound();
 
   return (
-    <section className="px-4 py-6">
+    <section className="p-2 md:p-4">
       <Breadcrumb
         items={[
           { label: "Blog", href: "/posts" },
@@ -93,13 +93,15 @@ export default async function Post({
           }),
         }}
       />
-      <h1 className="title font-semibold text-2xl tracking-tighter">
+      <h1 className="title font-semibold text-lg md:text-2xl tracking-tighter">
         {post.metadata.title}
       </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-muted">
+      <div className="flex justify-between items-center mt-2 mb-8 text-sm border-4 border-red-500">
+        <div className="text-sm text-muted">
+          aaaaa
+
           {formatDate(post.metadata.publishedAt)}
-        </p>
+        </div>
         <PostViewCounter slug={post.slug} />
       </div>
       <article className="prose">

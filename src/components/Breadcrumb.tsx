@@ -18,14 +18,17 @@ export default function Breadcrumb({
   return (
     <nav aria-label="Breadcrumb" className="mb-6 text-sm">
       <ol className="flex items-center gap-1.5 text-muted">
-        <li>
+        <li className="shrink-0">
           <Link href={homeHref} className="hover:text-accent transition-colors">
             {homeLabel}
           </Link>
         </li>
         {items.map((item, i) => (
-          <li key={item.label} className="flex items-center gap-1.5">
-            <ChevronRight className="size-3.5" />
+          <li
+            key={item.label}
+            className={`flex items-center gap-1.5 ${i === items.length - 1 ? "min-w-0" : "shrink-0"}`}
+          >
+            <ChevronRight className="size-3.5 shrink-0" />
             {item.href && i < items.length - 1 ? (
               <Link
                 href={item.href}
@@ -34,7 +37,7 @@ export default function Breadcrumb({
                 {item.label}
               </Link>
             ) : (
-              <span className="text-foreground">{item.label}</span>
+              <span className="text-foreground truncate">{item.label}</span>
             )}
           </li>
         ))}

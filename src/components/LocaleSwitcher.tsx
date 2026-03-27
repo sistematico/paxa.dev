@@ -42,12 +42,11 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label="Trocar idioma"
-        className="relative flex items-center justify-center size-7 rounded-lg
-          bg-surface-alt hover:bg-border
+        className="relative flex items-center justify-center size-9 rounded-md
           transition-colors duration-300 ease-in-out
           cursor-pointer"
       >
-        <Globe strokeWidth={1.5} className="size-3.5 text-foreground" />
+        <Globe strokeWidth={1.5} className="size-5 text-foreground" />
       </button>
 
       <div
@@ -60,8 +59,8 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
             key={l}
             href={switchTo(l)}
             onClick={() => setOpen(false)}
-            className={`flex items-center gap-2 px-3 py-1.5 text-sm transition-colors
-              ${l === locale ? "text-white font-semibold" : "text-foreground hover:bg-surface-alt"}`}
+            className={`flex items-center gap-2 px-3 py-1.5 text-sm transition-colors text-foreground 
+              ${l === locale ? "font-semibold" : "hover:bg-surface-alt"}`}
           >
             <span className="uppercase text-xs font-mono w-5">{l}</span>
             {localeLabels[l]}
