@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vite dev --port 3001",
-    "build": "vite build",
-    "start": "NODE_ENV=production node dist/server/index.js",
+    "build": "vinext build",
+    "start": "vinext start",
     "lint": "biome check",
     "format": "biome format --write",
     "check": "tsc --noEmit",
