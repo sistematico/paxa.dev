@@ -13,8 +13,9 @@
 # testing
 /coverage
 
-# next.js
+# next.js / vinext
 /.next/
+/.vinext/
 /out/
 
 # production
@@ -47,3 +48,4 @@ next-env.d.ts
 # database
 data/**
 !data/.gitkeep
+/dist/

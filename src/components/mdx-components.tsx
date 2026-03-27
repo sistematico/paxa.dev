@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { codeToHtml } from "shiki";
 import React from "react";
@@ -39,8 +38,8 @@ function CustomLink(props: { href: string; children: React.ReactNode }) {
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
 }
 
-function RoundedImage(props: React.ComponentProps<typeof Image>) {
-  return <Image className="rounded-lg" {...props} />;
+function RoundedImage(props: React.ComponentProps<"img">) {
+  return <img className="rounded-lg" {...props} alt={props.alt || ""} />;
 }
 
 function Code({

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import Navbar from "./Navbar";
 import LocaleSwitcher from "./LocaleSwitcher";
@@ -22,7 +21,7 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
           href={homeHref}
           className="mr-auto flex items-center gap-2 text-4xl font-semibold text-foreground/80"
         >
-          <Image
+          <img
             className="w-12 h-12"
             src="/images/logo.svg"
             alt={n?.title!}

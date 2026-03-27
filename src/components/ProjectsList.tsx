@@ -1,4 +1,6 @@
 // src/components/ProjectsList.tsx
+"use client";
+
 import Link from "next/link";
 import { Calculator, Radio, FolderGit2 } from "lucide-react";
 import type { Project } from "@/actions/projects";

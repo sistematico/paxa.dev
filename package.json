@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development next dev",
-    "build": "next build",
-    "start": "NODE_ENV=production next start -p 3001",
+    "dev": "vite dev --port 3001",
+    "build": "vite build",
+    "start": "NODE_ENV=production node .vinext/dist/server.js",
     "lint": "biome check",
     "format": "biome format --write",
     "check": "tsc --noEmit",
@@ -18,6 +18,7 @@
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.1.6",
     "@types/mdx": "^2.0.13",
+    "@unpic/react": "^1.0.2",
     "better-sqlite3": "^12.8.0",
     "drizzle-orm": "^0.45.1",
     "lucide-react": "^0.563.0",
@@ -25,9 +26,10 @@
     "next-mdx-remote": "^6.0.0",
     "nextjs-toploader": "^3.9.17",
     "nodemailer": "^8.0.3",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "shiki": "^4.0.2",
+    "vinext": "^0.0.36",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -38,10 +40,14 @@
     "@types/nodemailer": "^7.0.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitejs/plugin-rsc": "^0.5.21",
     "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.10",
+    "react-server-dom-webpack": "^19.2.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^8.0.3"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -54,5 +60,6 @@
       "@esbuild-kit/esm-loader",
       "prebuild-install"
     ]
-  }
+  },
+  "type": "module"
 }

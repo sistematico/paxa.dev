@@ -1,3 +1,5 @@
+"use client";
+
 import { SiReddit, SiX } from "@icons-pack/react-simple-icons";
 import HomepageViewCounter from "@/components/HomepageViewCounter";
 

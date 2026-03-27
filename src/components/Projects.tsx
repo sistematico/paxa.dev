@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Calculator, Radio, FolderGit2 } from "lucide-react";
 import projects from "@/data/projects.json";

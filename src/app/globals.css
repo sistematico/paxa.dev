@@ -1,10 +1,14 @@
 @import "tailwindcss";
 
+:root {
+  --font-nunito: "Nunito", sans-serif;
+}
+
 @theme {
   --color-foreground: #c0c5ce;
-  --color-background: #343d46;
+  --color-background: #1a1a1a;
   /* --color-background-alt: #2b3039; */
-  --color-background-alt: #21242b;
+  --color-background-alt: #222222;
   --color-surface: #2b3039;
   --color-surface-alt: #3d4652;
   --color-border: #4f5b66;

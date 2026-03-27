@@ -1,20 +1,12 @@
 import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import { Nunito } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import NextTopLoader from "nextjs-toploader";
+// import NextTopLoader from "@/components/TopLoader";
 import type { Metadata } from "next";
 import { locales, type Locale, defaultLocale, getBaseUrl } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import "../globals.css";
-
-const nunito = Nunito({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-nunito",
-  display: "swap",
-});
 
 export async function generateMetadata({
   params,
@@ -84,9 +76,19 @@ export default async function LocaleLayout({
           type="image/svg+xml"
           sizes="any"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body className={`${nunito.variable} font-(family-name:--font-nunito)`}>
-        <NextTopLoader color="var(--color-accent)" showSpinner={true} />
+      <body className="font-(family-name:--font-nunito)">
+        {/* <NextTopLoader color="var(--color-accent)" showSpinner={true} /> */}
         <ThemeProvider>
           <AudioPlayerProvider>
             <div className="flex flex-col min-h-screen">

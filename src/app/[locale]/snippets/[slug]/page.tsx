@@ -5,10 +5,10 @@ import { formatDate } from "@/actions/posts";
 import { getSnippets } from "@/actions/snippets";
 import { baseUrl } from "@/sitemap";
 import Link from "next/link";
+import BackLink from "@/components/BackLink";
 import { getDictionary } from "@/i18n";
 import type { Locale } from "@/i18n/config";
 import { locales, getBaseUrl } from "@/i18n/config";
-import { ArrowLeft } from "lucide-react";
 
 export async function generateStaticParams() {
   const params: { locale: string; slug: string }[] = [];
@@ -132,13 +132,7 @@ export default async function SnippetPage({
         <CustomMDX source={snippet.content} />
       </article>
       <div className="mt-12 pt-8 border-t border-border">
-        <Link
-          href="/snippets"
-          className="text-muted hover:text-accent transition-colors"
-        >
-          <ArrowLeft size={24} className="inline-block" />{" "}
-          {dict.snippets.backToSnippets}
-        </Link>
+        <BackLink href="/snippets" label={dict.snippets.backToSnippets} />
       </div>
     </section>
   );

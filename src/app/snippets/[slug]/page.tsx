@@ -5,7 +5,7 @@ import { formatDate } from "@/actions/posts";
 import { getSnippets } from "@/actions/snippets";
 import { baseUrl } from "@/sitemap";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import BackLink from "@/components/BackLink";
 
 export async function generateStaticParams() {
   const snippets = getSnippets();
@@ -137,12 +137,7 @@ export default async function SnippetPage({
 
       {/* Back link */}
       <div className="mt-12 pt-8 border-t border-border">
-        <Link
-          href="/snippets"
-          className="text-sm text-muted hover:text-accent transition-colors"
-        >
-          <ArrowLeft size={24} className="inline-block" /> Voltar para snippets
-        </Link>
+        <BackLink href="/snippets" label="Voltar para snippets" />
       </div>
     </section>
   );
