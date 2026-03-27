@@ -34,8 +34,9 @@ if pnpm run build; then
   [ -e $TMPDIR ] && cp -af $TMPDIR $WORKDIR
 
   echo "✅ Configurando contexto SELinux para /var/www/paxa.dev..."
-  sudo semanage fcontext -a -t httpd_sys_content_t "/var/www/paxa.dev(/.*)?" 2> /dev/null
-  sudo restorecon -R /var/www/paxa.dev 2> /dev/null
+  sudo /usr/sbin/semanage fcontext -a -t httpd_sys_content_t "/var/www/paxa.dev(/.*)?" 2> /dev/null
+  sudo /usr/sbin/restorecon -R /var/www/paxa.dev 2> /dev/null
+  sudo /usr/sbin/restorecon -Rv /home/nginx/.local/share/pnpm/
 
   sudo /usr/bin/systemctl start $SERVICE
   echo "🚀 Serviço reiniciado!"
