@@ -10,6 +10,22 @@ const contactSchema = z.object({
   message: z.string().min(10, "Mensagem deve ter pelo menos 10 caracteres"),
 });
 
+async function verifyTurnstile(token: string): Promise<boolean> {
+  const res = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: process.env.TURNSTILE_SECRET_KEY!,
+        response: token,
+      }),
+    },
+  );
+  const data = await res.json();
+  return data.success === true;
+}
+
 export type ContactFormState = {
   status: "idle" | "success" | "error";
   message: string;
@@ -32,6 +48,16 @@ export async function submitContactForm(
       subject: formData.get("subject") as string,
       message: formData.get("message") as string,
     };
+
+    // Verificar Turnstile
+    const turnstileToken = formData.get("cf-turnstile-response") as string;
+    if (!turnstileToken || !(await verifyTurnstile(turnstileToken))) {
+      return {
+        status: "error" as const,
+        message: "Verificação de segurança falhou. Tente novamente.",
+        formData: data,
+      };
+    }
 
     // Validação
     const validatedData = contactSchema.parse(data);
@@ -71,7 +97,7 @@ export async function submitContactForm(
 
     // E-mail de confirmação para o remetente
     await transporter.sendMail({
-      from: process.env.SMTP_USER,
+      from: process.env.EMAIL_USER,
       to: validatedData.email,
       subject: "Mensagem recebida - Paxá.dev",
       html: `

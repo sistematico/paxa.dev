@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     // E-mail de confirmação para o remetente
     await transporter.sendMail({
-      from: process.env.SMTP_USER,
+      from: process.env.EMAIL_USER,
       to: validatedData.email,
       subject: "Mensagem recebida - Paxá.dev",
       html: `

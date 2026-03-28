@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { submitContactForm, type ContactFormState } from "@/actions/contact";
 import type { Dictionary } from "@/i18n";
 
@@ -16,6 +17,11 @@ export default function ContactForm({ dict }: ContactFormProps) {
     status: "idle",
     message: "",
   });
+  const turnstileRef = useRef<TurnstileInstance>(null);
+
+  if (state.status === "success" || state.status === "error") {
+    turnstileRef.current?.reset();
+  }
 
   return (
     <div className="max-w-2xl mx-auto px-6">
@@ -98,6 +104,12 @@ export default function ContactForm({ dict }: ContactFormProps) {
             className="w-full px-4 py-3 rounded-lg border border-border bg-surface text-foreground focus:border-accent focus:outline-none transition-colors resize-none"
           />
         </div>
+
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+          options={{ theme: "dark" }}
+        />
 
         {state.message && (
           <div
