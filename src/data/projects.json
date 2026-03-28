@@ -4,7 +4,14 @@
       "id": "agrocomm",
       "title": "AgroComm",
       "description": "Aplicativo de controle financeiro pessoal com integração bancária e visualização de dados",
-      "tech": ["Next.js", "Socket.IO", "TypeScript", "Drizzle ORM", "TailwindCSS", "Cheerio"],
+      "tech": [
+        "Next.js",
+        "Socket.IO",
+        "TypeScript",
+        "Drizzle ORM",
+        "TailwindCSS",
+        "Cheerio"
+      ],
       "github": "https://github.com/agrocommodities/agrocomm",
       "demo": "https://agrocomm.com.br",
       "icon": "Bean",
