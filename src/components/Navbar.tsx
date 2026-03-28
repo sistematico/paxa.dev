@@ -21,42 +21,16 @@ export default function Navbar({ dict }: NavbarProps) {
   const n = dict?.nav;
 
   const navLinks = [
-    {
-      name: n?.home ?? "Início",
-      href: "/",
-      icon: Home,
-      className: "hover:text-blue-500/80",
-    },
-    {
-      name: n?.blog ?? "Blog",
-      href: "/posts",
-      icon: ScrollText,
-      className: "hover:text-red-500/80",
-    },
-    {
-      name: n?.projects ?? "Projetos",
-      href: "/projetos",
-      icon: HardHat,
-      className: "hover:text-cyan-500/80",
-    },
+    { name: n?.home ?? "Início", href: "/", icon: Home },
+    { name: n?.blog ?? "Blog", href: "/posts", icon: ScrollText },
+    { name: n?.projects ?? "Projetos", href: "/projetos", icon: HardHat },
     {
       name: n?.snippets ?? "Snippets",
       href: "/snippets",
       icon: SquareBottomDashedScissors,
-      className: "hover:text-green-500/80",
     },
-    {
-      name: n?.bookmarks ?? "Favoritos",
-      href: "/favoritos",
-      icon: Bookmark,
-      className: "hover:text-indigo-500/80",
-    },
-    {
-      name: n?.contact ?? "Contato",
-      href: "/contato",
-      icon: Mail,
-      className: "hover:text-yellow-500/80",
-    },
+    { name: n?.bookmarks ?? "Favoritos", href: "/favoritos", icon: Bookmark },
+    { name: n?.contact ?? "Contato", href: "/contato", icon: Mail },
   ];
 
   return (
@@ -65,7 +39,7 @@ export default function Navbar({ dict }: NavbarProps) {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded bg-surface hover:bg-border transition-colors duration-300"
+        className="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-md hover:bg-surface-alt/50 transition-colors"
         aria-label="Toggle menu"
       >
         <span
@@ -87,32 +61,32 @@ export default function Navbar({ dict }: NavbarProps) {
 
       {/* Mobile Menu */}
       <nav
-        className={`md:hidden absolute left-0 right-0 top-full z-40 bg-surface border-b-2 border-background-alt px-4 flex flex-col gap-3 overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`md:hidden absolute left-0 right-0 top-full z-40 bg-background/95 backdrop-blur-md border-b border-border/50 px-4 flex flex-col gap-1 overflow-hidden transition-all duration-300 ease-in-out ${
           isOpen ? "max-h-96 opacity-100 py-3" : "max-h-0 opacity-0 py-0"
         }`}
       >
         {navLinks.map((link) => (
           <Link
             key={link.name}
-            className={`flex items-center gap-1 rounded bg-background-alt/50 hover:bg-surface-alt/50 w-full px-2 py-1 transition-colors duration-300 ease-in-out ${link.className}`}
+            className="flex items-center gap-2 rounded-md text-muted hover:text-foreground hover:bg-surface-alt/50 w-full px-3 py-2 text-sm transition-colors"
             href={link.href}
             onClick={() => setIsOpen(false)}
           >
-            <link.icon className="size-5" />
+            <link.icon className="size-4" />
             {link.name}
           </Link>
         ))}
       </nav>
 
       {/* Desktop Menu */}
-      <nav className="hidden md:flex flex-row items-center justify-between gap-3">
+      <nav className="hidden md:flex flex-row items-center gap-1">
         {navLinks.map((link) => (
           <Link
             key={link.name}
-            className={`flex items-center gap-1 rounded bg-background-alt hover:bg-surface-alt px-2 py-1 transition-colors duration-300 ease-in-out ${link.className}`}
+            className="flex items-center gap-1.5 rounded-md text-sm text-muted hover:text-foreground px-2.5 py-1.5 transition-colors"
             href={link.href}
           >
-            <link.icon className="size-5" />
+            <link.icon className="size-4" />
             {link.name}
           </Link>
         ))}

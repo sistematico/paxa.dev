@@ -5,12 +5,14 @@ import { defaultLocale, isValidLocale } from "@/i18n/config";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip for API routes, _next internals, and static files with extensions
+  // Skip for API routes, _next internals, and static files with known extensions
   if (
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/og") ||
-    /\.[^/]+$/.test(pathname)
+    /\.(?:svg|png|jpe?g|gif|webp|webm|ico|mp3|mp4|ogg|wav|flac|woff2?|ttf|eot|css|js|json|xml|txt|pdf|map)$/i.test(
+      pathname,
+    )
   ) {
     return NextResponse.next();
   }
@@ -41,7 +43,9 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|images|audio).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon\\.ico|images/|audio/|.*\\.(?:svg|png|jpe?g|gif|webp|webm|ico|mp3|mp4|ogg|wav|flac|woff2?|ttf|eot|css|js|json|xml|txt|pdf|map)$).*)",
+  ],
 };
 
 export default proxy;

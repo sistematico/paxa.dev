@@ -2,7 +2,7 @@ import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-// import NextTopLoader from "@/components/TopLoader";
+import TopLoader from "@/components/TopLoader";
 import type { Metadata } from "next";
 import { locales, type Locale, defaultLocale, getBaseUrl } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
@@ -88,7 +88,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body className="font-(family-name:--font-nunito)">
-        {/* <NextTopLoader color="var(--color-accent)" showSpinner={true} /> */}
+        <TopLoader color="var(--color-accent)" showSpinner={true} />
         <ThemeProvider>
           <AudioPlayerProvider>
             <div className="flex flex-col min-h-screen">

@@ -15,25 +15,19 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
   const n = dict?.base;
 
   return (
-    <header className="sticky z-50 bg-surface border-b border-border top-0">
-      <div className="relative flex items-center gap-1 container mx-auto px-2 md:px-4 py-2">
-        <Link
-          href={homeHref}
-          className="mr-auto flex items-center gap-2 text-4xl font-semibold text-foreground/80"
-        >
+    <header className="sticky z-50 top-0 bg-background/80 backdrop-blur-md border-b border-border/50">
+      <div className="relative flex items-center gap-2 container mx-auto px-4 py-3">
+        <Link href={homeHref} className="mr-auto flex items-center gap-3 group">
           <img
-            className="w-12 h-12"
+            className="w-9 h-9"
             src="/images/logo.svg"
             alt={n?.title!}
-            width={50}
-            height={50}
+            width={36}
+            height={36}
           />
-          <div className="flex flex-col -gap-2">
-            <div className="text-3xl leading-tight -mb-1">{n?.title}</div>
-            <div className="text-xs/3 tracking-tighter text-foreground/60 lowercase italic">
-              {n?.subtitle}
-            </div>
-          </div>
+          <span className="text-lg font-semibold text-foreground tracking-tight group-hover:text-accent transition-colors">
+            {n?.title}
+          </span>
         </Link>
         <ThemeSwitcher />
         <LocaleSwitcher locale={locale} />

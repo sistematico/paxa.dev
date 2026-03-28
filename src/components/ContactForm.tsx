@@ -114,7 +114,7 @@ export default function ContactForm({ dict }: ContactFormProps) {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full px-8 py-4 bg-accent text-background rounded-lg font-semibold hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-8 py-3 bg-surface-alt text-foreground rounded-lg font-medium border border-border hover:border-accent hover:text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPending
             ? (dict?.sendingButton ?? "Enviando...")

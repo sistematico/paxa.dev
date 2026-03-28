@@ -1,0 +1,155 @@
+---
+title: "How to identify and remove suspicious items from macOS Login Items"
+description: "A complete guide to diagnosing and cleaning unknown items in System Settings > General > Login Items on macOS."
+publishedAt: "2026-03-27"
+tags: ["macos", "security", "terminal", "tips"]
+---
+
+If you opened **System Settings → General → Login Items & Extensions** and found items you don't recognize — or that simply won't leave the list — you're not alone. In this tutorial I'll show you how to identify where each one comes from and how to remove them for good.
+
+## What are Login Items?
+
+Login Items are apps, agents, and extensions that macOS starts automatically when you log in. Many of them are legitimate (such as cloud managers, menu bar utilities, etc.), but over time the list can accumulate items from uninstalled apps or unknown sources.
+
+---
+
+## Common items that raise questions
+
+### Benjamin Fleischer
+
+This name refers to the developer of the app **Hand Mirror** — a quick camera utility for the macOS menu bar. If you've ever installed or tested this app, it registers a login item as a system extension.
+
+**It's not malicious**, but if you no longer use the app, you can remove it.
+
+### Multiple Docker items
+
+Docker Desktop installs three separate components by default:
+
+- The main app (Docker Desktop)
+- A privileged helper (`com.docker.vmnetd`)
+- A socket agent for container communication
+
+Having three items is **normal**, but old reinstallations can generate duplicates.
+
+### sh
+
+This is the item that deserves the most attention. `sh` is the POSIX system shell (`/bin/sh`), and it shouldn't appear as a login item on its own. It may be a remnant of some development tool (Homebrew, some SDK), but it could also indicate something unwanted on the system.
+
+> **Tip:** Always investigate the `sh` item before any removal. Identify where it comes from before taking action.
+
+---
+
+## Step 1 — Diagnosis via Terminal
+
+Open **Terminal** (you can use `Cmd + Space` and search for "Terminal") and run the commands below:
+
+```bash
+# List all login items registered on the system (macOS Ventura 13+)
+sfltool dumpbtm
+```
+
+```bash
+# Launch agents for your user
+ls -la ~/Library/LaunchAgents/
+```
+
+```bash
+# System launch agents
+ls -la /Library/LaunchAgents/
+```
+
+```bash
+# System launch daemons
+ls -la /Library/LaunchDaemons/
+```
+
+The `sfltool dumpbtm` command is the most complete: it shows all registered items, where they came from, and which bundle ID is associated. With this output in hand, it's easy to identify the origin of any suspicious item.
+
+---
+
+## Step 2 — Removing each item
+
+### Removing Benjamin Fleischer (Hand Mirror)
+
+If you don't use the app, the cleanest way is to uninstall it completely. If the app is already gone from your machine but the item persists, look for leftover files:
+
+```bash
+find ~/Library/LaunchAgents/ -name "*handmirror*" -o -name "*fleischer*" 2>/dev/null
+find /Library/LaunchAgents/ -name "*handmirror*" -o -name "*fleischer*" 2>/dev/null
+```
+
+If you find any `.plist`, remove it as described in Step 3.
+
+### Cleaning duplicate Docker items
+
+First, check which Docker files exist:
+
+```bash
+find /Library/LaunchAgents/ -name "*docker*"
+find ~/Library/LaunchAgents/ -name "*docker*"
+find /Library/LaunchDaemons/ -name "*docker*"
+```
+
+The safest way to clean duplicates is to uninstall Docker Desktop through the app itself and reinstall:
+
+1. Open **Docker Desktop**
+2. Go to **Troubleshoot → Uninstall**
+3. Reinstall the latest version from [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+### Investigating the sh item
+
+```bash
+# See the full "sh" entry in login items
+sfltool dumpbtm | grep -i "sh"
+
+# Check if any LaunchAgent points to /bin/sh
+grep -r "/bin/sh" ~/Library/LaunchAgents/ /Library/LaunchAgents/ 2>/dev/null
+```
+
+If the `grep` result shows a `.plist` file, open it to see what it executes:
+
+```bash
+cat ~/Library/LaunchAgents/FILE_NAME.plist
+```
+
+This lets you see exactly which script or command is being run at login.
+
+---
+
+## Step 3 — Removing items that won't leave via the GUI
+
+When the macOS GUI won't let you remove an item (the `—` button is grayed out or the item comes back after restarting), you can remove it via Terminal.
+
+**For user items:**
+
+```bash
+launchctl unload ~/Library/LaunchAgents/FILE_NAME.plist
+rm ~/Library/LaunchAgents/FILE_NAME.plist
+```
+
+**For system items (requires administrator permission):**
+
+```bash
+sudo launchctl unload /Library/LaunchAgents/FILE_NAME.plist
+sudo rm /Library/LaunchAgents/FILE_NAME.plist
+```
+
+> Replace `FILE_NAME.plist` with the actual file name found during diagnosis.
+
+After removing, restart your Mac and check if the item is gone from **System Settings → General → Login Items**.
+
+---
+
+## Summary
+
+| Item | Likely origin | Risk | Recommended action |
+|---|---|---|---|
+| Benjamin Fleischer | Hand Mirror app | None | Uninstall the app |
+| 3× Docker | Docker Desktop | None | Reinstall Docker |
+| sh | Unknown | Investigate | Use `sfltool dumpbtm` to identify |
+
+The key takeaway here is: **before removing any item, identify its origin**. The `sfltool dumpbtm` command is your best ally for that. With the bundle name or file path in hand, removal via Terminal is straightforward and definitive.
+
+---
+
+Got an item in your list that doesn't fit the examples above? Drop a comment and we'll investigate it together.

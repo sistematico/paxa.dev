@@ -13,8 +13,8 @@
   --color-surface-alt: #3d4652;
   --color-border: #4f5b66;
   --color-muted: #65737e;
-  --color-accent: #8fa1b3;
-  --color-accent-hover: #a7bbd0;
+  --color-accent: #f6821f;
+  --color-accent-hover: #ff9a3c;
 }
 
 /* ── Light theme overrides ── */
@@ -26,8 +26,8 @@
   --color-surface-alt: #e8ecf0;
   --color-border: #d0d7de;
   --color-muted: #6b7b8d;
-  --color-accent: #5a7a9b;
-  --color-accent-hover: #476a8a;
+  --color-accent: #e0740f;
+  --color-accent-hover: #c76210;
 }
 
 body {

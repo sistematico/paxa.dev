@@ -1,4 +1,4 @@
-import type { Locale } from "./config";
+import { defaultLocale, locales, type Locale } from "./config";
 import type { Dictionary } from "./types";
 
 const dictionaries = {
@@ -7,7 +7,8 @@ const dictionaries = {
 };
 
 export async function getDictionary(locale: Locale): Promise<Dictionary> {
-  return dictionaries[locale]();
+  const safe = locales.includes(locale as Locale) ? locale : defaultLocale;
+  return dictionaries[safe]();
 }
 
 export type { Dictionary };

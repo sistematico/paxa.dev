@@ -107,6 +107,7 @@ export function formatDate(
   includeRelative = false,
   locale = "pt",
 ) {
+  if (!date) return "";
   const currentDate = new Date();
   if (!date.includes("T")) {
     date = `${date}T00:00:00`;
