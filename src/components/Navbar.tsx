@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   Home,
@@ -18,6 +19,7 @@ interface NavbarProps {
 
 export default function Navbar({ dict }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
   const n = dict?.nav;
 
   const navLinks = [
@@ -32,6 +34,14 @@ export default function Navbar({ dict }: NavbarProps) {
     { name: n?.bookmarks ?? "Favoritos", href: "/favoritos", icon: Bookmark },
     { name: n?.contact ?? "Contato", href: "/contato", icon: Mail },
   ];
+
+  // Strip locale prefix for matching (e.g. /en/posts -> /posts)
+  const cleanPath = pathname.replace(/^\/(pt|en)/, "") || "/";
+
+  function isActive(href: string) {
+    if (href === "/") return cleanPath === "/";
+    return cleanPath.startsWith(href);
+  }
 
   return (
     <>
@@ -68,7 +78,11 @@ export default function Navbar({ dict }: NavbarProps) {
         {navLinks.map((link) => (
           <Link
             key={link.name}
-            className="flex items-center gap-2 rounded-md text-muted hover:text-foreground hover:bg-surface-alt/50 w-full px-3 py-2 text-sm transition-colors"
+            className={`flex items-center gap-2 rounded-md w-full px-3 py-2 text-sm transition-colors ${
+              isActive(link.href)
+                ? "text-accent font-medium"
+                : "text-nav-link hover:text-foreground hover:bg-surface-alt/50"
+            }`}
             href={link.href}
             onClick={() => setIsOpen(false)}
           >
@@ -83,7 +97,11 @@ export default function Navbar({ dict }: NavbarProps) {
         {navLinks.map((link) => (
           <Link
             key={link.name}
-            className="flex items-center gap-1.5 rounded-md text-sm text-muted hover:text-foreground px-2.5 py-1.5 transition-colors"
+            className={`nav-glow flex items-center gap-1.5 rounded-md text-sm px-2.5 py-1.5 transition-colors ${
+              isActive(link.href)
+                ? "text-accent font-medium"
+                : "text-nav-link hover:text-foreground"
+            }`}
             href={link.href}
           >
             <link.icon className="size-4" />

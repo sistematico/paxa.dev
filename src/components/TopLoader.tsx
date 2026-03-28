@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import NProgress from "nprogress";
+
+const MIN_DISPLAY_MS = 250;
 
 interface TopLoaderProps {
   color?: string;
@@ -18,6 +20,9 @@ export default function TopLoader({
   speed = 200,
   zIndex = 1600,
 }: TopLoaderProps) {
+  const startTimeRef = useRef(0);
+  const doneTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
   useEffect(() => {
     NProgress.configure({
       showSpinner,
@@ -27,6 +32,28 @@ export default function TopLoader({
       template:
         '<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>',
     });
+
+    function startProgress() {
+      if (doneTimerRef.current) {
+        clearTimeout(doneTimerRef.current);
+        doneTimerRef.current = null;
+      }
+      startTimeRef.current = Date.now();
+      NProgress.start();
+    }
+
+    function doneProgress() {
+      const elapsed = Date.now() - startTimeRef.current;
+      const remaining = MIN_DISPLAY_MS - elapsed;
+      if (remaining > 0) {
+        doneTimerRef.current = setTimeout(() => {
+          NProgress.done();
+          doneTimerRef.current = null;
+        }, remaining);
+      } else {
+        NProgress.done();
+      }
+    }
 
     function findClosestAnchor(
       el: HTMLElement | null,
@@ -56,33 +83,34 @@ export default function TopLoader({
 
         if (isSamePath) return;
 
-        NProgress.start();
+        startProgress();
       } catch {
-        NProgress.start();
-        NProgress.done();
+        startProgress();
+        doneProgress();
       }
     }
 
     const origPush = window.history.pushState.bind(window.history);
     window.history.pushState = (...args) => {
-      NProgress.done();
+      doneProgress();
       return origPush(...args);
     };
 
     const origReplace = window.history.replaceState.bind(window.history);
     window.history.replaceState = (...args) => {
-      NProgress.done();
+      doneProgress();
       return origReplace(...args);
     };
 
     function handlePopState() {
-      NProgress.done();
+      doneProgress();
     }
 
     document.addEventListener("click", handleClick);
     window.addEventListener("popstate", handlePopState);
 
     return () => {
+      if (doneTimerRef.current) clearTimeout(doneTimerRef.current);
       document.removeEventListener("click", handleClick);
       window.removeEventListener("popstate", handlePopState);
       window.history.pushState = origPush;

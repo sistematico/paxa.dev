@@ -6,6 +6,8 @@ import { Globe } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { locales } from "@/i18n/config";
 
+const STORAGE_KEY = "paxa-locale";
+
 const localeLabels: Record<Locale, string> = {
   pt: "Português",
   en: "English",
@@ -24,6 +26,13 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
     }
     const host = target === "en" ? "en.paxa.dev" : "paxa.dev";
     return `https://${host}${pathname}`;
+  }
+
+  function handleSwitch(target: Locale) {
+    try {
+      localStorage.setItem(STORAGE_KEY, target);
+    } catch {}
+    setOpen(false);
   }
 
   useEffect(() => {
@@ -58,7 +67,7 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
           <a
             key={l}
             href={switchTo(l)}
-            onClick={() => setOpen(false)}
+            onClick={() => handleSwitch(l)}
             className={`flex items-center gap-2 px-3 py-1.5 text-sm transition-colors text-foreground 
               ${l === locale ? "font-semibold" : "hover:bg-surface-alt"}`}
           >

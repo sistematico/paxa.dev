@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TopLoader from "@/components/TopLoader";
+import LocaleDetector from "@/components/LocaleDetector";
 import type { Metadata } from "next";
 import { locales, type Locale, defaultLocale, getBaseUrl } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
@@ -67,7 +68,12 @@ export default async function LocaleLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("paxa-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`,
+            __html: `(function(){try{var t=localStorage.getItem("paxa-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t)}else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches){document.documentElement.setAttribute("data-theme","light")}}catch(e){}})()`,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem("paxa-font-size");if(s)document.documentElement.style.fontSize=s}catch(e){}})()`,
           }}
         />
         <link
@@ -88,6 +94,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body className="font-(family-name:--font-nunito)">
+        <LocaleDetector locale={safeLocale} />
         <TopLoader color="var(--color-accent)" showSpinner={true} />
         <ThemeProvider>
           <AudioPlayerProvider>

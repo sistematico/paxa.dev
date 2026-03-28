@@ -15,6 +15,7 @@
   --color-muted: #65737e;
   --color-accent: #f6821f;
   --color-accent-hover: #ff9a3c;
+  --color-nav-link: #8a929b;
 }
 
 /* ── Light theme overrides ── */
@@ -28,6 +29,7 @@
   --color-muted: #6b7b8d;
   --color-accent: #e0740f;
   --color-accent-hover: #c76210;
+  --color-nav-link: #3d4652;
 }
 
 body {
@@ -38,6 +40,196 @@ body {
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
+}
+
+/* ── Nav glow hover effect ── */
+.nav-glow {
+  position: relative;
+}
+
+.nav-glow:hover {
+  filter: drop-shadow(0 0 4px var(--color-accent));
+  animation: nav-pulse 3s steps(1, end) infinite;
+}
+
+@keyframes nav-pulse {
+  0% {
+    filter: drop-shadow(
+      0 0 5px color-mix(in srgb, var(--color-accent) 60%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 60%, var(--color-nav-link));
+  }
+  4% {
+    filter: drop-shadow(
+      0 0 2px color-mix(in srgb, var(--color-accent) 22%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 25%, var(--color-nav-link));
+  }
+  7% {
+    filter: drop-shadow(
+      0 0 6px color-mix(in srgb, var(--color-accent) 65%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 65%, var(--color-nav-link));
+  }
+  10% {
+    filter: drop-shadow(
+      0 0 2px color-mix(in srgb, var(--color-accent) 16%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 20%, var(--color-nav-link));
+  }
+  14% {
+    filter: drop-shadow(
+      0 0 5px color-mix(in srgb, var(--color-accent) 55%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 52%, var(--color-nav-link));
+  }
+  18% {
+    filter: drop-shadow(
+      0 0 3px color-mix(in srgb, var(--color-accent) 28%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 30%, var(--color-nav-link));
+  }
+  21% {
+    filter: drop-shadow(
+      0 0 7px color-mix(in srgb, var(--color-accent) 70%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 70%, var(--color-nav-link));
+  }
+  23% {
+    filter: drop-shadow(
+      0 0 2px color-mix(in srgb, var(--color-accent) 18%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 22%, var(--color-nav-link));
+  }
+  27% {
+    filter: drop-shadow(
+      0 0 5px color-mix(in srgb, var(--color-accent) 50%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 48%, var(--color-nav-link));
+  }
+  32% {
+    filter: drop-shadow(
+      0 0 3px color-mix(in srgb, var(--color-accent) 34%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 35%, var(--color-nav-link));
+  }
+  35% {
+    filter: drop-shadow(
+      0 0 6px color-mix(in srgb, var(--color-accent) 65%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 62%, var(--color-nav-link));
+  }
+  38% {
+    filter: drop-shadow(
+      0 0 2px color-mix(in srgb, var(--color-accent) 24%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 26%, var(--color-nav-link));
+  }
+  42% {
+    filter: drop-shadow(
+      0 0 6px color-mix(in srgb, var(--color-accent) 60%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 56%, var(--color-nav-link));
+  }
+  47% {
+    filter: drop-shadow(
+      0 0 2px color-mix(in srgb, var(--color-accent) 16%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 20%, var(--color-nav-link));
+  }
+  50% {
+    filter: drop-shadow(
+      0 0 5px color-mix(in srgb, var(--color-accent) 55%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 54%, var(--color-nav-link));
+  }
+  53% {
+    filter: drop-shadow(
+      0 0 3px color-mix(in srgb, var(--color-accent) 30%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 30%, var(--color-nav-link));
+  }
+  58% {
+    filter: drop-shadow(
+      0 0 7px color-mix(in srgb, var(--color-accent) 70%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 68%, var(--color-nav-link));
+  }
+  61% {
+    filter: drop-shadow(
+      0 0 2px color-mix(in srgb, var(--color-accent) 22%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 24%, var(--color-nav-link));
+  }
+  65% {
+    filter: drop-shadow(
+      0 0 5px color-mix(in srgb, var(--color-accent) 48%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 45%, var(--color-nav-link));
+  }
+  70% {
+    filter: drop-shadow(
+      0 0 3px color-mix(in srgb, var(--color-accent) 28%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 28%, var(--color-nav-link));
+  }
+  74% {
+    filter: drop-shadow(
+      0 0 6px color-mix(in srgb, var(--color-accent) 65%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 62%, var(--color-nav-link));
+  }
+  78% {
+    filter: drop-shadow(
+      0 0 2px color-mix(in srgb, var(--color-accent) 18%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 22%, var(--color-nav-link));
+  }
+  82% {
+    filter: drop-shadow(
+      0 0 6px color-mix(in srgb, var(--color-accent) 58%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 56%, var(--color-nav-link));
+  }
+  86% {
+    filter: drop-shadow(
+      0 0 2px color-mix(in srgb, var(--color-accent) 24%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 26%, var(--color-nav-link));
+  }
+  90% {
+    filter: drop-shadow(
+      0 0 6px color-mix(in srgb, var(--color-accent) 62%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 60%, var(--color-nav-link));
+  }
+  94% {
+    filter: drop-shadow(
+      0 0 2px color-mix(in srgb, var(--color-accent) 16%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 20%, var(--color-nav-link));
+  }
+  97% {
+    filter: drop-shadow(
+      0 0 5px color-mix(in srgb, var(--color-accent) 50%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 48%, var(--color-nav-link));
+  }
+  100% {
+    filter: drop-shadow(
+      0 0 3px color-mix(in srgb, var(--color-accent) 34%, transparent)
+    );
+    color: color-mix(in srgb, var(--color-accent) 32%, var(--color-nav-link));
+  }
+}
+
+/* ── Logo ── */
+.header-logo {
+  color: #cac1ba;
+}
+
+[data-theme="light"] .header-logo {
+  color: #4b423a;
 }
 
 h1 {
