@@ -8,15 +8,16 @@ Site pessoal / blog / portfólio de um desenvolvedor fullstack. URL: <https://pa
 
 | Camada        | Tecnologia                             |
 | ------------- | -------------------------------------- |
-| Framework     | Next.js 16 (App Router)                |
+| Framework     | vinext (Vite + App Router)             |
 | Runtime       | React 19, TypeScript 5                 |
 | Estilo        | Tailwind CSS v4 (`@tailwindcss/postcss`) |
 | Conteúdo      | MDX (`next-mdx-remote`, `@next/mdx`)  |
+| Bundler       | Vite 8                                 |
 | Banco de dados | Drizzle ORM + better-sqlite3 (SQLite) |
 | Validação     | Zod                                    |
 | E-mail        | Nodemailer                             |
 | Ícones        | lucide-react                           |
-| Code highlight | sugar-high                            |
+| Code highlight | shiki                                 |
 | Lint/Format   | Biome 2                                |
 | Gerenciador   | pnpm                                   |
 

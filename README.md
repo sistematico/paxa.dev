@@ -4,9 +4,10 @@ Site pessoal, blog e portfólio — [paxa.dev](https://paxa.dev)
 
 ## Stack
 
-- **Framework**: Next.js 16 (App Router) + React 19
+- **Framework**: vinext (Vite + App Router) + React 19
 - **Linguagem**: TypeScript 5
 - **Estilo**: Tailwind CSS v4
+- **Bundler**: Vite 8
 - **Conteúdo**: MDX (next-mdx-remote, @next/mdx)
 - **Banco de dados**: Drizzle ORM + better-sqlite3 (SQLite)
 - **Validação**: Zod

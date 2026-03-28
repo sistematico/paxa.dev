@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="flex items-center gap-3">
           <a
             className="text-muted hover:text-foreground transition-colors"
-            href="https://reddit.com/u/sistematico"
+            href="https://reddit.com/u/lsbrum"
             target="_blank"
             rel="noopener noreferrer"
           >

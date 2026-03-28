@@ -25,7 +25,7 @@ export function proxy(request: NextRequest) {
   const firstSegment = pathname.split("/")[1];
   if (isValidLocale(firstSegment)) {
     if (process.env.NODE_ENV !== "production") {
-      // In dev, the locale is already in the path — let Next.js route it via [locale]
+      // In dev, the locale is already in the path — let vinext route it via [locale]
       return NextResponse.next();
     }
     const cleanPath = pathname.replace(/^\/(pt|en)/, "") || "/";
