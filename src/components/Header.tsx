@@ -21,7 +21,7 @@ export default function Header({ locale = "pt", dict }: HeaderProps) {
           <img
             className="w-9 h-9"
             src="/images/logo.svg"
-            alt={n?.title!}
+            alt={n?.title}
             width={36}
             height={36}
           />
