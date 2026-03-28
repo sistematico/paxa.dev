@@ -1,10 +1,20 @@
 {
   "projects": [
     {
+      "id": "agrocomm",
+      "title": "AgroComm",
+      "description": "Aplicativo de controle financeiro pessoal com integração bancária e visualização de dados",
+      "tech": ["Next.js", "Socket.IO", "TypeScript", "Drizzle ORM", "TailwindCSS", "Cheerio"],
+      "github": "https://github.com/agrocommodities/agrocomm",
+      "demo": "https://agrocomm.com.br",
+      "icon": "Bean",
+      "featured": true
+    },
+    {
       "id": "reconta",
       "title": "ReConta",
       "description": "Aplicativo de controle financeiro pessoal com integração bancária e visualização de dados",
-      "tech": ["Next.js", "React", "Socket.IO", "TypeScript", "Drizzle ORM"],
+      "tech": ["Next.js", "Socket.IO", "TypeScript", "Drizzle ORM"],
       "github": "https://github.com/paxa/reconta",
       "demo": "https://reconta.app",
       "icon": "Calculator",
@@ -15,10 +25,10 @@
       "title": "Som do Mato",
       "description": "Website de rádio com player em tempo real e gerenciamento de conteúdo",
       "tech": ["Next.js", "TailwindCSS", "TypeScript"],
-      "github": "https://github.com/paxa/som-do-mato",
-      "demo": "https://somdomato.com.br",
+      "github": "https://github.com/somdomato/somdomato",
+      "demo": "https://somdomato.com",
       "icon": "Radio",
-      "featured": true
+      "featured": false
     }
   ]
 }

@@ -1,12 +1,21 @@
 {
   "bookmarks": [
     {
+      "id": "vinext",
+      "title": "Vinext",
+      "description": "",
+      "url": "https://vinext.io",
+      "category": "Documentação",
+      "tags": ["Next.js", "TypeScript"],
+      "featured": true
+    },
+    {
       "id": "react-docs",
       "title": "React Documentation",
       "description": "A documentação oficial do React com guias, referências e exemplos",
       "url": "https://react.dev",
       "category": "Documentação",
-      "tags": ["React", "Frontend", "JavaScript"],
+      "tags": ["React", "Frontend", "TypeScript", "JavaScript"],
       "featured": true
     },
     {
