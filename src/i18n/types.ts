@@ -7,6 +7,7 @@ export interface Dictionary {
     home: string;
     blog: string;
     projects: string;
+    cheatsheets: string;
     snippets: string;
     bookmarks: string;
     contact: string;
@@ -54,6 +55,15 @@ export interface Dictionary {
     seeAllSnippets: string;
     backToSnippets: string;
     totalSnippets: string;
+  };
+  cheatsheets: {
+    title: string;
+    metaTitle: string;
+    metaDesc: string;
+    noCheatSheetsFound: string;
+    seeAllCheatSheets: string;
+    backToCheatSheets: string;
+    totalCheatSheets: string;
   };
   projects: {
     title: string;

@@ -1,0 +1,40 @@
+---
+title: "Docker: Comandos Úteis"
+publishedAt: "2026-04-07"
+summary: "Referência rápida de comandos Docker para imagens, containers e limpeza."
+category: "Containers"
+tags: ["docker", "containers", "devops", "cli"]
+---
+
+# Docker: Comandos Úteis
+
+## Imagens
+
+| Comando | Ação |
+| --- | --- |
+| `docker images` | Lista imagens locais |
+| `docker pull node:22-alpine` | Baixa imagem |
+| `docker build -t app:latest .` | Builda imagem |
+| `docker rmi <image>` | Remove imagem |
+
+## Containers
+
+| Comando | Ação |
+| --- | --- |
+| `docker ps` | Containers em execução |
+| `docker ps -a` | Todos os containers |
+| `docker run --rm -it ubuntu bash` | Roda container interativo |
+| `docker stop <container>` | Para container |
+| `docker logs -f <container>` | Acompanha logs |
+
+## Limpeza
+
+| Comando | Ação |
+| --- | --- |
+| `docker system df` | Mostra uso de disco |
+| `docker system prune` | Remove recursos não usados |
+| `docker volume prune` | Remove volumes órfãos |
+
+## Dica
+
+Use `--rm` em containers temporários para evitar acúmulo de lixo local.

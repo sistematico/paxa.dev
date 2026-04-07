@@ -1,0 +1,40 @@
+---
+title: "Docker: Useful Commands"
+publishedAt: "2026-04-07"
+summary: "Quick reference for Docker image, container, and cleanup commands."
+category: "Containers"
+tags: ["docker", "containers", "devops", "cli"]
+---
+
+# Docker: Useful Commands
+
+## Images
+
+| Command | Action |
+| --- | --- |
+| `docker images` | List local images |
+| `docker pull node:22-alpine` | Pull image |
+| `docker build -t app:latest .` | Build image |
+| `docker rmi <image>` | Remove image |
+
+## Containers
+
+| Command | Action |
+| --- | --- |
+| `docker ps` | Running containers |
+| `docker ps -a` | All containers |
+| `docker run --rm -it ubuntu bash` | Run interactive container |
+| `docker stop <container>` | Stop container |
+| `docker logs -f <container>` | Follow logs |
+
+## Cleanup
+
+| Command | Action |
+| --- | --- |
+| `docker system df` | Show disk usage |
+| `docker system prune` | Remove unused resources |
+| `docker volume prune` | Remove orphan volumes |
+
+## Tip
+
+Use `--rm` for temporary containers to avoid local clutter.

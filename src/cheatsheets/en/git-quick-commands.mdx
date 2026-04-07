@@ -1,0 +1,42 @@
+---
+title: "Git: Quick Commands"
+publishedAt: "2026-04-07"
+summary: "Cheat sheet with the most common Git commands used in daily development."
+category: "Git"
+tags: ["git", "version-control", "cli"]
+---
+
+# Git: Quick Commands
+
+## Status and history
+
+| Command | Action |
+| --- | --- |
+| `git status -sb` | Short status output |
+| `git log --oneline --graph --decorate -20` | Compact visual history |
+| `git diff` | Unstaged changes |
+| `git diff --staged` | Staged changes |
+
+## Daily workflow
+
+| Command | Action |
+| --- | --- |
+| `git checkout -b feat/my-feature` | Create a branch |
+| `git add .` | Stage changes |
+| `git commit -m "feat: ..."` | Create commit |
+| `git pull --rebase origin main` | Update branch without merge commit |
+| `git push -u origin feat/my-feature` | Publish branch |
+
+## Quick fixes
+
+| Command | Action |
+| --- | --- |
+| `git commit --amend` | Edit last commit |
+| `git restore --staged <file>` | Unstage file |
+| `git restore <file>` | Discard local changes |
+| `git stash push -m "wip"` | Save temporary work |
+| `git stash pop` | Restore stash |
+
+## Tip
+
+Use `git pull --rebase` to keep a cleaner, linear feature-branch history.

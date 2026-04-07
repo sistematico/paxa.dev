@@ -9,6 +9,7 @@ const en: Dictionary = {
     home: "Home",
     blog: "Blog",
     projects: "Projects",
+    cheatsheets: "CheatSheets",
     snippets: "Snippets",
     bookmarks: "Bookmarks",
     contact: "Contact",
@@ -56,6 +57,15 @@ const en: Dictionary = {
     seeAllSnippets: "See all snippets →",
     backToSnippets: "Back to snippets",
     totalSnippets: "Total snippets:",
+  },
+  cheatsheets: {
+    title: "CheatSheets",
+    metaTitle: "CheatSheets",
+    metaDesc: "Quick references for terminal, Linux, and developer tools",
+    noCheatSheetsFound: "No cheatsheet found",
+    seeAllCheatSheets: "See all cheatsheets →",
+    backToCheatSheets: "Back to cheatsheets",
+    totalCheatSheets: "Total cheatsheets:",
   },
   projects: {
     title: "Projects",

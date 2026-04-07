@@ -1,0 +1,246 @@
+---
+title: "Yazi: Cheat Sheet Completo de Atalhos de Teclado"
+publishedAt: "2026-04-07"
+summary: "Referência rápida e completa de todos os atalhos do Yazi, o gerenciador de arquivos de terminal ultrarrápido."
+category: "Terminal"
+tags: ["yazi", "terminal", "linux", "produtividade", "cli"]
+---
+
+# Yazi: Cheat Sheet Completo de Atalhos de Teclado
+
+[Yazi](https://github.com/sxyazi/yazi) é um gerenciador de arquivos de terminal escrito em Rust, com navegação no estilo Vim, preview em tempo real e altamente configurável. Este guia cobre todos os atalhos essenciais para você dominar o Yazi do zero.
+
+---
+
+## Navegação entre arquivos
+
+| Tecla | Ação |
+|-------|------|
+| `j` / `↓` | Próximo arquivo |
+| `k` / `↑` | Arquivo anterior |
+| `gg` | Ir para o topo da lista |
+| `G` | Ir para o final da lista |
+| `Ctrl+d` | Descer meia página |
+| `Ctrl+u` | Subir meia página |
+| `Ctrl+f` / `PageDown` | Descer página inteira |
+| `Ctrl+b` / `PageUp` | Subir página inteira |
+
+---
+
+## Navegação entre diretórios
+
+| Tecla | Ação |
+|-------|------|
+| `h` / `←` | Voltar ao diretório pai |
+| `l` / `→` | Entrar no diretório filho |
+| `H` | Voltar ao diretório anterior (histórico) |
+| `L` | Avançar no histórico de diretórios |
+
+### Atalhos de goto rápido
+
+| Tecla | Destino |
+|-------|---------|
+| `gh` | `~` (home) |
+| `gc` | `~/.config` |
+| `gd` | `~/Downloads` |
+| `g Space` | Navegação interativa |
+| `gf` | Seguir o symlink em foco |
+
+> **Dica:** Combine `z` para buscar via **fzf** ou `Z` para saltar com **zoxide** — ambos integram nativamente ao Yazi.
+
+---
+
+## Operações em arquivos
+
+| Tecla | Ação |
+|-------|------|
+| `o` / `Enter` | Abrir arquivo(s) selecionado(s) |
+| `O` / `Shift+Enter` | Abrir com escolha interativa de programa |
+| `a` | Criar arquivo (terminar com `/` para criar diretório) |
+| `r` | Renomear arquivo(s) |
+| `d` | Mover para lixeira |
+| `D` | Deletar permanentemente |
+| `y` | Copiar (yank) |
+| `x` | Recortar (cut) |
+| `p` | Colar |
+| `P` | Colar (sobrescrever se existir) |
+| `Y` / `X` | Cancelar operação de yank |
+| `-` | Criar symlink (caminho absoluto) |
+| `_` | Criar symlink (caminho relativo) |
+| `Ctrl+-` | Criar hardlink |
+
+---
+
+## Seleção e modo visual
+
+| Tecla | Ação |
+|-------|------|
+| `Space` | Alternar seleção do arquivo atual e mover para o próximo |
+| `v` | Entrar no modo visual (seleção) |
+| `V` | Entrar no modo visual (desseleção) |
+| `Ctrl+a` | Selecionar todos os arquivos |
+| `Ctrl+r` | Inverter seleção |
+| `Esc` | Sair do modo visual / limpar seleção |
+
+---
+
+## Copiar informações do arquivo
+
+| Tecla | Ação |
+|-------|------|
+| `cc` | Copiar o caminho completo |
+| `cd` | Copiar o caminho do diretório |
+| `cf` | Copiar o nome do arquivo |
+| `cn` | Copiar o nome sem extensão |
+
+---
+
+## Busca e filtro
+
+| Tecla | Ação |
+|-------|------|
+| `s` | Buscar arquivos por nome (via `fd`) |
+| `S` | Buscar arquivos por conteúdo (via `ripgrep`) |
+| `Ctrl+s` | Cancelar busca em andamento |
+| `/` | Encontrar próximo arquivo (inline) |
+| `?` | Encontrar arquivo anterior (inline) |
+| `n` | Navegar para o próximo resultado |
+| `N` | Navegar para o resultado anterior |
+| `f` | Filtrar arquivos na view atual |
+
+> **Diferença importante:** `s`/`S` fazem busca recursiva no sistema de arquivos. `/`/`?` filtram apenas dentro da listagem atual.
+
+---
+
+## Ordenação
+
+| Tecla | Ação |
+|-------|------|
+| `,m` | Ordenar por data de modificação |
+| `,M` | Ordenar por data de modificação (reverso) |
+| `,b` | Ordenar por data de criação |
+| `,B` | Ordenar por data de criação (reverso) |
+| `,e` | Ordenar por extensão |
+| `,E` | Ordenar por extensão (reverso) |
+| `,a` | Ordenar alfabeticamente |
+| `,A` | Ordenar alfabeticamente (reverso) |
+| `,n` | Ordenação natural (ex: file2 antes de file10) |
+| `,N` | Ordenação natural (reverso) |
+| `,s` | Ordenar por tamanho |
+| `,S` | Ordenar por tamanho (reverso) |
+| `,r` | Ordenação aleatória |
+
+---
+
+## Linemode (informações exibidas ao lado dos arquivos)
+
+| Tecla | Informação exibida |
+|-------|-------------------|
+| `ms` | Tamanho |
+| `mp` | Permissões |
+| `mb` | Data de criação (btime) |
+| `mm` | Data de modificação (mtime) |
+| `mo` | Dono (owner) |
+| `mn` | Nenhuma (limpar) |
+
+---
+
+## Preview (spot)
+
+| Tecla | Ação |
+|-------|------|
+| `Tab` | Abrir/fechar preview detalhado do arquivo em foco |
+| `K` | Rolar preview para cima |
+| `J` | Rolar preview para baixo |
+
+---
+
+## Abas (tabs)
+
+| Tecla | Ação |
+|-------|------|
+| `t` | Criar nova aba no diretório atual |
+| `1` – `9` | Ir direto para a aba N |
+| `[` | Ir para a aba anterior |
+| `]` | Ir para a próxima aba |
+| `{` | Trocar aba com a anterior |
+| `}` | Trocar aba com a próxima |
+
+---
+
+## Shell e comandos externos
+
+| Tecla | Ação |
+|-------|------|
+| `;` | Abrir shell interativo |
+| `:` | Rodar comando shell (aguarda terminar) |
+| `.` | Alternar visibilidade de arquivos ocultos |
+| `z` | Saltar para arquivo/diretório via **fzf** |
+| `Z` | Saltar para diretório via **zoxide** |
+
+---
+
+## Gerenciador de tarefas
+
+| Tecla | Ação |
+|-------|------|
+| `w` | Abrir/fechar o gerenciador de tarefas |
+| `j` / `k` | Navegar entre tarefas |
+| `Enter` | Inspecionar tarefa |
+| `x` | Cancelar tarefa |
+
+---
+
+## Geral
+
+| Tecla | Ação |
+|-------|------|
+| `q` | Sair (salva diretório atual) |
+| `Q` | Sair (sem salvar diretório) |
+| `Ctrl+c` | Fechar aba atual (ou sair se for a última) |
+| `Ctrl+z` | Suspender processo |
+| `~` / `F1` | Abrir ajuda |
+
+---
+
+## Referência visual rápida
+
+```
+NAVEGAÇÃO         ARQUIVOS           BUSCA
+──────────        ────────           ─────
+k  ↑ anterior    o  abrir           s  busca por nome (fd)
+j  ↓ próximo     a  criar           S  busca por conteúdo (rg)
+h  ← pai         r  renomear        /  encontrar próximo
+l  → filho        d  lixeira         ?  encontrar anterior
+H  histórico ←   D  deletar         f  filtrar view
+L  histórico →   y  copiar          n  próximo resultado
+gg topo          x  recortar        N  resultado anterior
+G  fim           p  colar
+
+SELEÇÃO           ABAS               GOTO
+───────           ────               ────
+Space  toggle     t  nova aba        gh  ~
+v      visual     [  aba anterior    gc  ~/.config
+Ctrl+a todos      ]  próxima aba     gd  ~/Downloads
+Ctrl+r inverter   1-9 aba direta     z   fzf
+```
+
+---
+
+## Configurando seus próprios atalhos
+
+Os atalhos do Yazi são definidos em `~/.config/yazi/keymap.toml`. Para sobrescrever ou adicionar um atalho, basta editar o arquivo:
+
+```toml
+[mgr]
+keymap = [
+  # Atalho personalizado: ir para projetos com gp
+  { on = [ "g", "p" ], run = "cd ~/projects", desc = "Go ~/projects" },
+]
+```
+
+> **Nota:** A configuração usa o modelo de **prepend** — os atalhos definidos pelo usuário têm prioridade sobre os padrões.
+
+---
+
+Yazi é um dos gerenciadores de arquivos de terminal mais modernos disponíveis hoje. Com esses atalhos na ponta dos dedos, a navegação pelo sistema de arquivos fica tão fluida quanto editar texto no Neovim.

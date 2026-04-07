@@ -19,6 +19,7 @@ export default async function sitemap() {
     const routes = [
       "",
       "/posts",
+      "/cheatsheets",
       "/snippets",
       "/projetos",
       "/favoritos",
