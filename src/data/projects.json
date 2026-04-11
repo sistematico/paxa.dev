@@ -36,6 +36,16 @@
       "demo": "https://somdomato.com",
       "icon": "Radio",
       "featured": false
+    },
+    {
+      "id": "macunaima",
+      "title": "Macunaíma",
+      "description": "",
+      "tech": ["GrammyJS"],
+      "github": "https://github.com/sistematico/macunaima",
+      "demo": "",
+      "icon": "Robot",
+      "featured": false
     }
   ]
 }

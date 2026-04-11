@@ -27,4 +27,4 @@ export const slugTranslations: Record<string, Record<string, string | null>> = {
     "yazi-atalhos": "yazi-shortcuts",
     "yazi-cheatsheet-completo": null,
   },
-}
+};
