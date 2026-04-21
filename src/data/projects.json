@@ -36,6 +36,17 @@
       "demo": "https://somdomato.com",
       "icon": "Radio",
       "featured": false
+    },
+    {
+      "id": "gs1",
+      "title": "GS1 DataMatrix Scanner",
+      "description": "",
+      "tech": ["Kotlin"],
+      "github": "https://github.com/sistematico/gs1-scanner",
+      "demo": "https://sistematico.github.io/gs1-scanner",
+      "icon": "Radio",
+      "featured": false
     }
+
   ]
 }
