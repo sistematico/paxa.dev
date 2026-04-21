@@ -45,7 +45,9 @@
       "github": "https://github.com/sistematico/gs1-scanner",
       "demo": "https://sistematico.github.io/gs1-scanner",
       "icon": "Radio",
+      "featured": false
     },
+    {
       "id": "macunaima",
       "title": "Macunaíma",
       "description": "",
