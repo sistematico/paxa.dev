@@ -52,6 +52,7 @@ export default function Projects() {
                     </div>
 
                     <div className="flex gap-4">
+                      {project.github && (
                       <a
                         href={project.github}
                         target="_blank"
@@ -60,6 +61,7 @@ export default function Projects() {
                       >
                         GitHub →
                       </a>
+                      )}
                       {project.demo && (
                         <a
                           href={project.demo}

@@ -9,6 +9,7 @@ import {
   Mail,
   HardHat,
   Bookmark,
+  FileText,
   SquareBottomDashedScissors,
 } from "lucide-react";
 import type { Dictionary } from "@/i18n";
@@ -26,6 +27,11 @@ export default function Navbar({ dict }: NavbarProps) {
     { name: n?.home ?? "Início", href: "/", icon: Home },
     { name: n?.blog ?? "Blog", href: "/posts", icon: ScrollText },
     { name: n?.projects ?? "Projetos", href: "/projetos", icon: HardHat },
+    {
+      name: n?.cheatsheets ?? "CheatSheets",
+      href: "/cheatsheets",
+      icon: FileText,
+    },
     {
       name: n?.snippets ?? "Snippets",
       href: "/snippets",

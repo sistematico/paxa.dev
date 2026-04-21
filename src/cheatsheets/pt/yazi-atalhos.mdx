@@ -1,0 +1,56 @@
+---
+title: "Yazi: Cheat Sheet de Atalhos"
+publishedAt: "2026-04-07"
+summary: "Referência rápida com os atalhos essenciais do Yazi para navegação e produtividade no terminal."
+category: "Terminal"
+tags: ["yazi", "linux", "cli", "produtividade"]
+---
+
+# Yazi: Cheat Sheet de Atalhos
+
+[Yazi](https://github.com/sxyazi/yazi) é um gerenciador de arquivos de terminal extremamente rápido, com navegação inspirada em Vim.
+
+## Navegação
+
+| Tecla | Ação |
+| --- | --- |
+| `j` / `↓` | Próximo arquivo |
+| `k` / `↑` | Arquivo anterior |
+| `h` / `←` | Voltar ao diretório pai |
+| `l` / `→` | Entrar no diretório filho |
+| `gg` | Ir para o topo |
+| `G` | Ir para o fim |
+
+## Operações com arquivos
+
+| Tecla | Ação |
+| --- | --- |
+| `o` / `Enter` | Abrir arquivo |
+| `a` | Criar arquivo/pasta |
+| `r` | Renomear |
+| `d` | Enviar para lixeira |
+| `D` | Deletar permanentemente |
+| `y` / `x` / `p` | Copiar / recortar / colar |
+
+## Busca e filtro
+
+| Tecla | Ação |
+| --- | --- |
+| `s` | Buscar por nome (`fd`) |
+| `S` | Buscar por conteúdo (`rg`) |
+| `/` / `?` | Buscar próximo/anterior na lista |
+| `f` | Filtrar itens da view atual |
+
+## Abas e utilidades
+
+| Tecla | Ação |
+| --- | --- |
+| `t` | Nova aba |
+| `[` / `]` | Aba anterior/próxima |
+| `z` | Salto com `fzf` |
+| `Z` | Salto com `zoxide` |
+| `~` | Abrir ajuda |
+
+## Dica
+
+Para personalizar atalhos, edite `~/.config/yazi/keymap.toml`.

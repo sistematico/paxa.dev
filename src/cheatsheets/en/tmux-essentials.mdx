@@ -1,0 +1,43 @@
+---
+title: "Tmux: Essential Shortcuts"
+publishedAt: "2026-04-07"
+summary: "Essential tmux shortcuts for sessions, windows, and panes."
+category: "Terminal"
+tags: ["tmux", "terminal", "productivity", "linux"]
+---
+
+# Tmux: Essential Shortcuts
+
+Default prefix: `Ctrl+b`
+
+## Sessions
+
+| Key/Command | Action |
+| --- | --- |
+| `tmux new -s dev` | Create session named dev |
+| `tmux ls` | List sessions |
+| `tmux attach -t dev` | Attach to session |
+| `Prefix + d` | Detach session |
+
+## Windows
+
+| Key | Action |
+| --- | --- |
+| `Prefix + c` | New window |
+| `Prefix + ,` | Rename window |
+| `Prefix + n / p` | Next / previous |
+| `Prefix + &` | Close window |
+
+## Panes
+
+| Key | Action |
+| --- | --- |
+| `Prefix + %` | Split vertically |
+| `Prefix + "` | Split horizontally |
+| `Prefix + o` | Switch pane |
+| `Prefix + x` | Close pane |
+| `Prefix + z` | Zoom current pane |
+
+## Tip
+
+In `~/.tmux.conf`, set `set -g mouse on` to resize panes with the mouse.

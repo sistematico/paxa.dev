@@ -45,8 +45,15 @@
       "github": "https://github.com/sistematico/gs1-scanner",
       "demo": "https://sistematico.github.io/gs1-scanner",
       "icon": "Radio",
+    },
+      "id": "macunaima",
+      "title": "Macunaíma",
+      "description": "",
+      "tech": ["GrammyJS"],
+      "github": "https://github.com/sistematico/macunaima",
+      "demo": "",
+      "icon": "Robot",
       "featured": false
     }
-
   ]
 }

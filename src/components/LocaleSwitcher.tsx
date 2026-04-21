@@ -1,10 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { Globe } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { locales } from "@/i18n/config";
+import { slugTranslations } from "@/data/slug-translations";
 
 const STORAGE_KEY = "paxa-locale";
 
@@ -12,6 +14,18 @@ const localeLabels: Record<Locale, string> = {
   pt: "Português",
   en: "English",
 };
+
+function translatePath(pathname: string): string {
+  const match = pathname.match(/^\/(posts|cheatsheets|snippets)\/(.+)$/);
+  if (!match) return pathname;
+
+  const [, contentType, currentSlug] = match;
+  const translations = slugTranslations[contentType];
+  if (!translations || !(currentSlug in translations)) return pathname;
+
+  const translated = translations[currentSlug];
+  return translated ? `/${contentType}/${translated}` : `/${contentType}`;
+}
 
 export default function LocaleSwitcher({ locale }: { locale: Locale }) {
   const rawPathname = usePathname();
@@ -21,11 +35,13 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
   const pathname = rawPathname.replace(/^\/(pt|en)/, "") || "/";
 
   function switchTo(target: Locale) {
+    const resolvedPath = target === locale ? pathname : translatePath(pathname);
+
     if (process.env.NODE_ENV !== "production") {
-      return `/${target}${pathname === "/" ? "" : pathname}`;
+      return `/${target}${resolvedPath === "/" ? "" : resolvedPath}`;
     }
     const host = target === "en" ? "en.paxa.dev" : "paxa.dev";
-    return `https://${host}${pathname}`;
+    return `https://${host}${resolvedPath}`;
   }
 
   function handleSwitch(target: Locale) {
@@ -64,7 +80,7 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
           ${open ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}`}
       >
         {locales.map((l) => (
-          <a
+          <Link
             key={l}
             href={switchTo(l)}
             onClick={() => handleSwitch(l)}
@@ -73,7 +89,7 @@ export default function LocaleSwitcher({ locale }: { locale: Locale }) {
           >
             <span className="uppercase text-xs font-mono w-5">{l}</span>
             {localeLabels[l]}
-          </a>
+          </Link>
         ))}
       </div>
     </div>

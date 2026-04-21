@@ -1,0 +1,43 @@
+---
+title: "Tmux: Atalhos Essenciais"
+publishedAt: "2026-04-07"
+summary: "Atalhos essenciais para sessões, panes e janelas no tmux."
+category: "Terminal"
+tags: ["tmux", "terminal", "produtividade", "linux"]
+---
+
+# Tmux: Atalhos Essenciais
+
+Prefixo padrão: `Ctrl+b`
+
+## Sessões
+
+| Tecla/Comando | Ação |
+| --- | --- |
+| `tmux new -s dev` | Nova sessão chamada dev |
+| `tmux ls` | Lista sessões |
+| `tmux attach -t dev` | Conecta na sessão |
+| `Prefix + d` | Desanexa sessão |
+
+## Janelas
+
+| Tecla | Ação |
+| --- | --- |
+| `Prefix + c` | Nova janela |
+| `Prefix + ,` | Renomear janela |
+| `Prefix + n / p` | Próxima / anterior |
+| `Prefix + &` | Fecha janela |
+
+## Panes
+
+| Tecla | Ação |
+| --- | --- |
+| `Prefix + %` | Divide vertical |
+| `Prefix + "` | Divide horizontal |
+| `Prefix + o` | Alterna pane |
+| `Prefix + x` | Fecha pane |
+| `Prefix + z` | Zoom na pane atual |
+
+## Dica
+
+No `~/.tmux.conf`, configure `set -g mouse on` para redimensionar panes com o mouse.

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import { codeToHtml } from "shiki";
 import React from "react";
 import CodeBlock from "./CodeBlock";
@@ -148,6 +149,7 @@ export function CustomMDX(props: { source: string; components?: object }) {
   return (
     <MDXRemote
       {...props}
+      options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
       components={{ ...components, ...(props.components || {}) }}
     />
   );

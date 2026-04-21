@@ -1,0 +1,42 @@
+---
+title: "Git: Comandos Rápidos"
+publishedAt: "2026-04-07"
+summary: "Cheat sheet com os comandos Git mais usados no fluxo diário de desenvolvimento."
+category: "Git"
+tags: ["git", "versionamento", "cli"]
+---
+
+# Git: Comandos Rápidos
+
+## Estado e histórico
+
+| Comando | Ação |
+| --- | --- |
+| `git status -sb` | Status resumido |
+| `git log --oneline --graph --decorate -20` | Histórico visual curto |
+| `git diff` | Diferenças não staged |
+| `git diff --staged` | Diferenças staged |
+
+## Fluxo diário
+
+| Comando | Ação |
+| --- | --- |
+| `git checkout -b feat/minha-feature` | Cria branch |
+| `git add .` | Adiciona mudanças |
+| `git commit -m "feat: ..."` | Cria commit |
+| `git pull --rebase origin main` | Atualiza branch sem merge commit |
+| `git push -u origin feat/minha-feature` | Publica branch |
+
+## Correções rápidas
+
+| Comando | Ação |
+| --- | --- |
+| `git commit --amend` | Edita último commit |
+| `git restore --staged <arquivo>` | Remove do stage |
+| `git restore <arquivo>` | Descarta alterações locais |
+| `git stash push -m "wip"` | Salva trabalho temporário |
+| `git stash pop` | Recupera stash |
+
+## Dica
+
+Prefira `git pull --rebase` para manter um histórico linear em branches de feature.

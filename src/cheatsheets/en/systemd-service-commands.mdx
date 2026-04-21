@@ -1,0 +1,38 @@
+---
+title: "Systemd: Daily Service Commands"
+publishedAt: "2026-04-07"
+summary: "Essential commands to manage Linux services with systemd."
+category: "Linux"
+tags: ["systemd", "linux", "services", "devops"]
+---
+
+# Systemd: Daily Service Commands
+
+## Service control
+
+| Command | Action |
+| --- | --- |
+| `sudo systemctl start nginx` | Start service |
+| `sudo systemctl stop nginx` | Stop service |
+| `sudo systemctl restart nginx` | Restart service |
+| `sudo systemctl reload nginx` | Reload configuration |
+| `systemctl status nginx` | Show detailed status |
+
+## Boot and enablement
+
+| Command | Action |
+| --- | --- |
+| `sudo systemctl enable nginx` | Enable at boot |
+| `sudo systemctl disable nginx` | Disable at boot |
+| `systemctl is-enabled nginx` | Check enablement |
+
+## Logs
+
+| Command | Action |
+| --- | --- |
+| `journalctl -u nginx -n 100` | Last 100 lines |
+| `journalctl -u nginx -f` | Follow logs live |
+
+## Tip
+
+After editing a unit file, run `sudo systemctl daemon-reload` before restarting the service.
