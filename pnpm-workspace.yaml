@@ -1,3 +1,13 @@
+overrides:
+  esbuild: ">=0.25.0"
+
 ignoredBuiltDependencies:
-  - sharp
+  - "@esbuild-kit/core-utils"
+  - "@esbuild-kit/esm-loader"
+  - prebuild-install
   - unrs-resolver
+
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
+  sharp: true
