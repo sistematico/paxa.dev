@@ -1,0 +1,96 @@
+---
+title: "Guia de Infraestrutura IA: Atualizando o Hermes Agent e Configurando o LM Studio Headless com Qwen 3.6 no Arch Linux"
+date: "2026-06-08"
+tags: ["Docker", "Hermes Agent", "Arch Linux", "LM Studio", "Qwen", "LLM"]
+author: "Seu Nome"
+---
+
+Neste guia prático, vamos cobrir dois procedimentos essenciais para manter o seu ambiente local de inteligência artificial otimizado. Primeiro, veremos como atualizar o **Hermes Agent** rodando via Docker Compose sem perder nenhuma memória ou configuração. Em seguida, faremos o setup completo do **LM Studio Headless** no Arch Linux para servir localmente o inovador modelo **Qwen3.6-35b-a3b**.
+
+---
+
+## Parte 1: Atualizando o Hermes Agent no Docker
+
+Se você seguiu a instalação padrão estruturada via Docker Compose, atualizar o Hermes Agent exige apenas alguns comandos simples. Como as memórias e dados do agente estão mapeados em um volume persistente na sua máquina hospedeira, esse processo é totalmente seguro.
+
+Acesse a pasta do projeto no seu terminal Linux:
+```bash
+cd ~/hermes-agent
+```
+
+### 1. Baixar a imagem mais recente
+O primeiro passo é dar um pull para puxar a última build oficial do repositório de imagens:
+```bash
+docker compose pull
+```
+
+### 2. Recriar o contêiner atualizado
+Este comando derruba de forma limpa a instância antiga e inicializa o contêiner baseando-se na imagem que você acabou de baixar, preservando as variáveis de ambiente de UID/GID:
+```bash
+HERMES_UID=$(id -u) HERMES_GID=$(id -g) docker compose up -d
+```
+
+### 3. Limpeza de disco (Opcional)
+Para evitar o acúmulo de imagens antigas e sem uso ("dangling images") que gastam armazenamento desnecessário, execute:
+```bash
+docker image prune -f
+```
+
+### 4. Inicializar os serviços internos do Agente
+Lembre-se de reiniciar o gateway e as APIs em segundo plano dentro do novo contêiner atualizado para que ele volte a ficar operante de forma integrada:
+```bash
+docker exec -d hermes hermes gateway run
+```
+
+---
+
+## Parte 2: LM Studio Headless + Qwen3.6-35b-a3b no Arch Linux
+
+O **LM Studio** conta com uma CLI oficial (`lms`) que permite rodar o motor de inferência local inteiramente em modo *headless* (via terminal, ideal para servidores ou máquinas Arch puras sem interface gráfica pesada). Usaremos o modelo **Qwen3.6-35b-a3b**, um MoE (Mixture of Experts) altamente eficiente com 35 bilhões de parâmetros totais e apenas 3 bilhões ativos por token, ideal para chamadas de ferramentas e tarefas agentivas complexas.
+
+### 1. Instalação do LM Studio CLI (`lms`)
+No Arch Linux, a maneira mais limpa de gerenciar a CLI do LM Studio sem depender da interface gráfica completa é utilizando o instalador oficial de linha de comando ou via gerenciador de pacotes local.
+
+Abra o terminal do Arch e execute o script de instalação da CLI do LM Studio:
+```bash
+curl -fsSL https://lmstudio.ai | bash
+```
+*(Nota: Certifique-se de recarregar o seu terminal com `source ~/.bashrc` ou `source ~/.zshrc` para exportar o binário `lms` para o seu PATH).*
+
+### 2. Inicializar o serviço do LM Studio
+Com o binário ativo, inicie o servidor headless local do LM Studio em segundo plano:
+```bash
+lms server start
+```
+
+### 3. Baixar o Modelo Qwen3.6-35b-a3b
+O comando `lms get` permite buscar e baixar modelos diretamente do repositório Hugging Face através do terminal. Faça o download da versão GGUF otimizada do Qwen3.6-35b-a3b:
+```bash
+lms get qwen/qwen3.6-35b-a3b
+```
+*(Dica: Se preferir uma quantização específica para poupar VRAM na sua GPU, você pode listar as opções disponíveis ou passar a tag exata do arquivo GGUF desejado).*
+
+### 4. Carregar o Modelo na Memória
+Uma vez concluído o download, faça o carregamento do modelo no motor de inferência local:
+```bash
+lms load qwen/qwen3.6-35b-a3b
+```
+Você pode monitorar o status do carregamento e o consumo de memória a qualquer momento executando `lms ps`.
+
+### 5. Integrando o Hermes Agent com o LM Studio Local
+Por padrão, o servidor headless do LM Studio expõe uma API totalmente compatível com o formato da OpenAI no endereço `http://localhost:1234/v1`.
+
+Para fazer o contêiner do Hermes (Docker) enxergar o LM Studio que está rodando na sua máquina Arch hospedeira, configure o endereço utilizando o IP interno da ponte do Docker:
+
+1. Acesse o assistente de configuração do Hermes:
+   ```bash
+   docker exec -it hermes hermes setup
+   ```
+2. Quando solicitado o provedor ou endpoint customizado, aponte para:
+   ```text
+   http://docker.internal
+   ```
+3. Defina o ID do modelo exatamente como `qwen/qwen3.6-35b-a3b`.
+
+Pronto! Seu Hermes Agent agora está rodando na versão mais recente e utilizando o poder bruto e local do Qwen3.6 gerenciado via LM Studio Headless.
+
