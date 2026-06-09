@@ -35,6 +35,42 @@
       "category": "Ferramentas",
       "tags": ["Git", "DevOps", "Colaboração"],
       "featured": false
+    },
+    {
+      "id": "neonbladeui",
+      "title": "Neon Blade UI",
+      "description": "Biblioteca de componentes React para interfaces modernas e responsivas",
+      "url": "https://neonbladeui.neuronrush.com",
+      "category": "Componentes",
+      "tags": ["React", "UI", "Componentes"],
+      "featured": false
+    },
+    {
+      "id": "dotmatrix",
+      "title": "DotMatrix",
+      "description": "Loaders animados para suas aplicações web",
+      "url": "https://dotmatrix.zzzzshawn.cloud/",
+      "category": "Componentes",
+      "tags": ["React", "UI", "Componentes"],
+      "featured": false
+    },
+    {
+      "id": "shark",
+      "title": "Shark",
+      "description": "Componente de tabela para React com recursos avançados de ordenação, filtragem e paginação",
+      "url": "https://shark.vini.one",
+      "category": "Componentes",
+      "tags": ["React", "UI", "Componentes"],
+      "featured": false
+    },
+    {
+      "id": "remocn",
+      "title": "Remocn",
+      "description": "Biblioteca de componentes React para interfaces modernas e responsivas",
+      "url": "https://remocn.dev",
+      "category": "Componentes",
+      "tags": ["React", "UI", "Componentes"],
+      "featured": false
     }
   ]
 }

@@ -1,0 +1,53 @@
+---
+title: "Crie seu Próprio \"Mini GitHub\" com Git Bare em uma VPS"
+description: "Aprenda a configurar seu próprio servidor de versionamento central usando repositórios Git Bare em Debian ou Rocky Linux."
+publishedAt: '2026-06-09'
+tags: ["git", "vps", "linux", "devops"]
+---
+
+Um repositório **Bare** é um repositório Git que não possui um diretório de trabalho (você não vê os arquivos do projeto, apenas o histórico). Ele é ideal para servir como um servidor central onde você faz `push` e `pull`.
+
+#### 1. Preparação do Servidor (Debian 13 ou Rocky Linux 10)
+Acesse sua VPS via SSH e instale o Git:
+
+**Debian 13:**
+```bash
+sudo apt update && sudo apt install git -y
+```
+
+**Rocky Linux 10:**
+```bash
+sudo dnf install git -y
+```
+
+#### 2. Configurando o Usuário Git
+Para maior segurança, crie um usuário dedicado:
+```bash
+sudo adduser git
+# Defina uma senha ou configure chaves SSH para acesso sem senha (recomendado)
+```
+
+#### 3. Criando o Repositório Bare
+Mude para o usuário `git` e crie a pasta do seu projeto:
+```bash
+sudo su - git
+mkdir my-project.git
+cd my-project.git
+git init --bare
+```
+
+#### 4. Conectando sua Máquina Local
+No seu computador, dentro da pasta do seu projeto local:
+```bash
+# Adicione o servidor como remoto
+git remote add origin git@IP_DA_SUA_VPS:my-project.git
+
+# Envie seus arquivos
+git push -u origin main
+```
+
+#### 5. Clonando em Outra Máquina
+Para baixar o projeto em outro local:
+```bash
+git clone git@IP_DA_SUA_VPS:my-project.git
+```
