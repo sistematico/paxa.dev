@@ -1,0 +1,248 @@
+---
+title: "Yazi: Complete Keyboard Shortcuts Cheat Sheet"
+publishedAt: "2026-04-07"
+summary: "A quick and comprehensive reference for all Yazi shortcuts, the ultra-fast terminal file manager."
+category: "Terminal"
+tags: ["yazi", "terminal", "linux", "productivity", "cli"]
+---
+
+# Yazi: Complete Keyboard Shortcuts Cheat Sheet
+
+[Yazi](https://github.com/sxyazi/yazi) is a terminal file manager written in Rust, featuring Vim-style navigation, real-time previews, and extensive customization. This guide covers all the essential shortcuts you need to master Yazi from scratch.
+
+---
+
+## File navigation
+
+| Key | Action |
+|-----|--------|
+| `j` / `↓` | Next file |
+| `k` / `↑` | Previous file |
+| `gg` | Go to the top of the list |
+| `G` | Go to the bottom of the list |
+| `Ctrl+d` | Move down half a page |
+| `Ctrl+u` | Move up half a page |
+| `Ctrl+f` / `PageDown` | Move down a full page |
+| `Ctrl+b` / `PageUp` | Move up a full page |
+
+---
+
+## Directory navigation
+
+| Key | Action |
+|-----|--------|
+| `h` / `←` | Go back to the parent directory |
+| `l` / `→` | Enter the child directory |
+| `H` | Go back to the previous directory in history |
+| `L` | Go forward in directory history |
+
+### Quick goto shortcuts
+
+| Key | Destination |
+|-----|-------------|
+| `gh` | `~` (home) |
+| `gc` | `~/.config` |
+| `gd` | `~/Downloads` |
+| `g Space` | Interactive navigation |
+| `gf` | Follow the focused symlink |
+
+> **Tip:** Use `z` to search with **fzf** or `Z` to jump with **zoxide** — both integrate natively with Yazi.
+
+---
+
+## File operations
+
+| Key | Action |
+|-----|--------|
+| `o` / `Enter` | Open the selected file(s) |
+| `O` / `Shift+Enter` | Open with an interactive application chooser |
+| `a` | Create a file (end with `/` to create a directory) |
+| `r` | Rename file(s) |
+| `d` | Move to trash |
+| `D` | Delete permanently |
+| `y` | Copy (yank) |
+| `x` | Cut |
+| `p` | Paste |
+| `P` | Paste and overwrite if the destination exists |
+| `Y` / `X` | Cancel the yank operation |
+| `-` | Create a symlink using an absolute path |
+| `_` | Create a symlink using a relative path |
+| `Ctrl+-` | Create a hard link |
+
+---
+
+## Selection and visual mode
+
+| Key | Action |
+|-----|--------|
+| `Space` | Toggle selection of the current file and move to the next one |
+| `v` | Enter visual selection mode |
+| `V` | Enter visual deselection mode |
+| `Ctrl+a` | Select all files |
+| `Ctrl+r` | Invert selection |
+| `Esc` | Exit visual mode or clear the selection |
+
+---
+
+## Copying file information
+
+| Key | Action |
+|-----|--------|
+| `cc` | Copy the full path |
+| `cd` | Copy the directory path |
+| `cf` | Copy the file name |
+| `cn` | Copy the file name without its extension |
+
+---
+
+## Search and filtering
+
+| Key | Action |
+|-----|--------|
+| `s` | Search for files by name using `fd` |
+| `S` | Search file contents using `ripgrep` |
+| `Ctrl+s` | Cancel the current search |
+| `/` | Find the next file inline |
+| `?` | Find the previous file inline |
+| `n` | Go to the next result |
+| `N` | Go to the previous result |
+| `f` | Filter files in the current view |
+
+> **Important difference:** `s` and `S` perform recursive searches in the file system. `/` and `?` only search within the current listing.
+
+---
+
+## Sorting
+
+| Key | Action |
+|-----|--------|
+| `,m` | Sort by modification date |
+| `,M` | Sort by modification date in reverse order |
+| `,b` | Sort by creation date |
+| `,B` | Sort by creation date in reverse order |
+| `,e` | Sort by extension |
+| `,E` | Sort by extension in reverse order |
+| `,a` | Sort alphabetically |
+| `,A` | Sort alphabetically in reverse order |
+| `,n` | Natural sorting, such as file2 before file10 |
+| `,N` | Natural sorting in reverse order |
+| `,s` | Sort by size |
+| `,S` | Sort by size in reverse order |
+| `,r` | Random sorting |
+
+---
+
+## Linemode
+
+Information displayed next to files:
+
+| Key | Displayed information |
+|-----|-----------------------|
+| `ms` | Size |
+| `mp` | Permissions |
+| `mb` | Creation date (btime) |
+| `mm` | Modification date (mtime) |
+| `mo` | Owner |
+| `mn` | None — clear linemode |
+
+---
+
+## Preview and spot mode
+
+| Key | Action |
+|-----|--------|
+| `Tab` | Open or close the detailed preview of the focused file |
+| `K` | Scroll the preview up |
+| `J` | Scroll the preview down |
+
+---
+
+## Tabs
+
+| Key | Action |
+|-----|--------|
+| `t` | Create a new tab in the current directory |
+| `1` – `9` | Go directly to tab N |
+| `[` | Go to the previous tab |
+| `]` | Go to the next tab |
+| `{` | Swap the current tab with the previous tab |
+| `}` | Swap the current tab with the next tab |
+
+---
+
+## Shell and external commands
+
+| Key | Action |
+|-----|--------|
+| `;` | Open an interactive shell |
+| `:` | Run a shell command and wait for it to finish |
+| `.` | Toggle hidden file visibility |
+| `z` | Jump to a file or directory using **fzf** |
+| `Z` | Jump to a directory using **zoxide** |
+
+---
+
+## Task manager
+
+| Key | Action |
+|-----|--------|
+| `w` | Open or close the task manager |
+| `j` / `k` | Navigate between tasks |
+| `Enter` | Inspect a task |
+| `x` | Cancel a task |
+
+---
+
+## General
+
+| Key | Action |
+|-----|--------|
+| `q` | Quit and save the current directory |
+| `Q` | Quit without saving the current directory |
+| `Ctrl+c` | Close the current tab, or quit if it is the last tab |
+| `Ctrl+z` | Suspend the process |
+| `~` / `F1` | Open help |
+
+---
+
+## Quick visual reference
+
+```text
+NAVIGATION         FILES              SEARCH
+──────────         ─────              ──────
+k  ↑ previous      o  open            s  search by name (fd)
+j  ↓ next          a  create          S  search contents (rg)
+h  ← parent        r  rename          /  find next
+l  → child         d  trash           ?  find previous
+H  history ←       D  delete          f  filter view
+L  history →       y  copy            n  next result
+gg top             x  cut             N  previous result
+G  bottom          p  paste
+
+SELECTION          TABS               GOTO
+─────────          ────               ────
+Space  toggle      t  new tab         gh  ~
+v      visual      [  previous tab    gc  ~/.config
+Ctrl+a all         ]  next tab        gd  ~/Downloads
+Ctrl+r invert      1-9 direct tab     z   fzf
+````
+
+---
+
+## Configuring your own shortcuts
+
+Yazi shortcuts are defined in `~/.config/yazi/keymap.toml`. To override an existing shortcut or add a new one, edit the file:
+
+```toml
+[mgr]
+keymap = [
+  # Custom shortcut: go to projects with gp
+  { on = [ "g", "p" ], run = "cd ~/projects", desc = "Go ~/projects" },
+]
+```
+
+> **Note:** The configuration uses the **prepend** model, which means user-defined shortcuts take priority over the defaults.
+
+---
+
+Yazi is one of the most modern terminal file managers available today. With these shortcuts at your fingertips, navigating the file system becomes as smooth as editing text in Neovim.

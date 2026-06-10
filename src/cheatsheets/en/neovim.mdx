@@ -1,0 +1,597 @@
+---
+title: Neovim Keyboard Shortcuts Cheat Sheet
+summary: Native Neovim and plugin shortcuts
+publishedAt: "2024-06-01"
+category: "Editor"
+tags: ["neovim", "vim", "editor", "productivity", "cheatsheet"]
+---
+
+# Neovim Keyboard Shortcuts Cheat Sheet
+
+> **Important:** shortcuts marked as configuration-dependent are not universal. Run `:map`, `:nmap`, `:imap`, `:vmap` and `:Telescope keymaps` inside Neovim to inspect your active mappings.
+
+### Notation
+
+| Symbol | Description |
+|---|---|
+| `<C-x>` | Ctrl + x |
+| `<A-x>` | Alt + x |
+| `<S-x>` | Shift + x |
+| `<CR>` | Enter |
+| `<Esc>` | Escape |
+| `<leader>` | Leader key, commonly Space |
+
+---
+
+# 1. Modes
+
+| Shortcut | Description |
+|---|---|
+| `i` | Insert before cursor |
+| `I` | Insert at beginning of line |
+| `a` | Insert after cursor |
+| `A` | Insert at end of line |
+| `o` | Open line below |
+| `O` | Open line above |
+| `v` | Visual character mode |
+| `V` | Visual line mode |
+| `<C-v>` | Visual block mode |
+| `:` | Command-line mode |
+| `<Esc>` | Return to Normal mode |
+
+---
+
+# 2. Basic movement
+
+| Shortcut | Description |
+|---|---|
+| `h` | Move left |
+| `j` | Move down |
+| `k` | Move up |
+| `l` | Move right |
+| `w` | Next word beginning |
+| `W` | Next WORD beginning |
+| `b` | Previous word beginning |
+| `B` | Previous WORD beginning |
+| `e` | End of word |
+| `0` | Beginning of line |
+| `^` | First non-blank character |
+| `$` | End of line |
+| `gg` | First line of file |
+| `G` | Last line of file |
+| `{number}G` | Go to line number |
+| `%` | Jump to matching bracket |
+| `f{char}` | Find character forward |
+| `F{char}` | Find character backward |
+| `t{char}` | Move before character |
+| `;` | Repeat last `f`, `F`, `t` or `T` |
+| `,` | Repeat in opposite direction |
+| `<C-d>` | Half-page down |
+| `<C-u>` | Half-page up |
+| `<C-f>` | Page down |
+| `<C-b>` | Page up |
+| `zz` | Center cursor line |
+| `zt` | Put cursor line at top |
+| `zb` | Put cursor line at bottom |
+
+---
+
+# 3. Editing
+
+| Shortcut | Description |
+|---|---|
+| `x` | Delete character |
+| `X` | Delete character before cursor |
+| `dd` | Delete current line |
+| `D` | Delete to end of line |
+| `dw` | Delete word |
+| `d$` | Delete to end of line |
+| `diw` | Delete inside word |
+| `di"` | Delete inside quotes |
+| `di(` | Delete inside parentheses |
+| `ciw` | Change current word |
+| `ci"` | Change inside quotes |
+| `ci(` | Change inside parentheses |
+| `cc` | Change current line |
+| `C` | Change to end of line |
+| `yy` | Copy/yank current line |
+| `yw` | Copy/yank word |
+| `y$` | Copy to end of line |
+| `p` | Paste after cursor |
+| `P` | Paste before cursor |
+| `u` | Undo |
+| `<C-r>` | Redo |
+| `.` | Repeat last change |
+| `J` | Join next line |
+| `~` | Toggle character case |
+| `gu{motion}` | Convert to lowercase |
+| `gU{motion}` | Convert to uppercase |
+| `>>` | Indent line |
+| `<<` | Unindent line |
+| `=` | Auto-indent with motion |
+| `gg=G` | Format indentation for whole file |
+
+---
+
+# 4. Visual mode
+
+| Shortcut | Description |
+|---|---|
+| `v` | Select characters |
+| `V` | Select entire lines |
+| `<C-v>` | Select rectangular block |
+| `o` | Move to other end of selection |
+| `y` | Copy selection |
+| `d` | Delete selection |
+| `c` | Replace selection |
+| `>` | Indent selection |
+| `<` | Unindent selection |
+| `=` | Auto-indent selection |
+| `U` | Convert selection to uppercase |
+| `u` | Convert selection to lowercase |
+| `gv` | Reselect last selection |
+
+---
+
+# 5. Search and replace
+
+| Shortcut | Description |
+|---|---|
+| `/text` | Search forward |
+| `?text` | Search backward |
+| `n` | Next result |
+| `N` | Previous result |
+| `*` | Search word under cursor forward |
+| `#` | Search word under cursor backward |
+| `:%s/old/new/g` | Replace all occurrences |
+| `:%s/old/new/gc` | Replace all with confirmation |
+| `:noh` | Clear search highlight |
+
+---
+
+# 6. Files, buffers and windows
+
+## Files
+
+| Shortcut or command | Description |
+|---|---|
+| `:w` | Save file |
+| `:wa` | Save all files |
+| `:q` | Quit window |
+| `:q!` | Quit without saving |
+| `:wq` or `ZZ` | Save and quit |
+| `:e path` | Open file |
+| `:e!` | Reload discarding changes |
+
+## Buffers
+
+| Shortcut or command | Description |
+|---|---|
+| `:ls` | List buffers |
+| `:bnext` or `:bn` | Next buffer |
+| `:bprevious` or `:bp` | Previous buffer |
+| `:buffer {number}` | Open buffer by number |
+| `:bdelete` or `:bd` | Delete current buffer |
+| `<C-^>` | Alternate between two buffers |
+
+## Windows
+
+| Shortcut or command | Description |
+|---|---|
+| `:split` or `<C-w>s` | Horizontal split |
+| `:vsplit` or `<C-w>v` | Vertical split |
+| `<C-w>h` | Focus left window |
+| `<C-w>j` | Focus lower window |
+| `<C-w>k` | Focus upper window |
+| `<C-w>l` | Focus right window |
+| `<C-w>w` | Cycle windows |
+| `<C-w>q` | Close current window |
+| `<C-w>=` | Equalize window sizes |
+| `<C-w>_` | Maximize height |
+| `<C-w>\|` | Maximize width |
+| `<C-w>o` | Close other windows |
+
+---
+
+# 7. Marks, jumps and registers
+
+| Shortcut | Description |
+|---|---|
+| `m{letter}` | Create mark |
+| `'{letter}` | Jump to marked line |
+| `` `{letter} `` | Jump to exact marked position |
+| `<C-o>` | Jump backward |
+| `<C-i>` | Jump forward |
+| `:jumps` | Show jump list |
+| `:marks` | Show marks |
+| `"0p` | Paste last yank |
+| `"+y` | Copy to system clipboard |
+| `"+p` | Paste from system clipboard |
+| `"_d` | Delete without copying |
+
+---
+
+# 8. Macros
+
+| Shortcut | Description |
+|---|---|
+| `q{letter}` | Start recording macro |
+| `q` | Stop recording |
+| `@{letter}` | Execute macro |
+| `@@` | Repeat last macro |
+| `{number}@{letter}` | Execute macro multiple times |
+
+---
+
+# 9. Comments — comment.lua
+
+The exact mapping depends on which comment plugin your `comment.lua` loads.
+
+Common mappings used by **Comment.nvim**:
+
+| Shortcut | Description |
+|---|---|
+| `gcc` | Toggle comment on current line |
+| `gc{motion}` | Toggle line comment using motion |
+| `gbc` | Toggle block comment on current line |
+| `gb{motion}` | Block comment using motion |
+| `gc` in Visual mode | Toggle selected lines |
+| `gb` in Visual mode | Toggle selected block |
+
+Examples:
+
+| Command | Description |
+|---|---|
+| `gcip` | Comment current paragraph |
+| `gc3j` | Comment current and next 3 lines |
+
+---
+
+# 10. Telescope — telescope.lua
+
+Global shortcuts that **open Telescope are config-dependent**. Common custom mappings are:
+
+| Common mapping | Description |
+|---|---|
+| `<leader>ff` | Find files |
+| `<leader>fg` | Live grep in project |
+| `<leader>fb` | Find open buffers |
+| `<leader>fh` | Search help tags |
+| `<leader>fr` | Recent files |
+| `<leader>fk` | Search keymaps |
+| `<leader>fd` | Search diagnostics |
+| `<leader>fs` | Search document symbols |
+
+Inside Telescope:
+
+| Shortcut | Description |
+|---|---|
+| `<C-n>` or `<Down>` | Next result |
+| `<C-p>` or `<Up>` | Previous result |
+| `<CR>` | Open selected result |
+| `<C-x>` | Open in horizontal split |
+| `<C-v>` | Open in vertical split |
+| `<C-t>` | Open in new tab |
+| `<C-u>` | Scroll preview up |
+| `<C-d>` | Scroll preview down |
+| `<Tab>` | Toggle selection and move next |
+| `<S-Tab>` | Toggle selection and move previous |
+| `<C-q>` | Send selected results to quickfix |
+| `<Esc>` or `<C-c>` | Close Telescope |
+
+Useful commands:
+
+```vim
+:Telescope find_files
+:Telescope live_grep
+:Telescope buffers
+:Telescope help_tags
+:Telescope oldfiles
+:Telescope keymaps
+:Telescope diagnostics
+```
+
+---
+
+# 11. Neo-tree — neo-tree.lua
+
+The shortcut used to **open Neo-tree is config-dependent**. A common mapping is:
+
+| Common mapping | Description |
+|---|---|
+| `<leader>e` | Toggle file explorer |
+
+Useful commands:
+
+```vim
+:Neotree toggle
+:Neotree reveal
+:Neotree focus
+:Neotree filesystem
+:Neotree buffers
+:Neotree git_status
+```
+
+Inside Neo-tree:
+
+| Shortcut | Description |
+|---|---|
+| `<CR>` | Open file or expand directory |
+| `S` | Open in horizontal split |
+| `s` | Open in vertical split |
+| `t` | Open in new tab |
+| `a` | Add file or directory |
+| `d` | Delete item |
+| `r` | Rename item |
+| `y` | Copy item to clipboard |
+| `x` | Cut item to clipboard |
+| `p` | Paste item |
+| `c` | Copy item |
+| `m` | Move item |
+| `q` | Close Neo-tree |
+| `R` | Refresh tree |
+| `H` | Toggle hidden files |
+| `/` | Filter files |
+| `?` | Show Neo-tree help |
+
+---
+
+# 12. Bufferline — bufferline.lua
+
+Bufferline does not necessarily create global shortcuts. These are common custom mappings:
+
+| Common mapping | Description |
+|---|---|
+| `<S-h>` | Previous buffer |
+| `<S-l>` | Next buffer |
+| `[b` | Previous buffer |
+| `]b` | Next buffer |
+| `<leader>bd` | Delete current buffer |
+| `<leader>bp` | Pin/unpin buffer |
+
+Useful commands:
+
+```vim
+:BufferLineCycleNext
+:BufferLineCyclePrev
+:BufferLineMoveNext
+:BufferLineMovePrev
+:BufferLinePick
+:BufferLinePickClose
+:BufferLineCloseOthers
+:BufferLineCloseLeft
+:BufferLineCloseRight
+:BufferLineTogglePin
+```
+
+---
+
+# 13. LSP — lsp.lua
+
+LSP mappings are usually defined inside your `lsp.lua`, often during `LspAttach`.
+
+Common mappings:
+
+| Common mapping | Description |
+|---|---|
+| `gd` | Go to definition |
+| `gD` | Go to declaration |
+| `gr` | Find references |
+| `gi` | Go to implementation |
+| `gt` | Go to type definition |
+| `K` | Show hover documentation |
+| `<C-k>` in Insert mode | Show signature help |
+| `<leader>rn` | Rename symbol |
+| `<leader>ca` | Code action |
+| `<leader>f` | Format document |
+| `[d` | Previous diagnostic |
+| `]d` | Next diagnostic |
+| `<leader>d` | Show diagnostic message |
+| `<leader>q` | Diagnostics quickfix list |
+
+Native LSP commands:
+
+```vim
+:lua vim.lsp.buf.definition()
+:lua vim.lsp.buf.references()
+:lua vim.lsp.buf.rename()
+:lua vim.lsp.buf.code_action()
+:lua vim.diagnostic.open_float()
+```
+
+---
+
+# 14. Completion — cmp.lua
+
+Inside the completion menu, mappings are **config-dependent**. Common `nvim-cmp` mappings:
+
+| Common mapping | Description |
+|---|---|
+| `<C-n>` | Select next completion item |
+| `<C-p>` | Select previous completion item |
+| `<C-d>` | Scroll documentation up |
+| `<C-f>` | Scroll documentation down |
+| `<C-Space>` | Open completion menu |
+| `<C-e>` | Close completion menu |
+| `<CR>` | Confirm selected item |
+| `<Tab>` | Next item or expand snippet |
+| `<S-Tab>` | Previous item |
+
+---
+
+# 15. Formatting — conform.lua
+
+Formatting shortcuts are completely config-dependent.
+
+Common mapping:
+
+| Common mapping | Description |
+|---|---|
+| `<leader>f` | Format current file or selection |
+
+Typical Lua command:
+
+```lua
+require("conform").format({ async = true, lsp_format = "fallback" })
+```
+
+Useful inspection:
+
+```vim
+:ConformInfo
+```
+
+---
+
+# 16. Git signs — gitsigns.lua
+
+Common Gitsigns mappings:
+
+| Common mapping | Description |
+|---|---|
+| `]c` | Next Git hunk |
+| `[c` | Previous Git hunk |
+| `<leader>hs` | Stage hunk |
+| `<leader>hr` | Reset hunk |
+| `<leader>hS` | Stage entire buffer |
+| `<leader>hR` | Reset entire buffer |
+| `<leader>hu` | Undo staged hunk |
+| `<leader>hp` | Preview hunk |
+| `<leader>hb` | Show blame for current line |
+| `<leader>hd` | Diff against index |
+| `ih` | Select Git hunk in operator/visual mode |
+
+---
+
+# 17. Autopairs — autopairs.lua
+
+`nvim-autopairs` normally works automatically.
+
+| Action | Description |
+|---|---|
+| Type `(`, `[`, `{`, `"`, `'` | Automatically insert the closing pair |
+| `<BS>` | Delete an empty pair |
+| `<CR>` | Add an indented line inside a pair, if configured |
+
+---
+
+# 18. Treesitter — treesitter.lua
+
+Treesitter mainly improves syntax parsing and highlighting. It may not add shortcuts unless incremental selection is configured.
+
+Common incremental-selection mappings:
+
+| Common mapping | Description |
+|---|---|
+| `<C-Space>` | Start or expand syntax selection |
+| `<BS>` | Shrink syntax selection |
+
+Useful commands:
+
+```vim
+:Inspect
+:InspectTree
+:TSInstallInfo
+:TSUpdate
+```
+
+---
+
+# 19. Indentation — indent.lua
+
+Indent guide plugins usually add visual guides only and may have no keyboard mappings.
+
+Native indentation shortcuts:
+
+| Shortcut | Description |
+|---|---|
+| `>>` | Indent current line |
+| `<<` | Unindent current line |
+| `>` in Visual mode | Indent selection |
+| `<` in Visual mode | Unindent selection |
+| `=` | Reindent using a motion |
+| `gg=G` | Reindent entire file |
+
+---
+
+# 20. UI plugins
+
+These plugins normally do not add important editing shortcuts:
+
+- `alpha.lua` — startup dashboard / tela inicial
+- `lualine.lua` — status line / barra de status
+- `tokyo-night.lua` — color scheme / tema de cores
+- `indent.lua` — indentation guides / guias de indentação
+
+Alpha dashboard shortcuts depend entirely on your `alpha.lua` configuration.
+
+---
+
+# 21. Discover your exact mappings
+
+Run these commands inside Neovim:
+
+```vim
+:map
+:nmap
+:imap
+:vmap
+:xmap
+:map <leader>
+:verbose nmap <leader>e
+:verbose nmap gd
+:Telescope keymaps
+```
+
+Meaning:
+
+| Command | Description |
+|---|---|
+| `:map` | Show mappings for several modes |
+| `:nmap` | Show Normal-mode mappings |
+| `:imap` | Show Insert-mode mappings |
+| `:vmap` | Show Visual-mode mappings |
+| `:verbose nmap ...` | Show mapping and where it was defined |
+| `:Telescope keymaps` | Search active mappings interactively |
+
+To inspect the leader key:
+
+```vim
+:lua print(vim.g.mapleader)
+:lua print(vim.g.maplocalleader)
+```
+
+---
+
+# 22. Essential daily shortcuts
+
+| Shortcut | Description |
+|---|---|
+| `i` | Insert text |
+| `<Esc>` | Normal mode |
+| `:w` | Save |
+| `:q` | Quit |
+| `u` | Undo |
+| `<C-r>` | Redo |
+| `yy` | Copy line |
+| `dd` | Delete line |
+| `p` | Paste |
+| `ciw` | Replace word |
+| `/text` | Search |
+| `n` / `N` | Next/previous result |
+| `gg` / `G` | Start/end of file |
+| `<C-o>` / `<C-i>` | Back/forward jump |
+| `.` | Repeat last edit |
+| `gcc` | Toggle line comment |
+| `gd` | Go to definition |
+| `K` | Show documentation |
+| `]d` / `[d` | Next/previous diagnostic |
+| `<leader>ff` | Find files, when configured |
+| `<leader>fg` | Search project text, when configured |
+| `<leader>e` | Toggle Neo-tree, when configured |
+
+---
+
+## Accuracy note
+
+Neovim's native shortcuts are stable, but plugin launch mappings such as `<leader>ff`, `<leader>e`, `gd`, formatting and buffer navigation are commonly customized in Lua configuration files. Always use `:verbose map` or `:Telescope keymaps` to confirm your active configuration.

@@ -1,0 +1,597 @@
+---
+title: Folha de atalhos do Neovim
+summary: Atalhos nativos do Neovim e dos plugins
+publishedAt: "2024-06-01"
+category: "Editor"
+tags: ["neovim", "vim", "editor", "produtividade", "folha de atalhos"]
+---
+
+# Folha de atalhos do Neovim
+
+> **Importante:** atalhos marcados como dependentes da configuração não são universais. Execute `:map`, `:nmap`, `:imap`, `:vmap` e `:Telescope keymaps` dentro do Neovim para consultar os mapeamentos ativos.
+
+### Notação
+
+| Símbolo | Descrição |
+|---|---|
+| `<C-x>` | Ctrl + x |
+| `<A-x>` | Alt + x |
+| `<S-x>` | Shift + x |
+| `<CR>` | Enter |
+| `<Esc>` | Escape |
+| `<leader>` | Tecla líder, normalmente Espaço |
+
+---
+
+# 1. Modos
+
+| Atalho | Descrição |
+|---|---|
+| `i` | Inserir antes do cursor |
+| `I` | Inserir no início da linha |
+| `a` | Inserir após o cursor |
+| `A` | Inserir no final da linha |
+| `o` | Criar linha abaixo |
+| `O` | Criar linha acima |
+| `v` | Modo visual por caractere |
+| `V` | Modo visual por linha |
+| `<C-v>` | Modo visual em bloco |
+| `:` | Modo de comandos |
+| `<Esc>` | Voltar ao modo Normal |
+
+---
+
+# 2. Movimentação básica
+
+| Atalho | Descrição |
+|---|---|
+| `h` | Mover para a esquerda |
+| `j` | Mover para baixo |
+| `k` | Mover para cima |
+| `l` | Mover para a direita |
+| `w` | Início da próxima palavra |
+| `W` | Início da próxima PALAVRA |
+| `b` | Início da palavra anterior |
+| `B` | Início da PALAVRA anterior |
+| `e` | Final da palavra |
+| `0` | Início da linha |
+| `^` | Primeiro caractere não vazio |
+| `$` | Final da linha |
+| `gg` | Primeira linha do arquivo |
+| `G` | Última linha do arquivo |
+| `{number}G` | Ir para o número da linha |
+| `%` | Ir para o parêntese/chave correspondente |
+| `f{char}` | Procurar caractere à frente |
+| `F{char}` | Procurar caractere atrás |
+| `t{char}` | Mover até antes do caractere |
+| `;` | Repetir último `f`, `F`, `t` ou `T` |
+| `,` | Repetir na direção oposta |
+| `<C-d>` | Meia página para baixo |
+| `<C-u>` | Meia página para cima |
+| `<C-f>` | Página para baixo |
+| `<C-b>` | Página para cima |
+| `zz` | Centralizar linha do cursor |
+| `zt` | Colocar linha do cursor no topo |
+| `zb` | Colocar linha do cursor embaixo |
+
+---
+
+# 3. Edição
+
+| Atalho | Descrição |
+|---|---|
+| `x` | Apagar caractere |
+| `X` | Apagar caractere anterior |
+| `dd` | Apagar linha atual |
+| `D` | Apagar até o final da linha |
+| `dw` | Apagar palavra |
+| `d$` | Apagar até o final da linha |
+| `diw` | Apagar dentro da palavra |
+| `di"` | Apagar dentro das aspas |
+| `di(` | Apagar dentro dos parênteses |
+| `ciw` | Alterar palavra atual |
+| `ci"` | Alterar conteúdo entre aspas |
+| `ci(` | Alterar conteúdo entre parênteses |
+| `cc` | Alterar linha atual |
+| `C` | Alterar até o final da linha |
+| `yy` | Copiar linha atual |
+| `yw` | Copiar palavra |
+| `y$` | Copiar até o final da linha |
+| `p` | Colar após o cursor |
+| `P` | Colar antes do cursor |
+| `u` | Desfazer |
+| `<C-r>` | Refazer |
+| `.` | Repetir última alteração |
+| `J` | Juntar a próxima linha |
+| `~` | Alternar maiúscula/minúscula |
+| `gu{motion}` | Converter para minúsculas |
+| `gU{motion}` | Converter para maiúsculas |
+| `>>` | Aumentar recuo da linha |
+| `<<` | Diminuir recuo da linha |
+| `=` | Indentar automaticamente com movimento |
+| `gg=G` | Corrigir indentação do arquivo inteiro |
+
+---
+
+# 4. Modo visual
+
+| Atalho | Descrição |
+|---|---|
+| `v` | Selecionar caracteres |
+| `V` | Selecionar linhas inteiras |
+| `<C-v>` | Selecionar bloco retangular |
+| `o` | Ir para a outra ponta da seleção |
+| `y` | Copiar seleção |
+| `d` | Apagar seleção |
+| `c` | Substituir seleção |
+| `>` | Aumentar recuo da seleção |
+| `<` | Diminuir recuo da seleção |
+| `=` | Indentar seleção automaticamente |
+| `U` | Converter seleção para maiúsculas |
+| `u` | Converter seleção para minúsculas |
+| `gv` | Selecionar novamente a última seleção |
+
+---
+
+# 5. Busca e substituição
+
+| Atalho | Descrição |
+|---|---|
+| `/text` | Buscar para frente |
+| `?text` | Buscar para trás |
+| `n` | Próximo resultado |
+| `N` | Resultado anterior |
+| `*` | Buscar palavra sob o cursor à frente |
+| `#` | Buscar palavra sob o cursor atrás |
+| `:%s/old/new/g` | Substituir todas as ocorrências |
+| `:%s/old/new/gc` | Substituir todas com confirmação |
+| `:noh` | Limpar destaque da busca |
+
+---
+
+# 6. Arquivos, buffers e janelas
+
+## Arquivos
+
+| Atalho ou comando | Descrição |
+|---|---|
+| `:w` | Salvar arquivo |
+| `:wa` | Salvar todos os arquivos |
+| `:q` | Fechar janela |
+| `:q!` | Fechar sem salvar |
+| `:wq` or `ZZ` | Salvar e fechar |
+| `:e path` | Abrir arquivo |
+| `:e!` | Recarregar descartando alterações |
+
+## Buffers
+
+| Atalho ou comando | Descrição |
+|---|---|
+| `:ls` | Listar buffers |
+| `:bnext` or `:bn` | Próximo buffer |
+| `:bprevious` or `:bp` | Buffer anterior |
+| `:buffer {number}` | Abrir buffer pelo número |
+| `:bdelete` or `:bd` | Fechar buffer atual |
+| `<C-^>` | Alternar entre os dois últimos buffers |
+
+## Janelas
+
+| Atalho ou comando | Descrição |
+|---|---|
+| `:split` or `<C-w>s` | Divisão horizontal |
+| `:vsplit` or `<C-w>v` | Divisão vertical |
+| `<C-w>h` | Focar janela à esquerda |
+| `<C-w>j` | Focar janela abaixo |
+| `<C-w>k` | Focar janela acima |
+| `<C-w>l` | Focar janela à direita |
+| `<C-w>w` | Alternar entre janelas |
+| `<C-w>q` | Fechar janela atual |
+| `<C-w>=` | Igualar tamanho das janelas |
+| `<C-w>_` | Maximizar altura |
+| `<C-w>\|` | Maximizar largura |
+| `<C-w>o` | Fechar janelas exceto a atual |
+
+---
+
+# 7. Marcas, saltos e registradores
+
+| Atalho | Descrição |
+|---|---|
+| `m{letter}` | Criar marca |
+| `'{letter}` | Ir para a linha marcada |
+| `` `{letter} `` | Ir para a posição exata marcada |
+| `<C-o>` | Voltar no histórico de saltos |
+| `<C-i>` | Avançar no histórico de saltos |
+| `:jumps` | Mostrar lista de saltos |
+| `:marks` | Mostrar marcas |
+| `"0p` | Colar a última cópia |
+| `"+y` | Copiar para a área de transferência |
+| `"+p` | Colar da área de transferência |
+| `"_d` | Apagar sem copiar |
+
+---
+
+# 8. Macros
+
+| Atalho | Descrição |
+|---|---|
+| `q{letter}` | Iniciar gravação da macro |
+| `q` | Parar gravação |
+| `@{letter}` | Executar macro |
+| `@@` | Repetir última macro |
+| `{number}@{letter}` | Executar macro várias vezes |
+
+---
+
+# 9. Comments — comment.lua
+
+O mapeamento exato depende de qual plugin de comentários o arquivo `comment.lua` carrega.
+
+Mapeamentos comuns usados pelo **Comment.nvim**:
+
+| Atalho | Descrição |
+|---|---|
+| `gcc` | Comentar/descomentar linha atual |
+| `gc{motion}` | Comentar/descomentar usando movimento |
+| `gbc` | Alternar comentário em bloco |
+| `gb{motion}` | Comentário em bloco usando movimento |
+| `gc` in Visual mode | Comentar/descomentar seleção |
+| `gb` in Visual mode | Alternar comentário em bloco da seleção |
+
+Exemplos:
+
+| Comando | Descrição |
+|---|---|
+| `gcip` | Comentar parágrafo atual |
+| `gc3j` | Comentar linha atual e as próximas 3 |
+
+---
+
+# 10. Telescope — telescope.lua
+
+Os atalhos globais que **abrem o Telescope dependem da configuração**. Mapeamentos personalizados comuns:
+
+| Mapeamento comum | Descrição |
+|---|---|
+| `<leader>ff` | Procurar arquivos |
+| `<leader>fg` | Buscar texto no projeto |
+| `<leader>fb` | Procurar buffers abertos |
+| `<leader>fh` | Buscar na ajuda |
+| `<leader>fr` | Arquivos recentes |
+| `<leader>fk` | Buscar atalhos |
+| `<leader>fd` | Buscar diagnósticos |
+| `<leader>fs` | Buscar símbolos do documento |
+
+Dentro do Telescope:
+
+| Atalho | Descrição |
+|---|---|
+| `<C-n>` or `<Down>` | Próximo resultado |
+| `<C-p>` or `<Up>` | Resultado anterior |
+| `<CR>` | Abrir resultado selecionado |
+| `<C-x>` | Abrir em divisão horizontal |
+| `<C-v>` | Abrir em divisão vertical |
+| `<C-t>` | Abrir em nova aba |
+| `<C-u>` | Rolar pré-visualização para cima |
+| `<C-d>` | Rolar pré-visualização para baixo |
+| `<Tab>` | Marcar item e ir ao próximo |
+| `<S-Tab>` | Marcar item e ir ao anterior |
+| `<C-q>` | Enviar resultados ao quickfix |
+| `<Esc>` or `<C-c>` | Fechar Telescope |
+
+Comandos úteis:
+
+```vim
+:Telescope find_files
+:Telescope live_grep
+:Telescope buffers
+:Telescope help_tags
+:Telescope oldfiles
+:Telescope keymaps
+:Telescope diagnostics
+```
+
+---
+
+# 11. Neo-tree — neo-tree.lua
+
+O atalho usado para **abrir o Neo-tree depende da configuração**. Um mapeamento comum é:
+
+| Mapeamento comum | Descrição |
+|---|---|
+| `<leader>e` | Abrir/fechar explorador de arquivos |
+
+Comandos úteis:
+
+```vim
+:Neotree toggle
+:Neotree reveal
+:Neotree focus
+:Neotree filesystem
+:Neotree buffers
+:Neotree git_status
+```
+
+Dentro do Neo-tree:
+
+| Atalho | Descrição |
+|---|---|
+| `<CR>` | Abrir arquivo ou expandir diretório |
+| `S` | Abrir em divisão horizontal |
+| `s` | Abrir em divisão vertical |
+| `t` | Abrir em nova aba |
+| `a` | Criar arquivo ou diretório |
+| `d` | Apagar item |
+| `r` | Renomear item |
+| `y` | Copiar item |
+| `x` | Recortar item |
+| `p` | Colar item |
+| `c` | Copiar item |
+| `m` | Mover item |
+| `q` | Fechar Neo-tree |
+| `R` | Atualizar árvore |
+| `H` | Mostrar/ocultar arquivos escondidos |
+| `/` | Filtrar arquivos |
+| `?` | Mostrar ajuda do Neo-tree |
+
+---
+
+# 12. Bufferline — bufferline.lua
+
+O Bufferline não cria necessariamente atalhos globais. Estes são mapeamentos personalizados comuns:
+
+| Mapeamento comum | Descrição |
+|---|---|
+| `<S-h>` | Buffer anterior |
+| `<S-l>` | Próximo buffer |
+| `[b` | Buffer anterior |
+| `]b` | Próximo buffer |
+| `<leader>bd` | Fechar buffer atual |
+| `<leader>bp` | Fixar/desafixar buffer |
+
+Comandos úteis:
+
+```vim
+:BufferLineCycleNext
+:BufferLineCyclePrev
+:BufferLineMoveNext
+:BufferLineMovePrev
+:BufferLinePick
+:BufferLinePickClose
+:BufferLineCloseOthers
+:BufferLineCloseLeft
+:BufferLineCloseRight
+:BufferLineTogglePin
+```
+
+---
+
+# 13. LSP — lsp.lua
+
+Os mapeamentos do LSP normalmente são definidos no arquivo `lsp.lua`, muitas vezes durante `LspAttach`.
+
+Atalhos comuns:
+
+| Mapeamento comum | Descrição |
+|---|---|
+| `gd` | Ir para a definição |
+| `gD` | Ir para a declaração |
+| `gr` | Localizar referências |
+| `gi` | Ir para a implementação |
+| `gt` | Ir para a definição do tipo |
+| `K` | Mostrar documentação |
+| `<C-k>` in Insert mode | Mostrar ajuda da assinatura |
+| `<leader>rn` | Renomear símbolo |
+| `<leader>ca` | Ação de código |
+| `<leader>f` | Formatar documento |
+| `[d` | Diagnóstico anterior |
+| `]d` | Próximo diagnóstico |
+| `<leader>d` | Mostrar mensagem do diagnóstico |
+| `<leader>q` | Lista de diagnósticos no quickfix |
+
+Comandos LSP nativos:
+
+```vim
+:lua vim.lsp.buf.definition()
+:lua vim.lsp.buf.references()
+:lua vim.lsp.buf.rename()
+:lua vim.lsp.buf.code_action()
+:lua vim.diagnostic.open_float()
+```
+
+---
+
+# 14. Completion — cmp.lua
+
+Dentro do menu de autocompletar, os mapeamentos **dependem da configuração**. Mapeamentos comuns do `nvim-cmp`:
+
+| Mapeamento comum | Descrição |
+|---|---|
+| `<C-n>` | Selecionar próxima sugestão |
+| `<C-p>` | Selecionar sugestão anterior |
+| `<C-d>` | Rolar documentação para cima |
+| `<C-f>` | Rolar documentação para baixo |
+| `<C-Space>` | Abrir menu de sugestões |
+| `<C-e>` | Fechar menu de sugestões |
+| `<CR>` | Confirmar sugestão |
+| `<Tab>` | Próxima sugestão ou expandir snippet |
+| `<S-Tab>` | Sugestão anterior |
+
+---
+
+# 15. Formatting — conform.lua
+
+Os atalhos de formatação dependem completamente da configuração.
+
+Atalho comum:
+
+| Mapeamento comum | Descrição |
+|---|---|
+| `<leader>f` | Formatar arquivo ou seleção |
+
+Comando Lua típico:
+
+```lua
+require("conform").format({ async = true, lsp_format = "fallback" })
+```
+
+Inspeção útil:
+
+```vim
+:ConformInfo
+```
+
+---
+
+# 16. Git signs — gitsigns.lua
+
+Common Gitsigns mappings:
+
+| Mapeamento comum | Descrição |
+|---|---|
+| `]c` | Próximo bloco alterado |
+| `[c` | Bloco alterado anterior |
+| `<leader>hs` | Adicionar bloco ao stage |
+| `<leader>hr` | Desfazer alterações do bloco |
+| `<leader>hS` | Adicionar arquivo inteiro ao stage |
+| `<leader>hR` | Desfazer alterações do arquivo |
+| `<leader>hu` | Retirar último bloco do stage |
+| `<leader>hp` | Pré-visualizar bloco alterado |
+| `<leader>hb` | Mostrar autor da linha |
+| `<leader>hd` | Comparar com o índice |
+| `ih` | Selecionar bloco Git |
+
+---
+
+# 17. Autopairs — autopairs.lua
+
+O `nvim-autopairs` normalmente funciona de forma automática.
+
+| Ação | Descrição |
+|---|---|
+| Type `(`, `[`, `{`, `"`, `'` | Inserir automaticamente o par de fechamento |
+| `<BS>` | Apagar um par vazio |
+| `<CR>` | Criar linha indentada dentro do par, se configurado |
+
+---
+
+# 18. Treesitter — treesitter.lua
+
+O Treesitter melhora principalmente a análise sintática e o destaque de código. Ele pode não adicionar atalhos, a menos que a seleção incremental esteja configurada.
+
+Mapeamentos comuns de seleção incremental:
+
+| Mapeamento comum | Descrição |
+|---|---|
+| `<C-Space>` | Iniciar ou expandir seleção sintática |
+| `<BS>` | Diminuir seleção sintática |
+
+Comandos úteis:
+
+```vim
+:Inspect
+:InspectTree
+:TSInstallInfo
+:TSUpdate
+```
+
+---
+
+# 19. Indentation — indent.lua
+
+Plugins de guias de indentação normalmente adicionam apenas indicadores visuais e podem não possuir atalhos.
+
+Native indentation shortcuts:
+
+| Atalho | Descrição |
+|---|---|
+| `>>` | Aumentar recuo da linha |
+| `<<` | Diminuir recuo da linha |
+| `>` in Visual mode | Aumentar recuo da seleção |
+| `<` in Visual mode | Diminuir recuo da seleção |
+| `=` | Reindentar usando movimento |
+| `gg=G` | Reindentar arquivo inteiro |
+
+---
+
+# 20. Plugins de interface
+
+Estes plugins normalmente não adicionam atalhos importantes de edição:
+
+- `alpha.lua` — painel inicial
+- `lualine.lua` — barra de status
+- `tokyo-night.lua` — tema de cores
+- `indent.lua` — guias de indentação
+
+Os atalhos do painel Alpha dependem totalmente da configuração em `alpha.lua`.
+
+---
+
+# 21. Descobrir seus atalhos exatos
+
+Execute estes comandos dentro do Neovim:
+
+```vim
+:map
+:nmap
+:imap
+:vmap
+:xmap
+:map <leader>
+:verbose nmap <leader>e
+:verbose nmap gd
+:Telescope keymaps
+```
+
+Significado:
+
+| Comando | Descrição |
+|---|---|
+| `:map` | Mostrar atalhos de vários modos |
+| `:nmap` | Mostrar atalhos do modo Normal |
+| `:imap` | Mostrar atalhos do modo Inserção |
+| `:vmap` | Mostrar atalhos do modo Visual |
+| `:verbose nmap ...` | Mostrar o atalho e onde foi definido |
+| `:Telescope keymaps` | Pesquisar atalhos ativos interativamente |
+
+Para verificar a tecla líder:
+
+```vim
+:lua print(vim.g.mapleader)
+:lua print(vim.g.maplocalleader)
+```
+
+---
+
+# 22. Atalhos essenciais para o dia a dia
+
+| Atalho | Descrição |
+|---|---|
+| `i` | Inserir texto |
+| `<Esc>` | Modo Normal |
+| `:w` | Salvar |
+| `:q` | Fechar |
+| `u` | Desfazer |
+| `<C-r>` | Refazer |
+| `yy` | Copiar linha |
+| `dd` | Apagar linha |
+| `p` | Colar |
+| `ciw` | Substituir palavra |
+| `/text` | Buscar |
+| `n` / `N` | Próximo/anterior |
+| `gg` / `G` | Início/fim do arquivo |
+| `<C-o>` / `<C-i>` | Voltar/avançar no histórico |
+| `.` | Repetir última edição |
+| `gcc` | Comentar/descomentar linha |
+| `gd` | Ir para definição |
+| `K` | Mostrar documentação |
+| `]d` / `[d` | Próximo/anterior diagnóstico |
+| `<leader>ff` | Procurar arquivos, quando configurado |
+| `<leader>fg` | Buscar texto no projeto, quando configurado |
+| `<leader>e` | Abrir/fechar Neo-tree, quando configurado |
+
+---
+
+## Nota de precisão
+
+Os atalhos nativos do Neovim são estáveis, mas mapeamentos de plugins como `<leader>ff`, `<leader>e`, `gd`, formatação e navegação entre buffers costumam ser personalizados nos arquivos Lua. Use `:verbose map` ou `:Telescope keymaps` para confirmar a configuração ativa.
