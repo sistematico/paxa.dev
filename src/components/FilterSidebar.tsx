@@ -11,10 +11,10 @@ function SidebarCard({
 }) {
   return (
     <div
-      className={`rounded-lg p-4 ${
+      className={`rounded-lg p-4 border transition-colors ${
         accent
-          ? "bg-surface border border-accent/25"
-          : "bg-surface border border-transparent"
+          ? "bg-white border-gray-200"
+          : "bg-surface border-border/50"
       }`}
     >
       {children}
