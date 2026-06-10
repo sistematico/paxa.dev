@@ -1,0 +1,693 @@
+---
+title: "How to run Windows 11 on Incus under Arch Linux"
+description: "A complete guide to installing and running a Windows 11 virtual machine using Incus, KVM/QEMU, TPM 2.0, and VirtIO drivers on Arch Linux."
+publishedAt: "2026-06-10"
+category: "Linux"
+tags: ["linux", "virtualization", "windows 11", "incus"]
+---
+
+# How to run Windows 11 on Incus under Arch Linux
+
+This guide shows how to create a **Windows 11** virtual machine in **Incus**, using Arch Linux as the host operating system.
+
+By the end, you will have:
+
+- Windows 11 running with KVM acceleration;
+- UEFI firmware and Secure Boot;
+- a virtual TPM 2.0 device;
+- VirtIO networking and devices;
+- a graphical console through SPICE;
+- commands to start, stop, resize, and delete the VM.
+
+> This procedure assumes an `x86_64` computer with hardware virtualization support. On Intel processors, this feature is usually called **VT-x**; on AMD processors, it is usually called **AMD-V** or **SVM**.
+
+## 1. Check processor virtualization support
+
+Check whether the processor reports virtualization support:
+
+```bash
+lscpu | grep -E 'Virtualization|Virtualização'
+```
+
+You can also search directly for the processor extensions:
+
+```bash
+grep -Eoc '(vmx|svm)' /proc/cpuinfo
+```
+
+A result greater than `0` indicates that the processor provides the required extension.
+
+Check whether the KVM device exists:
+
+```bash
+ls -l /dev/kvm
+```
+
+If `/dev/kvm` does not exist, verify that virtualization is enabled in UEFI/BIOS and load the module corresponding to your processor:
+
+```bash
+# Intel
+sudo modprobe kvm_intel
+
+# AMD
+sudo modprobe kvm_amd
+```
+
+To confirm that the modules are loaded:
+
+```bash
+lsmod | grep kvm
+```
+
+## 2. Install Incus and the graphical client
+
+Update the system and install Incus and `virt-viewer`:
+
+```bash
+sudo pacman -Syu incus virt-viewer
+```
+
+The `virt-viewer` package provides the `remote-viewer` command, which Incus uses to open the virtual machine's graphical SPICE console.
+
+Enable the Incus socket:
+
+```bash
+sudo systemctl enable --now incus.socket
+```
+
+To start instances configured for automatic startup during boot, also enable the service:
+
+```bash
+sudo systemctl enable incus.service
+```
+
+## 3. Allow your user to manage Incus
+
+Add your user to the `incus-admin` group:
+
+```bash
+sudo usermod -aG incus-admin "$USER"
+```
+
+Membership in this group grants administrative privileges equivalent to `root` over Incus. Log out of the graphical session and log back in to apply the new group membership.
+
+To apply it temporarily in the current terminal, you can also use:
+
+```bash
+newgrp incus-admin
+```
+
+Test access:
+
+```bash
+incus info
+```
+
+## 4. Initialize Incus
+
+Run the configuration wizard:
+
+```bash
+incus admin init
+```
+
+For a simple local installation, these choices are usually appropriate:
+
+```text
+Would you like to use clustering? no
+Would you like to configure a new storage pool? yes
+Name of the new storage pool: default
+Name of the storage backend: dir
+Would you like to create a new local network bridge? yes
+Name of the new bridge: incusbr0
+IPv4 address: auto
+IPv6 address: auto
+Would you like the server to be available over the network? no
+Would you like stale cached images to be updated automatically? yes
+Would you like a YAML "init" preseed to be printed? no
+```
+
+### Choosing the storage backend
+
+The `dir` backend is simple and works well for testing. For frequent use, snapshots, and better volume management, you can choose `btrfs`, `lvm`, or `zfs`, provided the host is already prepared for it.
+
+Check the configuration that was created:
+
+```bash
+incus storage list
+incus network list
+incus profile show default
+```
+
+## 5. Download the required images
+
+Create a directory for the ISO files:
+
+```bash
+mkdir -p "$HOME/VMs/iso"
+cd "$HOME/VMs/iso"
+```
+
+### Windows 11 ISO
+
+Download the official Windows 11 ISO from Microsoft's website and save it, for example, as:
+
+```text
+~/VMs/iso/Windows11.iso
+```
+
+This guide assumes the `x86_64` edition of Windows 11 on an `x86_64` Arch Linux host.
+
+### VirtIO driver ISO
+
+Download the stable VirtIO driver image maintained by the Fedora project:
+
+```bash
+curl -L \
+  -o "$HOME/VMs/iso/virtio-win.iso" \
+  https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+```
+
+VirtIO drivers are primarily used for networking, storage, memory ballooning, and other paravirtualized devices.
+
+## 6. Create the Windows 11 VM
+
+Create an empty virtual machine named `win11`:
+
+```bash
+incus init win11 --empty --vm
+```
+
+Tell Incus that the guest operating system is Windows:
+
+```bash
+incus config set win11 image.os=Windows
+```
+
+This makes Incus adjust Windows-specific details such as the local-time hardware clock, compatible devices, and IOMMU behavior.
+
+Set the VM resources:
+
+```bash
+incus config set win11 limits.cpu=4
+incus config set win11 limits.memory=8GiB
+```
+
+Increase the main disk to 80 GiB:
+
+```bash
+incus config device override win11 root size=80GiB
+```
+
+Reasonable minimum values:
+
+| Resource | Practical minimum | Recommended |
+|---|---:|---:|
+| CPU | 2 cores | 4 or more |
+| Memory | 4 GiB | 8 GiB or more |
+| Disk | 64 GiB | 80–128 GiB |
+
+## 7. Add a virtual TPM 2.0 device
+
+Windows 11 normally requires TPM 2.0. Incus provides a software-emulated TPM:
+
+```bash
+incus config device add win11 vtpm tpm
+```
+
+> For virtual machines, do not use `path=/dev/tpm0`. That option is intended for exposing TPM devices to containers. The VM uses the virtual TPM created and managed by Incus itself.
+
+Check whether the device was added:
+
+```bash
+incus config device show win11
+```
+
+## 8. Configure UEFI and Secure Boot
+
+Incus VMs use UEFI. Keep Secure Boot enabled:
+
+```bash
+incus config set win11 security.secureboot=true
+```
+
+On most recent installations, this is already the default behavior. The command makes the setting explicit.
+
+## 9. Attach the ISO files
+
+Attach the Windows ISO with the higher boot priority:
+
+```bash
+incus config device add win11 windows-iso disk \
+  source="$HOME/VMs/iso/Windows11.iso" \
+  readonly=true \
+  boot.priority=10
+```
+
+Also attach the VirtIO driver ISO:
+
+```bash
+incus config device add win11 virtio-iso disk \
+  source="$HOME/VMs/iso/virtio-win.iso" \
+  readonly=true \
+  boot.priority=5
+```
+
+Check the complete configuration:
+
+```bash
+incus config show win11 --expanded
+```
+
+## 10. Start the installation
+
+Start the VM:
+
+```bash
+incus start win11
+```
+
+Open the graphical console:
+
+```bash
+incus console win11 --type=vga
+```
+
+When the screen asks you to press a key to boot from the installation media, press any key.
+
+> In `remote-viewer`, press `Ctrl` + `Alt` to release the keyboard and mouse captured by the VM window.
+
+## 11. Install Windows 11
+
+Follow the installer normally.
+
+### If the installer does not show the disk
+
+In recent Incus versions, the main disk is usually presented through a controller that the Windows installer recognizes. If no drive appears:
+
+1. Click **Load driver**;
+2. open the `virtio-win` ISO drive;
+3. locate the folder compatible with Windows 11 `amd64`;
+4. try the `vioscsi` storage driver first;
+5. if necessary, try `viostor`.
+
+The paths usually look similar to:
+
+```text
+vioscsi\w11\amd64
+viostor\w11\amd64
+```
+
+The directory structure may vary slightly between VirtIO ISO versions.
+
+### If the installer requires an internet connection
+
+The VirtIO network adapter may not have a driver yet. There are two options.
+
+#### Option A: load the network driver
+
+In the installer, load the driver located approximately at:
+
+```text
+NetKVM\w11\amd64
+```
+
+#### Option B: create a local account during installation
+
+On the network requirement screen, press:
+
+```text
+Shift + F10
+```
+
+In the terminal, run:
+
+```cmd
+OOBE\BYPASSNRO
+```
+
+The VM will restart. After that, the installer may show an option to continue without internet access.
+
+> This command belongs to the Windows installer and may change or stop working in future releases. Prefer installing the `NetKVM` driver whenever possible.
+
+## 12. Install all VirtIO drivers
+
+After signing in to Windows:
+
+1. open File Explorer;
+2. open the VirtIO driver CD/DVD drive;
+3. run the installer available in the root directory, usually `virtio-win-guest-tools.exe`;
+4. complete the installation;
+5. restart Windows.
+
+This package installs the main VirtIO drivers and helper tools.
+
+After restarting, check **Device Manager**. No important devices should remain with a yellow warning icon.
+
+## 13. Install the Incus agent in Windows
+
+The agent allows commands such as `incus exec`, `incus file push`, and `incus file pull` to work inside the VM.
+
+Add the agent configuration disk:
+
+```bash
+incus config device add win11 agent disk source=agent:config
+```
+
+Restart the VM:
+
+```bash
+incus restart win11
+```
+
+In Windows, open the new CD drive associated with Incus and run the agent installer available on it. Then restart the system again.
+
+Check it from the host:
+
+```bash
+incus info win11
+```
+
+When the agent is active, Incus will be able to retrieve more information from the guest.
+
+One possible test is:
+
+```bash
+incus exec win11 -- cmd.exe /c ver
+```
+
+## 14. Remove the ISO files after installation
+
+Stop the VM:
+
+```bash
+incus stop win11
+```
+
+Remove the Windows installer ISO:
+
+```bash
+incus config device remove win11 windows-iso
+```
+
+You can also remove the VirtIO ISO after installing the drivers:
+
+```bash
+incus config device remove win11 virtio-iso
+```
+
+Keep the `agent` device because it provides the agent and its configuration to Windows.
+
+Start the VM again:
+
+```bash
+incus start win11
+incus console win11 --type=vga
+```
+
+## 15. Start the VM automatically with the host
+
+To start Windows automatically after Incus starts:
+
+```bash
+incus config set win11 boot.autostart=true
+```
+
+Optionally, define a priority and delay:
+
+```bash
+incus config set win11 boot.autostart.priority=10
+incus config set win11 boot.autostart.delay=15
+```
+
+Make sure the Incus service is enabled:
+
+```bash
+sudo systemctl enable incus.service
+```
+
+## 16. Useful commands
+
+### List instances
+
+```bash
+incus list
+```
+
+### Open the graphical console
+
+```bash
+incus console win11 --type=vga
+```
+
+### Start
+
+```bash
+incus start win11
+```
+
+### Shut down normally
+
+```bash
+incus stop win11
+```
+
+### Force shutdown
+
+Use this only when Windows is not responding:
+
+```bash
+incus stop win11 --force
+```
+
+### Restart
+
+```bash
+incus restart win11
+```
+
+### Change CPU and memory
+
+It is safer to stop the VM before making major changes:
+
+```bash
+incus stop win11
+incus config set win11 limits.cpu=6
+incus config set win11 limits.memory=12GiB
+incus start win11
+```
+
+### Create a snapshot
+
+```bash
+incus snapshot create win11 before-update
+```
+
+List snapshots:
+
+```bash
+incus snapshot list win11
+```
+
+Restore a snapshot:
+
+```bash
+incus stop win11
+incus snapshot restore win11 before-update
+incus start win11
+```
+
+### Delete the VM
+
+```bash
+incus stop win11 --force
+incus delete win11
+```
+
+## 17. Share an Arch Linux folder with Windows
+
+Sharing host directories with VMs depends on the agent and the appropriate drivers. A simple and predictable alternative is to share the folder over the network using Samba.
+
+Another option is to add a `disk` device, but support and the mounting procedure inside Windows depend on the sharing mechanism provided by the installed Incus version and drivers.
+
+For important data, prefer:
+
+- Samba over the `incusbr0` network;
+- an SFTP/SSH server;
+- a separate virtual disk;
+- application-based synchronization such as Syncthing.
+
+## 18. Remote access through RDP
+
+After installing the network drivers, find the VM's IP address:
+
+```bash
+incus list win11
+```
+
+Enable **Remote Desktop** in Windows. Then, on Arch Linux, use a client such as FreeRDP or Remmina.
+
+Example with FreeRDP:
+
+```bash
+sudo pacman -S freerdp
+xfreerdp3 /v:VM_IP_ADDRESS /u:YOUR_USERNAME /dynamic-resolution
+```
+
+Windows 11 Home normally does not provide a native RDP server; Pro and higher editions include this feature.
+
+## 19. Troubleshooting
+
+### `Error: Failed to connect to local Incus`
+
+Check the socket:
+
+```bash
+systemctl status incus.socket
+sudo systemctl restart incus.socket
+```
+
+Also check whether the user belongs to the correct group:
+
+```bash
+id
+```
+
+After joining the group, fully log out of the session and log back in.
+
+### `/dev/kvm` does not exist
+
+Check:
+
+```bash
+lscpu | grep -E 'Virtualization|Virtualização'
+lsmod | grep kvm
+```
+
+Enable VT-x, AMD-V, or SVM in UEFI/BIOS.
+
+### The VM is very slow
+
+Check whether it is actually using KVM:
+
+```bash
+incus info win11 --show-log
+```
+
+Also verify:
+
+- that `/dev/kvm` exists;
+- that virtualization is enabled in the firmware;
+- that the host is not running inside another VM without nested virtualization;
+- that enough free memory is available;
+- that the VirtIO drivers are installed in Windows.
+
+### Windows does not detect TPM 2.0
+
+Check the device:
+
+```bash
+incus config device show win11
+```
+
+The configuration should contain something similar to:
+
+```yaml
+vtpm:
+  type: tpm
+```
+
+Do not add `path=/dev/tpm0` to a VM TPM device. Stop the VM, remove the incorrect configuration, and recreate the device:
+
+```bash
+incus stop win11 --force
+incus config device remove win11 vtpm
+incus config device add win11 vtpm tpm
+incus start win11
+```
+
+### Secure Boot-related error
+
+Check:
+
+```bash
+incus config get win11 security.secureboot
+```
+
+For Windows 11, try to keep:
+
+```bash
+incus config set win11 security.secureboot=true
+```
+
+If you are using a modified or unsigned ISO, or an incompatible old installation, temporarily disabling Secure Boot may help with diagnosis:
+
+```bash
+incus stop win11
+incus config set win11 security.secureboot=false
+incus start win11
+```
+
+This reduces the integrity guarantees of the boot process and is not the recommended configuration for a normal Windows 11 installation.
+
+### The VGA console does not open
+
+Confirm that the SPICE client is installed:
+
+```bash
+sudo pacman -S virt-viewer
+```
+
+Then run:
+
+```bash
+incus console win11 --type=vga
+```
+
+### The VM does not receive an IP address
+
+First, install the `NetKVM` driver from the VirtIO ISO. Then check the Incus network:
+
+```bash
+incus network show incusbr0
+incus config device show win11
+incus list win11
+```
+
+The VM normally inherits an interface connected to the `incusbr0` bridge from the `default` profile.
+
+## 20. Complete configuration sequence
+
+After Incus, storage, and networking have been initialized, the creation process can be summarized as follows:
+
+```bash
+VM=win11
+WIN_ISO="$HOME/VMs/iso/Windows11.iso"
+VIRTIO_ISO="$HOME/VMs/iso/virtio-win.iso"
+
+incus init "$VM" --empty --vm
+incus config set "$VM" image.os=Windows
+incus config set "$VM" limits.cpu=4
+incus config set "$VM" limits.memory=8GiB
+incus config set "$VM" security.secureboot=true
+incus config device override "$VM" root size=80GiB
+incus config device add "$VM" vtpm tpm
+incus config device add "$VM" windows-iso disk \
+  source="$WIN_ISO" readonly=true boot.priority=10
+incus config device add "$VM" virtio-iso disk \
+  source="$VIRTIO_ISO" readonly=true boot.priority=5
+incus config device add "$VM" agent disk source=agent:config
+incus start "$VM"
+incus console "$VM" --type=vga
+```
+
+## References
+
+- [Official Incus documentation](https://linuxcontainers.org/incus/docs/main/)
+- [Creating instances and booting from an ISO](https://linuxcontainers.org/incus/docs/main/howto/instances_create/)
+- [Disk devices in Incus](https://linuxcontainers.org/incus/docs/main/reference/devices_disk/)
+- [TPM devices in Incus](https://linuxcontainers.org/incus/docs/main/reference/devices_tpm/)
+- [Accessing VM consoles](https://linuxcontainers.org/incus/docs/main/howto/instances_console/)
+- [Incus on the ArchWiki](https://wiki.archlinux.org/title/Incus)
+- [Official Windows 11 download](https://www.microsoft.com/software-download/windows11)
+- [VirtIO drivers for Windows](https://github.com/virtio-win/virtio-win-pkg-scripts)
