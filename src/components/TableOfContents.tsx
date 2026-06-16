@@ -126,13 +126,14 @@ export default function TableOfContents({ headings, title }: Props) {
       </div>
 
       {/* Desktop: sticky sidebar */}
-      <aside className="hidden lg:block" aria-label="Table of contents">
-        <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-3">
-            {title}
-          </p>
-          <TocList headings={headings} activeId={activeId} />
-        </div>
+      <aside
+        className="hidden lg:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1"
+        aria-label="Table of contents"
+      >
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-3">
+          {title}
+        </p>
+        <TocList headings={headings} activeId={activeId} />
       </aside>
     </>
   );
