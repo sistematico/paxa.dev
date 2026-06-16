@@ -38,16 +38,23 @@ function TocList({
 }) {
   return (
     <nav aria-label="Table of contents">
-      <ul className="space-y-1 text-sm">
+      <ul className="space-y-0.5 text-sm">
         {headings.map(({ id, text, level }) => (
-          <li key={id} style={{ paddingLeft: `${(level - 2) * 12}px` }}>
+          <li key={id} style={{ paddingLeft: `${(level - 2) * 10}px` }}>
             <a
               href={`#${id}`}
               onClick={onLinkClick}
-              className={`block py-0.5 leading-snug transition-colors duration-150 hover:text-accent ${
-                activeId === id ? "text-accent font-semibold" : "text-muted"
+              className={`flex items-center gap-2 py-1 leading-snug transition-colors duration-150 group ${
+                activeId === id
+                  ? "text-accent font-medium"
+                  : "text-muted hover:text-foreground"
               }`}
             >
+              <span
+                className={`shrink-0 w-0.5 h-3.5 rounded-full transition-colors duration-150 ${
+                  activeId === id ? "bg-accent" : "bg-border/0 group-hover:bg-border"
+                }`}
+              />
               {text}
             </a>
           </li>
@@ -69,7 +76,6 @@ export default function TableOfContents({ headings, title }: Props) {
 
     if (elements.length === 0) return;
 
-    // Track which headings are above the viewport to find the last one passed
     const aboveViewport = new Set<string>();
 
     observerRef.current = new IntersectionObserver(
@@ -80,7 +86,6 @@ export default function TableOfContents({ headings, title }: Props) {
             setActiveId(entry.target.id);
           } else if (entry.boundingClientRect.top < 0) {
             aboveViewport.add(entry.target.id);
-            // Activate the last heading that scrolled past
             const ids = headings.map((h) => h.id);
             const passed = ids.filter((id) => aboveViewport.has(id));
             if (passed.length > 0) {
@@ -104,18 +109,18 @@ export default function TableOfContents({ headings, title }: Props) {
   return (
     <>
       {/* Mobile: collapsible panel */}
-      <div className="lg:hidden border border-border rounded-lg overflow-hidden mb-6">
+      <div className="lg:hidden border border-border/30 rounded-lg overflow-hidden mb-6 bg-background-alt">
         <button
           type="button"
           onClick={() => setIsOpen((v) => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-surface text-sm font-semibold text-foreground"
+          className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-foreground"
           aria-expanded={isOpen}
         >
           <span>{title}</span>
           <ChevronIcon open={isOpen} />
         </button>
         {isOpen && (
-          <div className="px-4 py-3 border-t border-border bg-background">
+          <div className="px-4 py-3 border-t border-border/30">
             <TocList
               headings={headings}
               activeId={activeId}
@@ -127,10 +132,10 @@ export default function TableOfContents({ headings, title }: Props) {
 
       {/* Desktop: sticky sidebar */}
       <aside
-        className="hidden lg:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1"
+        className="hidden lg:block sticky top-16 max-h-[calc(100vh-5rem)] overflow-y-auto bg-background-alt border border-border/30 rounded-lg p-4"
         aria-label="Table of contents"
       >
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-3">
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-accent/60 mb-3">
           {title}
         </p>
         <TocList headings={headings} activeId={activeId} />

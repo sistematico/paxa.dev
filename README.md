@@ -50,6 +50,28 @@ src/
   snippets/      # MDX code snippets
 ```
 
+## Deploy
+
+O deploy é feito via GitHub Actions: o workflow faz SCP dos arquivos para o VPS e executa `scripts/deploy.sh`.
+
+### Banco de dados persistente
+
+O SQLite fica em `data/paxa.db` por padrão, mas esse caminho é **apagado a cada deploy** (o SCP sobrescreve o diretório com os arquivos do repo, que não incluem o banco). Para persistir os dados, defina `DATABASE_PATH` no `.env` do servidor apontando para fora do diretório do projeto:
+
+```bash
+# No servidor — executar uma vez
+mkdir -p /var/data
+cp /var/www/paxa.dev/data/paxa.db /var/data/paxa.db
+chown nginx:nginx /var/data/paxa.db
+```
+
+```ini
+# /var/www/paxa.dev/.env
+DATABASE_PATH=/var/data/paxa.db
+```
+
+O `.env` é preservado pelo `git clean -e .env` no script de deploy, então o banco em `/var/data/` nunca é tocado por deploys subsequentes.
+
 ## Convenções
 
 - UI em **português brasileiro**; código e commits em **inglês**

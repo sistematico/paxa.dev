@@ -12,7 +12,9 @@ function SidebarCard({
   return (
     <div
       className={`rounded-lg p-4 border transition-colors ${
-        accent ? "bg-surface border-accent/25" : "bg-surface border-border/50"
+        accent
+          ? "bg-background-alt border-accent/20"
+          : "bg-background-alt border-border/30"
       }`}
     >
       {children}
@@ -22,7 +24,7 @@ function SidebarCard({
 
 function SidebarHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted mb-3">
+    <h3 className="text-[11px] font-semibold uppercase tracking-widest text-accent/60 mb-3">
       {children}
     </h3>
   );
@@ -65,11 +67,11 @@ function ActiveFilters({
           <Link
             key={f.label}
             href={f.clearHref}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-accent/10 text-accent text-xs rounded-full hover:bg-accent/20 transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-accent/10 text-accent text-xs rounded-full border border-accent/20 hover:bg-accent/20 hover:border-accent/40 transition-colors"
             title={f.label}
           >
             <span>{f.value}</span>
-            <span className="opacity-60 text-[10px] leading-none">✕</span>
+            <span className="opacity-50 text-[10px] leading-none">✕</span>
           </Link>
         ))}
       </div>
@@ -109,8 +111,8 @@ function CategoryList({
             href={allHref}
             className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
               allActive
-                ? "bg-accent/15 text-accent font-medium"
-                : "text-foreground hover:bg-surface-alt"
+                ? "bg-accent/10 text-accent font-medium border-l-2 border-accent"
+                : "text-muted hover:text-foreground hover:bg-surface/40"
             }`}
           >
             {allLabel}
@@ -122,8 +124,8 @@ function CategoryList({
               href={item.href}
               className={`block px-3 py-1.5 rounded-md text-sm transition-colors ${
                 item.active
-                  ? "bg-accent/15 text-accent font-medium"
-                  : "text-foreground hover:bg-surface-alt"
+                  ? "bg-accent/10 text-accent font-medium border-l-2 border-accent"
+                  : "text-muted hover:text-foreground hover:bg-surface/40"
               }`}
             >
               {item.label}
@@ -160,10 +162,10 @@ function PillCloud({
           <Link
             key={item.label}
             href={item.href}
-            className={`px-2.5 py-1 rounded-full text-xs transition-colors ${
+            className={`px-2.5 py-1 rounded-full text-xs border transition-colors ${
               item.active
-                ? "bg-accent text-background font-medium"
-                : "bg-surface-alt text-foreground hover:bg-border"
+                ? "bg-accent text-background font-medium border-accent"
+                : "bg-transparent text-muted border-border/40 hover:text-foreground hover:border-border"
             }`}
           >
             {item.label}
@@ -191,7 +193,7 @@ function Stats({
   return (
     <SidebarCard>
       <SidebarHeading>{title}</SidebarHeading>
-      <div className="space-y-2.5 text-sm">
+      <div className="space-y-2 text-sm">
         {items.map((item) => (
           <div key={item.label} className="flex justify-between items-center">
             <span className="text-muted">{item.label}</span>
