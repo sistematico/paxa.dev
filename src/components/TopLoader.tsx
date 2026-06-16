@@ -45,7 +45,10 @@ export default function TopLoader({
       }
       startTimeRef.current = Date.now();
       NProgress.start();
-      heartbeatRef.current = setInterval(() => NProgress.inc(0.06), HEARTBEAT_MS);
+      heartbeatRef.current = setInterval(
+        () => NProgress.inc(0.06),
+        HEARTBEAT_MS,
+      );
     }
 
     function doneProgress() {
