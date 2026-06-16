@@ -52,18 +52,22 @@ export default function TopLoader({
     }
 
     function doneProgress() {
-      if (heartbeatRef.current) {
-        clearInterval(heartbeatRef.current);
-        heartbeatRef.current = null;
-      }
       const elapsed = Date.now() - startTimeRef.current;
       const remaining = MIN_DISPLAY_MS - elapsed;
       if (remaining > 0) {
         doneTimerRef.current = setTimeout(() => {
+          if (heartbeatRef.current) {
+            clearInterval(heartbeatRef.current);
+            heartbeatRef.current = null;
+          }
           NProgress.done();
           doneTimerRef.current = null;
         }, remaining);
       } else {
+        if (heartbeatRef.current) {
+          clearInterval(heartbeatRef.current);
+          heartbeatRef.current = null;
+        }
         NProgress.done();
       }
     }
