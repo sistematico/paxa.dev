@@ -1,6 +1,24 @@
 {
   "bookmarks": [
     {
+      "id": "awesomeselfhosted",
+      "title": "Awesome Self Hosted",
+      "description": "https://awesome-selfhosted.net/",
+      "url": "https://awesome-selfhosted.net",
+      "category": "Self Hosted",
+      "tags": [""],
+      "featured": true
+    },
+    {
+      "id": "selfh",
+      "title": "selfh.st",
+      "description": "https://selfh.st",
+      "url": "https://selfh.st",
+      "category": "Self Hosted",
+      "tags": ["Self Hosted"],
+      "featured": true
+    },
+    {
       "id": "vinext",
       "title": "Vinext",
       "description": "",
