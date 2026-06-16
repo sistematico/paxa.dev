@@ -3,8 +3,10 @@ import Link from "next/link";
 import { CustomMDX } from "@/components/mdx-components";
 import Breadcrumb from "@/components/Breadcrumb";
 import BackLink from "@/components/BackLink";
+import TableOfContents from "@/components/TableOfContents";
 import { formatDate } from "@/actions/posts";
 import { getCheatSheets } from "@/actions/cheatsheets";
+import { extractHeadings } from "@/actions/headings";
 import { baseUrl } from "@/sitemap";
 import { getDictionary } from "@/i18n";
 import type { Locale } from "@/i18n/config";
@@ -71,6 +73,7 @@ export default async function CheatSheetPage({
   if (!cheatsheet) notFound();
 
   const dict = await getDictionary(locale);
+  const headings = extractHeadings(cheatsheet.content);
 
   return (
     <section className="px-4 py-6">
@@ -130,9 +133,16 @@ export default async function CheatSheetPage({
           ))}
         </div>
       )}
-      <article className="prose">
-        <CustomMDX source={cheatsheet.content} />
-      </article>
+      <div className="lg:grid lg:grid-cols-[1fr_200px] lg:gap-10 lg:items-start">
+        {headings.length > 0 && (
+          <div className="lg:col-start-2 lg:row-start-1">
+            <TableOfContents headings={headings} title={dict.toc.title} />
+          </div>
+        )}
+        <article className="prose min-w-0 lg:col-start-1 lg:row-start-1">
+          <CustomMDX source={cheatsheet.content} />
+        </article>
+      </div>
       <div className="mt-12 pt-8 border-t border-border">
         <BackLink
           href="/cheatsheets"

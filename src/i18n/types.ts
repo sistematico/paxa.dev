@@ -98,4 +98,7 @@ export interface Dictionary {
     submitButton: string;
     sendingButton: string;
   };
+  toc: {
+    title: string;
+  };
 }

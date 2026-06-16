@@ -102,6 +102,9 @@ const en: Dictionary = {
     submitButton: "Send Message",
     sendingButton: "Sending...",
   },
+  toc: {
+    title: "On this page",
+  },
 };
 
 export default en;

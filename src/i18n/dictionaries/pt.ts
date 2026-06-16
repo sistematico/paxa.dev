@@ -102,6 +102,9 @@ const pt: Dictionary = {
     submitButton: "Enviar Mensagem",
     sendingButton: "Enviando...",
   },
+  toc: {
+    title: "Índice",
+  },
 };
 
 export default pt;
