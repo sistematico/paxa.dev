@@ -40,17 +40,12 @@ function TocList({
     <nav aria-label="Table of contents">
       <ul className="space-y-1 text-sm">
         {headings.map(({ id, text, level }) => (
-          <li
-            key={id}
-            style={{ paddingLeft: `${(level - 2) * 12}px` }}
-          >
+          <li key={id} style={{ paddingLeft: `${(level - 2) * 12}px` }}>
             <a
               href={`#${id}`}
               onClick={onLinkClick}
               className={`block py-0.5 leading-snug transition-colors duration-150 hover:text-accent ${
-                activeId === id
-                  ? "text-accent font-semibold"
-                  : "text-muted"
+                activeId === id ? "text-accent font-semibold" : "text-muted"
               }`}
             >
               {text}
@@ -94,7 +89,7 @@ export default function TableOfContents({ headings, title }: Props) {
           }
         }
       },
-      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 },
     );
 
     for (const el of elements) {
