@@ -52,7 +52,9 @@ function TocList({
             >
               <span
                 className={`shrink-0 w-0.5 h-3.5 rounded-full transition-colors duration-150 ${
-                  activeId === id ? "bg-accent" : "bg-border/0 group-hover:bg-border"
+                  activeId === id
+                    ? "bg-accent"
+                    : "bg-border/0 group-hover:bg-border"
                 }`}
               />
               {text}

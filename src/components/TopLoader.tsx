@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import NProgress from "nprogress";
 
 const MIN_DISPLAY_MS = 250;
+const HEARTBEAT_MS = 300;
 
 interface TopLoaderProps {
   color?: string;
@@ -22,13 +23,14 @@ export default function TopLoader({
 }: TopLoaderProps) {
   const startTimeRef = useRef(0);
   const doneTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const heartbeatRef = useRef<ReturnType<typeof setInterval>>(null);
 
   useEffect(() => {
     NProgress.configure({
       showSpinner,
       speed,
-      minimum: 0.08,
-      trickleSpeed: 200,
+      minimum: 0.2,
+      trickle: false,
       template:
         '<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>',
     });
@@ -38,11 +40,19 @@ export default function TopLoader({
         clearTimeout(doneTimerRef.current);
         doneTimerRef.current = null;
       }
+      if (heartbeatRef.current) {
+        clearInterval(heartbeatRef.current);
+      }
       startTimeRef.current = Date.now();
       NProgress.start();
+      heartbeatRef.current = setInterval(() => NProgress.inc(0.06), HEARTBEAT_MS);
     }
 
     function doneProgress() {
+      if (heartbeatRef.current) {
+        clearInterval(heartbeatRef.current);
+        heartbeatRef.current = null;
+      }
       const elapsed = Date.now() - startTimeRef.current;
       const remaining = MIN_DISPLAY_MS - elapsed;
       if (remaining > 0) {
@@ -111,6 +121,7 @@ export default function TopLoader({
 
     return () => {
       if (doneTimerRef.current) clearTimeout(doneTimerRef.current);
+      if (heartbeatRef.current) clearInterval(heartbeatRef.current);
       document.removeEventListener("click", handleClick);
       window.removeEventListener("popstate", handlePopState);
       window.history.pushState = origPush;
