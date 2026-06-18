@@ -1,0 +1,958 @@
+---
+title: "GeoIP2 in Nginx: IP geolocation on Ubuntu, Rocky Linux, and Oracle Linux"
+publishedAt: "2026-06-17"
+summary: "Learn how to identify a visitor's country, city, region, latitude, and longitude directly in Nginx using GeoIP2 and MaxMind's GeoLite2 databases, with instructions for Ubuntu, Rocky Linux, and Oracle Linux."
+category: "Servers"
+tags: ["nginx", "geoip2", "maxmind", "linux", "rocky-linux", "oracle-linux", "ubuntu", "nextjs"]
+---
+
+# GeoIP2 in Nginx: IP geolocation on Ubuntu, Rocky Linux, and Oracle Linux
+
+Approximating a visitor's location from their IP address can be useful for selecting a language, customizing content, generating statistics, applying regional rules, or forwarding location data to an application.
+
+A common solution is to query an external API. However, this adds latency, third-party dependencies, request limits, and potentially extra costs. With the **GeoIP2** module, Nginx can query MaxMind databases locally and expose the results as Nginx variables.
+
+In this guide, we will configure:
+
+- country and ISO code;
+- state or region;
+- city;
+- postal code;
+- latitude and longitude;
+- forwarding location data to PHP, Node.js, and Next.js applications;
+- installation on Ubuntu, Rocky Linux, and Oracle Linux;
+- automatic GeoLite2 database updates;
+- correct client IP handling when Cloudflare or another reverse proxy is in front of Nginx.
+
+> IP-based location is approximate. It is not equivalent to the device's GPS location and should not be treated as proof of a person's exact location.
+
+## How the solution works
+
+The request flow is:
+
+1. A visitor connects to Nginx.
+2. Nginx obtains the remote IP address.
+3. The `ngx_http_geoip2_module` module queries a MaxMind `.mmdb` database.
+4. The results are stored in Nginx variables.
+5. Those variables can be used in logs, rules, HTTP headers, FastCGI, or `proxy_pass`.
+
+The lookup happens locally and does not require an external API request for every visit.
+
+## Legacy GeoIP and GeoIP2 are not the same
+
+Do not confuse these modules:
+
+- `ngx_http_geoip_module`: the legacy module based on the old GeoIP databases;
+- `ngx_http_geoip2_module`: the current module compatible with MaxMind DB files in the `.mmdb` format.
+
+This article uses **GeoIP2** exclusively.
+
+## 1. Check whether GeoIP2 is already available
+
+Run:
+
+```bash
+nginx -V 2>&1 | grep -i geoip
+```
+
+Also search for installed dynamic modules:
+
+```bash
+find /usr/lib64/nginx /usr/lib/nginx /etc/nginx/modules \
+  -type f -iname '*geoip2*.so' 2>/dev/null
+```
+
+If you find something similar to:
+
+```text
+ngx_http_geoip2_module.so
+```
+
+the module is already installed. Check whether it is loaded near the beginning of `/etc/nginx/nginx.conf`:
+
+```nginx
+load_module modules/ngx_http_geoip2_module.so;
+```
+
+Depending on the package and distribution, the path may be absolute:
+
+```nginx
+load_module /usr/lib64/nginx/modules/ngx_http_geoip2_module.so;
+```
+
+Test the configuration:
+
+```bash
+sudo nginx -t
+```
+
+> `nginx -V` does not always list modules loaded dynamically. That is why you should also search for the `.so` file and inspect the `load_module` directives.
+
+## 2. Install the MaxMind DB library
+
+The Nginx module depends on `libmaxminddb`.
+
+### Ubuntu and Debian
+
+```bash
+sudo apt update
+sudo apt install -y libmaxminddb0 libmaxminddb-dev mmdb-bin geoipupdate
+```
+
+Verify the command-line utility:
+
+```bash
+mmdblookup --version
+```
+
+### Rocky Linux 8, 9, or 10
+
+Install EPEL and the required tools:
+
+```bash
+sudo dnf install -y epel-release
+sudo dnf install -y libmaxminddb libmaxminddb-devel geoipupdate git gcc make wget tar
+```
+
+If a package cannot be found, inspect the enabled repositories:
+
+```bash
+sudo dnf repolist
+sudo dnf search maxmind
+```
+
+On Rocky Linux 9, you may also need to enable CRB:
+
+```bash
+sudo dnf config-manager --set-enabled crb
+```
+
+On Rocky Linux 8, the equivalent repository is usually named PowerTools:
+
+```bash
+sudo dnf config-manager --set-enabled powertools
+```
+
+Then retry the installation:
+
+```bash
+sudo dnf install -y libmaxminddb libmaxminddb-devel geoipupdate
+```
+
+### Oracle Linux 8, 9, or 10
+
+Enable the development repository for your Oracle Linux version.
+
+On Oracle Linux 9:
+
+```bash
+sudo dnf config-manager --enable ol9_codeready_builder
+```
+
+On Oracle Linux 8:
+
+```bash
+sudo dnf config-manager --enable ol8_codeready_builder
+```
+
+Install the Oracle Linux EPEL release package when available:
+
+```bash
+sudo dnf install -y oracle-epel-release-el9
+```
+
+On Oracle Linux 8, use:
+
+```bash
+sudo dnf install -y oracle-epel-release-el8
+```
+
+Then install the dependencies:
+
+```bash
+sudo dnf install -y libmaxminddb libmaxminddb-devel geoipupdate git gcc make wget tar
+```
+
+On Oracle Linux 10, repository names may differ depending on the image and enabled repositories. List the available options:
+
+```bash
+sudo dnf repolist all | grep -Ei 'code|developer|epel'
+sudo dnf search libmaxminddb
+```
+
+If `libmaxminddb-devel` is unavailable, enable the matching development repository shown by the previous command.
+
+## 3. Install the Nginx GeoIP2 module
+
+The installation method depends on where your Nginx package came from. A dynamic module must be binary-compatible with the installed Nginx version and its build options.
+
+### Option A: use a distribution package
+
+First, check whether your distribution provides a ready-made package:
+
+```bash
+sudo dnf search nginx | grep -i geoip
+```
+
+Or on Ubuntu:
+
+```bash
+apt search nginx | grep -i geoip
+```
+
+If a package explicitly named **GeoIP2** is available, prefer it. Do not assume a package named only `geoip` is equivalent; it is usually the legacy module.
+
+After installation, locate the module file:
+
+```bash
+find /usr/lib64/nginx /usr/lib/nginx /etc/nginx/modules \
+  -type f -iname '*geoip2*.so' 2>/dev/null
+```
+
+### Option B: compile a compatible dynamic module
+
+This is the most universal option for Rocky Linux and Oracle Linux when no suitable RPM package is available.
+
+#### 3.1 Find the Nginx version and build arguments
+
+```bash
+nginx -v
+nginx -V 2>&1
+```
+
+Save the reported version. Example:
+
+```text
+nginx version: nginx/1.28.0
+```
+
+The source code used to compile the module must match the installed Nginx version.
+
+Store the version in a variable:
+
+```bash
+NGINX_VERSION="$(nginx -v 2>&1 | sed -E 's#nginx version: nginx/##')"
+echo "$NGINX_VERSION"
+```
+
+#### 3.2 Install build dependencies
+
+On Rocky Linux and Oracle Linux:
+
+```bash
+sudo dnf groupinstall -y "Development Tools"
+sudo dnf install -y \
+  git wget tar gcc make \
+  pcre2-devel zlib-devel openssl-devel \
+  libmaxminddb-devel
+```
+
+On some versions, the zlib compatibility package may be required:
+
+```bash
+sudo dnf install -y zlib-ng-compat-devel
+```
+
+#### 3.3 Download the source code
+
+```bash
+cd /usr/local/src
+
+sudo wget "https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz"
+sudo tar -xzf "nginx-${NGINX_VERSION}.tar.gz"
+
+sudo git clone --depth 1 \
+  https://github.com/leev/ngx_http_geoip2_module.git
+```
+
+#### 3.4 Compile only the module
+
+Enter the Nginx source directory:
+
+```bash
+cd "/usr/local/src/nginx-${NGINX_VERSION}"
+```
+
+Copy the arguments shown by `nginx -V`, preserving the original options and adding:
+
+```text
+--with-compat --add-dynamic-module=/usr/local/src/ngx_http_geoip2_module
+```
+
+Simplified example:
+
+```bash
+sudo ./configure \
+  --with-compat \
+  --with-http_ssl_module \
+  --with-http_v2_module \
+  --with-http_realip_module \
+  --add-dynamic-module=/usr/local/src/ngx_http_geoip2_module
+
+sudo make modules
+```
+
+The compiled module will be created at:
+
+```text
+objs/ngx_http_geoip2_module.so
+```
+
+> To avoid the `module is not binary compatible` error, use the same Nginx version and preserve the relevant arguments shown by `nginx -V`. Do not blindly replace your installation's build options with the simplified example above.
+
+#### 3.5 Install the module
+
+Find the configured Nginx module directory:
+
+```bash
+nginx -V 2>&1 | grep -oE -- '--modules-path=[^ ]+'
+```
+
+On RPM-based systems, it is commonly:
+
+```text
+/usr/lib64/nginx/modules
+```
+
+Create the directory and copy the module:
+
+```bash
+sudo mkdir -p /usr/lib64/nginx/modules
+sudo cp objs/ngx_http_geoip2_module.so /usr/lib64/nginx/modules/
+sudo chmod 755 /usr/lib64/nginx/modules/ngx_http_geoip2_module.so
+```
+
+At the beginning of `/etc/nginx/nginx.conf`, before the `events` block, add:
+
+```nginx
+load_module /usr/lib64/nginx/modules/ngx_http_geoip2_module.so;
+```
+
+Test the configuration:
+
+```bash
+sudo nginx -t
+```
+
+### Be careful after Nginx updates
+
+When Nginx is upgraded to a different version, a manually compiled module may no longer be compatible. After an upgrade, always run:
+
+```bash
+sudo nginx -t
+```
+
+If you see `module is not binary compatible`, rebuild the module against the exact new Nginx version.
+
+## 4. Create a free MaxMind account
+
+GeoLite2 databases are free, but they require a MaxMind account and a license key.
+
+In the MaxMind account portal:
+
+1. create or sign in to your account;
+2. generate a new license key;
+3. copy your `AccountID` and license key;
+4. do not publish the key in Git, Docker images, or documentation.
+
+We will use:
+
+- `GeoLite2-Country`;
+- `GeoLite2-City`.
+
+The City database already includes country information, but keeping Country separately can still be useful when a smaller database is preferred for specific lookups.
+
+## 5. Configure geoipupdate
+
+Edit the configuration file:
+
+```bash
+sudo nano /etc/GeoIP.conf
+```
+
+Use this template:
+
+```ini
+AccountID YOUR_ACCOUNT_ID
+LicenseKey YOUR_LICENSE_KEY
+EditionIDs GeoLite2-Country GeoLite2-City
+DatabaseDirectory /var/lib/GeoIP
+```
+
+Protect the file:
+
+```bash
+sudo chmod 600 /etc/GeoIP.conf
+sudo chown root:root /etc/GeoIP.conf
+```
+
+Create the database directory:
+
+```bash
+sudo mkdir -p /var/lib/GeoIP
+```
+
+Download or update the databases:
+
+```bash
+sudo geoipupdate
+```
+
+Check the files:
+
+```bash
+ls -lh /var/lib/GeoIP/
+```
+
+You should see files such as:
+
+```text
+GeoLite2-City.mmdb
+GeoLite2-Country.mmdb
+```
+
+## 6. Test the database from the command line
+
+Choose a public IP address for testing:
+
+```bash
+mmdblookup \
+  --file /var/lib/GeoIP/GeoLite2-City.mmdb \
+  --ip 8.8.8.8
+```
+
+To query only the country code:
+
+```bash
+mmdblookup \
+  --file /var/lib/GeoIP/GeoLite2-City.mmdb \
+  --ip 8.8.8.8 \
+  country iso_code
+```
+
+To query the city name in English when available:
+
+```bash
+mmdblookup \
+  --file /var/lib/GeoIP/GeoLite2-City.mmdb \
+  --ip 8.8.8.8 \
+  city names en
+```
+
+Not every record includes a city, postal code, or coordinates. Always define fallback values in your Nginx configuration.
+
+## 7. Permissions and SELinux on Rocky Linux and Oracle Linux
+
+The Nginx worker process must be able to read the `.mmdb` files.
+
+Apply safe permissions:
+
+```bash
+sudo chown -R root:root /var/lib/GeoIP
+sudo find /var/lib/GeoIP -type d -exec chmod 755 {} \;
+sudo find /var/lib/GeoIP -type f -name '*.mmdb' -exec chmod 644 {} \;
+```
+
+Check the SELinux mode:
+
+```bash
+getenforce
+```
+
+If SELinux is `Enforcing`, assign a context readable by Nginx:
+
+```bash
+sudo semanage fcontext -a -t httpd_sys_content_t "/var/lib/GeoIP(/.*)?"
+sudo restorecon -Rv /var/lib/GeoIP
+```
+
+If `semanage` is unavailable:
+
+```bash
+sudo dnf install -y policycoreutils-python-utils
+```
+
+Inspect the resulting context:
+
+```bash
+ls -lZ /var/lib/GeoIP/
+```
+
+Do not disable SELinux to work around a file permission problem. Fix the file context instead.
+
+## 8. Configure GeoIP2 variables in Nginx
+
+Create a dedicated configuration file:
+
+```bash
+sudo nano /etc/nginx/conf.d/geoip2.conf
+```
+
+Add:
+
+```nginx
+geoip2 /var/lib/GeoIP/GeoLite2-City.mmdb auto_reload=5m {
+    $geoip2_country_code default=-- source=$remote_addr country iso_code;
+    $geoip2_country_name default=Unknown source=$remote_addr country names en;
+
+    $geoip2_region_code default=-- source=$remote_addr subdivisions 0 iso_code;
+    $geoip2_region_name default=Unknown source=$remote_addr subdivisions 0 names en;
+
+    $geoip2_city_name default=Unknown source=$remote_addr city names en;
+    $geoip2_postal_code default=-- source=$remote_addr postal code;
+
+    $geoip2_latitude default=0 source=$remote_addr location latitude;
+    $geoip2_longitude default=0 source=$remote_addr location longitude;
+    $geoip2_time_zone default=Unknown source=$remote_addr location time_zone;
+    $geoip2_accuracy_radius default=0 source=$remote_addr location accuracy_radius;
+}
+```
+
+The option:
+
+```nginx
+auto_reload=5m
+```
+
+makes the module periodically check whether the database file has been replaced, avoiding the need to restart Nginx after each update.
+
+### Fallback between localized names
+
+You can define multiple variables and use `map` to select a fallback language:
+
+```nginx
+geoip2 /var/lib/GeoIP/GeoLite2-City.mmdb auto_reload=5m {
+    $geoip2_city_local source=$remote_addr city names en;
+    $geoip2_city_fallback source=$remote_addr city names es;
+}
+
+map $geoip2_city_local $geoip2_city_name {
+    ""      $geoip2_city_fallback;
+    default $geoip2_city_local;
+}
+```
+
+> The `geoip2` and `map` directives belong to the `http` context. In common installations, files in `/etc/nginx/conf.d/*.conf` are included inside that block. Do not place these directives inside `server` or `location`.
+
+Test and reload Nginx:
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+## 9. Expose the data through a temporary test route
+
+Inside a `server` block, temporarily add:
+
+```nginx
+location = /geoip-debug {
+    default_type application/json;
+
+    return 200 '{
+        "ip": "$remote_addr",
+        "countryCode": "$geoip2_country_code",
+        "country": "$geoip2_country_name",
+        "regionCode": "$geoip2_region_code",
+        "region": "$geoip2_region_name",
+        "city": "$geoip2_city_name",
+        "postalCode": "$geoip2_postal_code",
+        "latitude": "$geoip2_latitude",
+        "longitude": "$geoip2_longitude",
+        "timeZone": "$geoip2_time_zone",
+        "accuracyRadiusKm": "$geoip2_accuracy_radius"
+    }';
+}
+```
+
+Test it:
+
+```bash
+curl https://your-domain.com/geoip-debug
+```
+
+Remove this route after testing. Publicly exposing debug data without a clear need is not recommended.
+
+## 10. Forward the data to an application with proxy_pass
+
+For Node.js, Next.js, Bun, NestJS, or any application behind a reverse proxy:
+
+```nginx
+location / {
+    proxy_pass http://127.0.0.1:3000;
+
+    proxy_http_version 1.1;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    proxy_set_header X-GeoIP-Country-Code $geoip2_country_code;
+    proxy_set_header X-GeoIP-Country-Name $geoip2_country_name;
+    proxy_set_header X-GeoIP-Region-Code $geoip2_region_code;
+    proxy_set_header X-GeoIP-Region-Name $geoip2_region_name;
+    proxy_set_header X-GeoIP-City $geoip2_city_name;
+    proxy_set_header X-GeoIP-Postal-Code $geoip2_postal_code;
+    proxy_set_header X-GeoIP-Latitude $geoip2_latitude;
+    proxy_set_header X-GeoIP-Longitude $geoip2_longitude;
+    proxy_set_header X-GeoIP-Time-Zone $geoip2_time_zone;
+    proxy_set_header X-GeoIP-Accuracy-Radius $geoip2_accuracy_radius;
+}
+```
+
+### Reading the headers in Next.js
+
+In a Server Component, Route Handler, or Server Action:
+
+```ts
+import { headers } from "next/headers";
+
+type GeoLocation = {
+  countryCode: string | null;
+  countryName: string | null;
+  regionCode: string | null;
+  regionName: string | null;
+  city: string | null;
+  postalCode: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  timeZone: string | null;
+  accuracyRadiusKm: number | null;
+};
+
+function parseNumber(value: string | null): number | null {
+  if (value === null || value.trim() === "") {
+    return null;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+export async function getGeoLocation(): Promise<GeoLocation> {
+  const requestHeaders = await headers();
+
+  return {
+    countryCode: requestHeaders.get("x-geoip-country-code"),
+    countryName: requestHeaders.get("x-geoip-country-name"),
+    regionCode: requestHeaders.get("x-geoip-region-code"),
+    regionName: requestHeaders.get("x-geoip-region-name"),
+    city: requestHeaders.get("x-geoip-city"),
+    postalCode: requestHeaders.get("x-geoip-postal-code"),
+    latitude: parseNumber(requestHeaders.get("x-geoip-latitude")),
+    longitude: parseNumber(requestHeaders.get("x-geoip-longitude")),
+    timeZone: requestHeaders.get("x-geoip-time-zone"),
+    accuracyRadiusKm: parseNumber(
+      requestHeaders.get("x-geoip-accuracy-radius"),
+    ),
+  };
+}
+```
+
+These headers should only be considered trustworthy when the application is not exposed directly to the internet and receives traffic exclusively through Nginx.
+
+## 11. Forward the data to PHP with FastCGI
+
+In a PHP-FPM configuration:
+
+```nginx
+location ~ \.php$ {
+    include fastcgi_params;
+    fastcgi_pass unix:/run/php-fpm/www.sock;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+    fastcgi_param GEOIP_COUNTRY_CODE $geoip2_country_code;
+    fastcgi_param GEOIP_COUNTRY_NAME $geoip2_country_name;
+    fastcgi_param GEOIP_REGION_NAME $geoip2_region_name;
+    fastcgi_param GEOIP_CITY $geoip2_city_name;
+    fastcgi_param GEOIP_LATITUDE $geoip2_latitude;
+    fastcgi_param GEOIP_LONGITUDE $geoip2_longitude;
+}
+```
+
+In PHP:
+
+```php
+<?php
+
+$countryCode = $_SERVER['GEOIP_COUNTRY_CODE'] ?? null;
+$countryName = $_SERVER['GEOIP_COUNTRY_NAME'] ?? null;
+$city = $_SERVER['GEOIP_CITY'] ?? null;
+```
+
+## 12. Include the data in access logs
+
+Create a custom log format in the `http` context:
+
+```nginx
+log_format geoip_combined
+    '$remote_addr - $remote_user [$time_local] '
+    '"$request" $status $body_bytes_sent '
+    '"$http_referer" "$http_user_agent" '
+    'country=$geoip2_country_code '
+    'region="$geoip2_region_name" '
+    'city="$geoip2_city_name"';
+```
+
+In the virtual server:
+
+```nginx
+access_log /var/log/nginx/access_geoip.log geoip_combined;
+```
+
+Then run:
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Avoid logging latitude, longitude, or other unnecessary information unless there is a legitimate purpose. Logs are also subject to privacy and retention requirements.
+
+## 13. Cloudflare, load balancers, and proxies: restore the real IP first
+
+When Nginx is behind Cloudflare, a load balancer, or another proxy, `$remote_addr` may contain the proxy's address. In that case, GeoIP will return the data center's location instead of the visitor's location.
+
+With Cloudflare, configure Nginx's Real IP module and trust **only** the official Cloudflare networks.
+
+Structural example:
+
+```nginx
+# Add all current official Cloudflare IPv4 and IPv6 ranges here.
+set_real_ip_from 173.245.48.0/20;
+set_real_ip_from 103.21.244.0/22;
+# ...remaining official ranges...
+
+real_ip_header CF-Connecting-IP;
+real_ip_recursive on;
+```
+
+After Real IP is configured correctly, `$remote_addr` represents the visitor and can be used as the GeoIP2 `source`.
+
+Do not configure:
+
+```nginx
+set_real_ip_from 0.0.0.0/0;
+```
+
+That would allow any client to spoof the IP address through HTTP headers.
+
+If your provider sends the client IP in a different header, adjust `real_ip_header` and restrict `set_real_ip_from` to the trusted proxy addresses or networks.
+
+## 14. Automatically update the databases
+
+GeoLite2 databases should be kept up to date. You can run `geoipupdate` periodically with systemd.
+
+Create a service:
+
+```bash
+sudo nano /etc/systemd/system/geoipupdate.service
+```
+
+```ini
+[Unit]
+Description=Update MaxMind GeoLite2 databases
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/geoipupdate
+```
+
+Confirm the program path:
+
+```bash
+command -v geoipupdate
+```
+
+If the path differs, update `ExecStart` accordingly.
+
+Create the timer:
+
+```bash
+sudo nano /etc/systemd/system/geoipupdate.timer
+```
+
+```ini
+[Unit]
+Description=Weekly GeoLite2 database update
+
+[Timer]
+OnCalendar=Sun *-*-* 04:15:00
+Persistent=true
+RandomizedDelaySec=30m
+
+[Install]
+WantedBy=timers.target
+```
+
+Enable it:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now geoipupdate.timer
+```
+
+Verify it:
+
+```bash
+systemctl list-timers geoipupdate.timer
+sudo systemctl start geoipupdate.service
+sudo journalctl -u geoipupdate.service --no-pager
+```
+
+Because `auto_reload=5m` is enabled, Nginx will detect the updated database files automatically.
+
+## 15. Troubleshooting common problems
+
+### `unknown directive "geoip2"`
+
+The module was not loaded.
+
+Check:
+
+```bash
+sudo nginx -T 2>&1 | grep -i load_module
+find /usr/lib64/nginx /usr/lib/nginx -iname '*geoip2*.so' 2>/dev/null
+```
+
+Make sure the `load_module` directive appears before the `events` block.
+
+### `module is not binary compatible`
+
+The module was compiled for a different Nginx version or with incompatible build options.
+
+Rebuild it using the exact version and arguments shown by:
+
+```bash
+nginx -V 2>&1
+```
+
+### `MMDB_open ... Permission denied`
+
+Check standard permissions and SELinux:
+
+```bash
+namei -l /var/lib/GeoIP/GeoLite2-City.mmdb
+ls -lZ /var/lib/GeoIP/
+sudo ausearch -m AVC -ts recent
+```
+
+Reapply the context:
+
+```bash
+sudo restorecon -Rv /var/lib/GeoIP
+```
+
+### The city is shown as `Unknown`
+
+This may be normal. Not every IP has city-level resolution, and mobile networks, VPNs, CGNAT, and regional providers can reduce accuracy.
+
+Test the address directly:
+
+```bash
+mmdblookup \
+  --file /var/lib/GeoIP/GeoLite2-City.mmdb \
+  --ip VISITOR_PUBLIC_IP \
+  city names en
+```
+
+### The result shows Cloudflare's location
+
+Nginx is still using the proxy IP. Configure `real_ip_header`, `set_real_ip_from`, and `real_ip_recursive` before the GeoIP2 lookup.
+
+### It works in the terminal but not in Nginx
+
+The Nginx user or SELinux domain may not have access to the database. Identify the worker user:
+
+```bash
+ps -eo user,group,comm | grep nginx
+```
+
+Then inspect every permission in the path:
+
+```bash
+namei -l /var/lib/GeoIP/GeoLite2-City.mmdb
+```
+
+## 16. Security and privacy
+
+Important recommendations:
+
+- do not treat GeoIP as an exact location;
+- do not make critical decisions based only on the detected country or city;
+- do not trust GeoIP headers sent directly by a client;
+- keep the application accessible only through the reverse proxy;
+- do not expose your MaxMind license key;
+- do not log more data than necessary;
+- disclose approximate geolocation use in your privacy policy when applicable;
+- provide a manual language or region fallback;
+- remember that VPNs, Tor, mobile networks, and CGNAT can change or reduce accuracy.
+
+## Final configuration summary
+
+Your `/etc/nginx/conf.d/geoip2.conf` file can look like this:
+
+```nginx
+geoip2 /var/lib/GeoIP/GeoLite2-City.mmdb auto_reload=5m {
+    $geoip2_country_code default=-- source=$remote_addr country iso_code;
+    $geoip2_country_name default=Unknown source=$remote_addr country names en;
+    $geoip2_region_code default=-- source=$remote_addr subdivisions 0 iso_code;
+    $geoip2_region_name default=Unknown source=$remote_addr subdivisions 0 names en;
+    $geoip2_city_name default=Unknown source=$remote_addr city names en;
+    $geoip2_postal_code default=-- source=$remote_addr postal code;
+    $geoip2_latitude default=0 source=$remote_addr location latitude;
+    $geoip2_longitude default=0 source=$remote_addr location longitude;
+    $geoip2_time_zone default=Unknown source=$remote_addr location time_zone;
+    $geoip2_accuracy_radius default=0 source=$remote_addr location accuracy_radius;
+}
+```
+
+And the reverse proxy for a Next.js application:
+
+```nginx
+location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    proxy_set_header X-GeoIP-Country-Code $geoip2_country_code;
+    proxy_set_header X-GeoIP-Country-Name $geoip2_country_name;
+    proxy_set_header X-GeoIP-Region-Code $geoip2_region_code;
+    proxy_set_header X-GeoIP-Region-Name $geoip2_region_name;
+    proxy_set_header X-GeoIP-City $geoip2_city_name;
+    proxy_set_header X-GeoIP-Postal-Code $geoip2_postal_code;
+    proxy_set_header X-GeoIP-Latitude $geoip2_latitude;
+    proxy_set_header X-GeoIP-Longitude $geoip2_longitude;
+    proxy_set_header X-GeoIP-Time-Zone $geoip2_time_zone;
+    proxy_set_header X-GeoIP-Accuracy-Radius $geoip2_accuracy_radius;
+}
+```
+
+Always finish with:
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+## Conclusion
+
+GeoIP2 allows Nginx to identify approximate location information without querying an external API for every request. The solution is fast, local, and especially useful when Nginx already acts as a reverse proxy for PHP, Node.js, or Next.js.
+
+The most important points are to use GeoIP2 instead of the legacy GeoIP module, keep the databases updated, preserve binary compatibility when compiling the module, and correctly restore the visitor's IP when Cloudflare or another proxy is in front of Nginx.
+
+## References
+
+- Article that inspired this guide: https://dev.to/gbhorwood/nginx-doing-ip-geolocation-right-in-nginx-442h
+- GeoIP2 module for Nginx: https://github.com/leev/ngx_http_geoip2_module
+- MaxMind GeoLite2 documentation: https://dev.maxmind.com/geoip/geolite2-free-geolocation-data/
+- Updating MaxMind databases: https://dev.maxmind.com/geoip/updating-databases/
+- Nginx on Rocky Linux: https://docs.rockylinux.org/guides/web/nginx-mainline/
+- Nginx on Oracle Linux: https://docs.oracle.com/en/learn/ol-nginx/
