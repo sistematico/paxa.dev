@@ -134,7 +134,7 @@ export default function TableOfContents({ headings, title }: Props) {
 
       {/* Desktop: sticky sidebar */}
       <aside
-        className="hidden lg:block sticky top-16 max-h-[calc(100vh-5rem)] overflow-y-auto bg-background-alt border border-border/30 rounded-lg p-4"
+        className="hidden lg:block sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto bg-background-alt border border-border/30 rounded-lg p-4"
         aria-label="Table of contents"
       >
         <p className="text-[11px] font-semibold uppercase tracking-widest text-accent/60 mb-3">

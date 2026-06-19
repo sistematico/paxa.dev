@@ -135,7 +135,7 @@ export default async function CheatSheetPage({
       )}
       <div className="lg:grid lg:grid-cols-[1fr_200px] lg:gap-10 lg:items-start">
         {headings.length > 0 && (
-          <div className="lg:col-start-2 lg:row-start-1 lg:self-stretch">
+          <div className="lg:col-start-2 lg:row-start-1 lg:self-stretch lg:-mt-28">
             <TableOfContents headings={headings} title={dict.toc.title} />
           </div>
         )}

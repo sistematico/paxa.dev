@@ -17,12 +17,12 @@ export default function ThemeSwitcher() {
     >
       <Sun
         strokeWidth={1.5}
-        className={`absolute size-5 text-amber-400 transition-all duration-400 ease-in-out
+        className={`absolute size-5 transition-all duration-400 ease-in-out
           ${isLight ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-0 opacity-0"}`}
       />
       <Moon
         strokeWidth={1.5}
-        className={`absolute size-5 text-blue-300 transition-all duration-400 ease-in-out
+        className={`absolute size-5 transition-all duration-400 ease-in-out
           ${isLight ? "-rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"}`}
       />
     </button>
