@@ -126,11 +126,20 @@ export default function TopLoader({
     document.addEventListener("click", handleClick);
     window.addEventListener("popstate", handlePopState);
 
+    // Browsers with the Navigation API (Chromium) drive client-side
+    // navigation through window.navigation rather than history.pushState,
+    // so the pushState/replaceState patches above never fire for them.
+    const nav = (window as unknown as { navigation?: EventTarget }).navigation;
+    nav?.addEventListener("navigatesuccess", doneProgress);
+    nav?.addEventListener("navigateerror", doneProgress);
+
     return () => {
       if (doneTimerRef.current) clearTimeout(doneTimerRef.current);
       if (heartbeatRef.current) clearInterval(heartbeatRef.current);
       document.removeEventListener("click", handleClick);
       window.removeEventListener("popstate", handlePopState);
+      nav?.removeEventListener("navigatesuccess", doneProgress);
+      nav?.removeEventListener("navigateerror", doneProgress);
       window.history.pushState = origPush;
       window.history.replaceState = origReplace;
     };
