@@ -4,10 +4,7 @@
       "id": "git-paxa",
       "title": "Git Paxá",
       "description": "Um repositório Git",
-      "tech": [
-        "git",
-        "linux"
-      ],
+      "tech": ["git", "linux"],
       "github": "https://git.paxa.dev/git-paxa",
       "demo": "https://git.paxa.dev",
       "icon": "Robot",
@@ -34,12 +31,7 @@
       "id": "reconta",
       "title": "ReConta",
       "description": "Aplicativo de controle financeiro pessoal com integração bancária e visualização de dados",
-      "tech": [
-        "Next.js",
-        "Socket.IO",
-        "TypeScript",
-        "Drizzle ORM"
-      ],
+      "tech": ["Next.js", "Socket.IO", "TypeScript", "Drizzle ORM"],
       "github": "https://github.com/paxa/reconta",
       "demo": "https://reconta.app",
       "icon": "Calculator",
@@ -49,11 +41,7 @@
       "id": "som-do-mato",
       "title": "Som do Mato",
       "description": "Website de rádio com player em tempo real e gerenciamento de conteúdo",
-      "tech": [
-        "Next.js",
-        "TailwindCSS",
-        "TypeScript"
-      ],
+      "tech": ["Next.js", "TailwindCSS", "TypeScript"],
       "github": "https://github.com/somdomato/somdomato",
       "demo": "https://somdomato.com",
       "icon": "Radio",
@@ -63,9 +51,7 @@
       "id": "gs1",
       "title": "GS1 DataMatrix Scanner",
       "description": "",
-      "tech": [
-        "Kotlin"
-      ],
+      "tech": ["Kotlin"],
       "github": "https://github.com/sistematico/gs1-scanner",
       "demo": "https://sistematico.github.io/gs1-scanner",
       "icon": "Radio",
@@ -75,9 +61,7 @@
       "id": "macunaima",
       "title": "Macunaíma",
       "description": "",
-      "tech": [
-        "GrammyJS"
-      ],
+      "tech": ["GrammyJS"],
       "github": "https://github.com/sistematico/macunaima",
       "demo": "",
       "icon": "Robot",
