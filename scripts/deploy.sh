@@ -18,18 +18,21 @@ cp .env .env.production
 echo "📥 Instalando dependências..."
 pnpm install
 
+echo "⏸️ Parando serviço para liberar o banco de dados..."
+sudo /usr/bin/systemctl stop $SERVICE
+
 echo "🗃️ Sincronizando banco de dados..."
 pnpm run push
 
 if [ $? -ne 0 ]; then
   echo "⚠️ Falha ao sincronizar banco de dados. Abortando o deploy..."
+  sudo /usr/bin/systemctl start $SERVICE
   exit 1
 fi
 
 if pnpm run build; then
   echo "✅ Build concluído com sucesso!"
-  sudo /usr/bin/systemctl stop $SERVICE
-  
+
   [ -e $WORKDIR ] && rm -rf $WORKDIR
   [ -e $TMPDIR ] && cp -af $TMPDIR $WORKDIR
 
@@ -42,4 +45,7 @@ if pnpm run build; then
 
   sudo /usr/bin/systemctl start $SERVICE
   echo "🚀 Serviço reiniciado!"
+else
+  echo "⚠️ Falha no build. Reiniciando serviço com a versão anterior..."
+  sudo /usr/bin/systemctl start $SERVICE
 fi
