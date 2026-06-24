@@ -6,7 +6,9 @@
       "description": "https://awesome-selfhosted.net/",
       "url": "https://awesome-selfhosted.net",
       "category": "Self Hosted",
-      "tags": [""],
+      "tags": [
+        ""
+      ],
       "featured": true
     },
     {
@@ -15,7 +17,9 @@
       "description": "https://selfh.st",
       "url": "https://selfh.st",
       "category": "Self Hosted",
-      "tags": ["Self Hosted"],
+      "tags": [
+        "Self Hosted"
+      ],
       "featured": true
     },
     {
@@ -24,7 +28,10 @@
       "description": "",
       "url": "https://vinext.io",
       "category": "Documentação",
-      "tags": ["Next.js", "TypeScript"],
+      "tags": [
+        "Next.js",
+        "TypeScript"
+      ],
       "featured": true
     },
     {
@@ -33,7 +40,12 @@
       "description": "A documentação oficial do React com guias, referências e exemplos",
       "url": "https://react.dev",
       "category": "Documentação",
-      "tags": ["React", "Frontend", "TypeScript", "JavaScript"],
+      "tags": [
+        "React",
+        "Frontend",
+        "TypeScript",
+        "JavaScript"
+      ],
       "featured": true
     },
     {
@@ -42,7 +54,11 @@
       "description": "Framework CSS utility-first para desenvolvimento rápido",
       "url": "https://tailwindcss.com",
       "category": "CSS",
-      "tags": ["CSS", "Design", "Frontend"],
+      "tags": [
+        "CSS",
+        "Design",
+        "Frontend"
+      ],
       "featured": true
     },
     {
@@ -51,7 +67,11 @@
       "description": "Plataforma de hospedagem de código e colaboração",
       "url": "https://github.com",
       "category": "Ferramentas",
-      "tags": ["Git", "DevOps", "Colaboração"],
+      "tags": [
+        "Git",
+        "DevOps",
+        "Colaboração"
+      ],
       "featured": false
     },
     {
@@ -60,7 +80,11 @@
       "description": "Biblioteca de componentes React para interfaces modernas e responsivas",
       "url": "https://neonbladeui.neuronrush.com",
       "category": "Componentes",
-      "tags": ["React", "UI", "Componentes"],
+      "tags": [
+        "React",
+        "UI",
+        "Componentes"
+      ],
       "featured": false
     },
     {
@@ -69,7 +93,11 @@
       "description": "Loaders animados para suas aplicações web",
       "url": "https://dotmatrix.zzzzshawn.cloud/",
       "category": "Componentes",
-      "tags": ["React", "UI", "Componentes"],
+      "tags": [
+        "React",
+        "UI",
+        "Componentes"
+      ],
       "featured": false
     },
     {
@@ -78,7 +106,11 @@
       "description": "Componente de tabela para React com recursos avançados de ordenação, filtragem e paginação",
       "url": "https://shark.vini.one",
       "category": "Componentes",
-      "tags": ["React", "UI", "Componentes"],
+      "tags": [
+        "React",
+        "UI",
+        "Componentes"
+      ],
       "featured": false
     },
     {
@@ -87,7 +119,38 @@
       "description": "Biblioteca de componentes React para interfaces modernas e responsivas",
       "url": "https://remocn.dev",
       "category": "Componentes",
-      "tags": ["React", "UI", "Componentes"],
+      "tags": [
+        "React",
+        "UI",
+        "Componentes"
+      ],
+      "featured": false
+    },
+    {
+      "id": "golang-yt-1",
+      "title": "golang video 1",
+      "description": "",
+      "url": "",
+      "category": "",
+      "tags": [],
+      "featured": false
+    },
+    {
+      "id": "golang-yt-1",
+      "title": "golang video 1",
+      "description": "",
+      "url": "",
+      "category": "",
+      "tags": [],
+      "featured": false
+    },
+    {
+      "id": "golang-yt-1",
+      "title": "golang video 1",
+      "description": "",
+      "url": "",
+      "category": "",
+      "tags": [],
       "featured": false
     }
   ]

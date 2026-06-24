@@ -1,0 +1,68 @@
+---
+title: "LM Studio"
+summary: "A guide to optimizing LM Studio for the pi agent, focused on maximum performance and memory efficiency."
+publishedAt: "2026-06-24"
+category: "AI Infrastructure"
+tags: ["LM Studio", "pi", "Arch Linux", "Agents", "LLM"]
+---
+
+# 🚀 Optimization Guide: LM Studio + pi Agent
+**Target Hardware:** Intel Ultra 9 285K | NVIDIA RTX 5060 Ti (16GB) | 64GB RAM
+
+This guide defines the ideal settings to maximize the performance of the `pi` agent, balancing the intelligence of large models with the speed of smaller ones.
+
+## 🧠 The Fundamental Concept: VRAM vs. RAM
+Your GPU has **16GB of VRAM**.
+- If the model + context fit within 16GB → **Maximum Speed (GPU)**.
+- If the model + context exceed 16GB → **Slowdown (spillover to RAM/CPU)**.
+
+---
+
+## 🛠️ Configuration Profiles
+
+### 1. Profile: Deep Reasoning (Large Models: 26B+)
+*Use this profile for complex architecture and difficult logic tasks, where accuracy matters more than speed.*
+**Example:** `gemma-4-2quanto-26b`
+
+| Parameter | Recommended Value | Reason |
+| :--- | :--- | :--- |
+| **GPU Offload** | **Partial (Manual)** | Adjust so total GPU usage stays around 14GB. |
+| **Context Length** | `16384` (16k) | Prevents the context window from pushing too many layers to the CPU. |
+| **CPU Thread Pool** | `18` | Leaves cores available for the OS and the `pi` agent. |
+| **Eval. Batch Size** | `512` | Balances prompt processing and VRAM usage. |
+| **Physical Batch Size** | `512` | Keeps the inference pipeline stable. |
+| **Max Concur. Pred.** | `1` | The `pi` agent works sequentially; there is no need for more. |
+
+---
+
+### 2. Profile: Instant Coding (Light Models: 7B - 9B)
+*Use this profile for rapid refactoring, unit test creation, and file reading. Focus on ultra-low latency.*
+**Example:** `Llama-3-8B`, `Mistral-7B`, `Phi-3`
+
+| Parameter | Recommended Value | Reason |
+| :--- | :--- | :--- |
+| **GPU Offload** | **Max (All Layers)** | Ensures the entire model resides in VRAM. |
+| **Context Length** | `32768` or `65536` | Uses the extra VRAM to give the agent longer-term memory. |
+| **CPU Thread Pool** | `18` | Keeps the system responsive. |
+| **Eval. Batch Size** | `1024` or `2048` | Drastically speeds up long prompt reading. |
+| **Physical Batch Size** | `1024` | Aligns with evaluation for high throughput. |
+| **Max Concur. Pred.** | `1` | Keeps focus on the single task of the agent. |
+
+---
+
+## 📖 Glossary of Advanced Parameters
+
+* **GPU Offload:** Defines how many model layers are processed by the GPU. The goal is always to use as much as possible without exceeding the 16GB total.
+* **Context Length:** The “short-term memory.” A larger value lets the `pi` agent read more code at once, but increases memory consumption.
+* **CPU Thread Pool Size:** How many cores of your Intel Ultra 9 CPU are dedicated to the model’s math computation when it is running via RAM.
+* **Evaluation/Physical Batch Size:** Defines how many tokens are processed in a single step during prefill and decoding. Larger values increase throughput (tokens per second), but require more VRAM.
+
+---
+
+## ⚠️ Critical Warnings
+
+> [!CAUTION]
+> **VRAM MONITORING:** Before loading a model, check the `nvidia-smi` command. If your GPU is already under heavy load (for example, more than 5GB occupied by other apps), you will not be able to run large models in full-GPU mode. Close browsers and other heavy applications before starting LM Studio.
+
+> [!TIP]
+> **GOLDEN TIP:** If you notice that the `pi` agent is responding very slowly (low tokens/s), reduce the **Context Length** or lower the number of layers in **GPU Offload** to ensure the model fits entirely in your RTX 5060 Ti.

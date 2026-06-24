@@ -1,0 +1,112 @@
+---
+title: "Folha de atalhos do Vim"
+summary: "Atalhos úteis do Vim para navegação, edição, busca e buffers."
+publishedAt: "2026-06-24"
+category: "Editor"
+tags: ["vim", "editor", "produtividade", "folha de atalhos"]
+---
+
+# Folha de atalhos do Vim
+
+> **Dica:** use `:help <tema>` para abrir a documentação interna do Vim.
+
+## 1. Modos
+
+| Atalho | Ação |
+|---|---|
+| `i` | Entrar em modo de inserção antes do cursor |
+| `a` | Entrar em modo de inserção após o cursor |
+| `o` | Abrir uma nova linha abaixo |
+| `O` | Abrir uma nova linha acima |
+| `v` | Entrar no modo visual por caractere |
+| `V` | Entrar no modo visual por linha |
+| `<C-v>` | Entrar no modo visual em bloco |
+| `<Esc>` | Voltar ao modo Normal |
+
+## 2. Movimentação básica
+
+| Atalho | Ação |
+|---|---|
+| `h` | Mover para a esquerda |
+| `j` | Mover para baixo |
+| `k` | Mover para cima |
+| `l` | Mover para a direita |
+| `w` | Ir para o início da próxima palavra |
+| `b` | Ir para o início da palavra anterior |
+| `e` | Ir para o final da palavra |
+| `0` | Ir para o início da linha |
+| `$` | Ir para o final da linha |
+| `gg` | Ir para a primeira linha |
+| `G` | Ir para a última linha |
+| `{n}G` | Ir para a linha `n` |
+| `%` | Ir para o parêntese ou chave correspondente |
+| `zz` | Centralizar a linha atual |
+
+## 3. Edição
+
+| Atalho | Ação |
+|---|---|
+| `x` | Apagar caractere sob o cursor |
+| `dw` | Apagar palavra |
+| `dd` | Apagar linha atual |
+| `D` | Apagar até o final da linha |
+| `yy` | Copiar linha atual |
+| `yw` | Copiar palavra |
+| `p` | Colar após o cursor |
+| `P` | Colar antes do cursor |
+| `u` | Desfazer |
+| `<C-r>` | Refazer |
+| `.` | Repetir a última alteração |
+| `J` | Unir a linha atual com a próxima |
+| `>>` | Aumentar recuo |
+| `<<` | Diminuir recuo |
+
+## 4. Busca e substituição
+
+| Atalho | Ação |
+|---|---|
+| `/texto` | Buscar para frente |
+| `?texto` | Buscar para trás |
+| `n` | Próximo resultado |
+| `N` | Resultado anterior |
+| `:%s/antigo/novo/g` | Substituir todas as ocorrências |
+| `:noh` | Limpar destaque da busca |
+
+## 5. Arquivos, buffers e janelas
+
+| Atalho | Ação |
+|---|---|
+| `:e arquivo` | Abrir um arquivo |
+| `:w` | Salvar |
+| `:q` | Fechar janela |
+| `:q!` | Fechar sem salvar |
+| `:wq` | Salvar e fechar |
+| `:ls` | Listar buffers |
+| `:bnext` | Próximo buffer |
+| `:bprevious` | Buffer anterior |
+| `:split` | Dividir horizontalmente |
+| `:vsplit` | Dividir verticalmente |
+| `<C-w>w` | Alternar entre janelas |
+
+## 6. Modo visual
+
+| Atalho | Ação |
+|---|---|
+| `v` | Selecionar caracteres |
+| `V` | Selecionar linhas |
+| `<C-v>` | Selecionar bloco retangular |
+| `y` | Copiar seleção |
+| `d` | Apagar seleção |
+| `c` | Substituir seleção |
+| `>` | Aumentar recuo da seleção |
+| `<` | Diminuir recuo da seleção |
+
+## 7. Marcas e macros
+
+| Atalho | Ação |
+|---|---|
+| `m{letra}` | Criar marco |
+| `'{letra}` | Ir para o marco |
+| `q{letra}` | Iniciar gravação de macro |
+| `q` | Parar gravação |
+| `@{letra}` | Executar macro |

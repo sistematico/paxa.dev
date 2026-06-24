@@ -1,0 +1,68 @@
+---
+title: "LM Studio"
+summary: "Guia de otimização para LM Studio com o agente pi, focando em desempenho máximo e eficiência de memória."
+publishedAt: "2026-06-24"
+category: "Infraestrutura IA"
+tags: ["LM Studio", "pi", "Arch Linux", "Agents", "LLM"]
+---
+
+# 🚀 Guia de Otimização: LM Studio + pi Agent
+**Hardware Target:** Intel Ultra 9 285K | NVIDIA RTX 5060 Ti (16GB) | 64GB RAM
+
+Este guia define as configurações ideais para maximizar a performance do agente `pi`, equilibrando a inteligência dos modelos grandes com a velocidade dos modelos menores.
+
+## 🧠 O Conceito Fundamental: VRAM vs. RAM
+A sua GPU possui **16GB de VRAM**. 
+- Se o modelo + contexto couberem nos 16GB $\rightarrow$ **Velocidade Máxima (GPU)**.
+- Se o modelo + contexto excederem os 16GB $\rightarrow$ **Lentidão (Transbordo para RAM/CPU)**.
+
+---
+
+## 🛠️ Perfis de Configuração
+
+### 1. Perfil "Deep Reasoning" (Modelos Grandes: 26B+)
+*Use este perfil para tarefas complexas de arquitetura e lógica difícil, onde a precisão é mais importante que a velocidade.*
+**Exemplo:** `gemma-4-2quanto-26b`
+
+| Parâmetro | Valor Recomendado | Motivo |
+| :--- | :--- | :--- |
+| **GPU Offload** | **Partial (Manual)** | Ajuste para que o uso total da GPU fique em ~14GB. |
+| **Context Length** | `16384` (16k) | Evita que o contexto "empurre" mais camadas para a CPU. |
+| **CPU Thread Pool** | `18` | Deixa núcleos livres para o SO e para o agente `pi`. |
+| **Eval. Batch Size** | `512` | Equilíbrio entre processamento de prompt e uso de VRAM. |
+| **Physical Batch Size**| `512` | Mantém a estabilidade do pipeline de inferência. |
+| **Max Concur. Pred.** | `1` | O `pi` trabalha de forma sequencial; não há necessidade de mais. |
+
+---
+
+### 2. Perfil "Instant Coding" (Modelos Leves: 7B - 9B)
+*Use este perfil para refatoração rápida, criação de testes unitários e leitura de arquivos. Foco em latência ultra-baixa.*
+**Exemplo:** `Llama-3-8B`, `Mistral-7B`, `Phi-3`
+
+| Parâmetro | Valor Recomendado | Motivo |
+| :--- | :--- | :--- |
+| **GPU Offload** | **Max (All Layers)** | Garante que o modelo inteiro resida na VRAM. |
+| **Context Length** | `32768` ou `65536` | Aproveita a sobra de VRAM para dar "memória longa" ao agente. |
+| **CPU Thread Pool** | `18` | Mantém o sistema responsivo. |
+| **Eval. Batch Size** | `1024` ou `2048` | Acelera drasticamente a leitura de prompts longos. |
+| **Physical Batch Size**| `1024` | Sincroniza com o Evaluation para alta vazão. |
+| **Max Concur. Pred.** | `1` | Mantém foco na tarefa única do agente. |
+
+---
+
+## 📖 Glossário de Parâmetros Avançados
+
+*   **GPU Offload:** Define quantas camadas do modelo são processadas pela GPU. O objetivo é sempre o máximo possível sem atingir os 16GB totais.
+*   **Context Length (Janela de Contexto):** A "memória de curto prazo". Quanto maior, mais código o `pi` consegue ler de uma vez, mas maior é o consumo de memória.
+*   **CPU Thread Pool Size:** Quantos núcleos da sua CPU Intel Ultra 9 serão dedicados ao cálculo matemático do modelo quando ele estiver rodando via RAM.
+*   **Evaluation/Physical Batch Size:** Define quantos tokens são processados em um único "passo" durante a leitura (prefill) e geração (decoding). Valores maiores aumentam o *throughput* (tokens por segundo), mas exigem mais VRAM.
+
+---
+
+## ⚠️ Avisos Críticos
+
+> [!CAUTION]
+> **MONITORAMENTO DE VRAM:** Antes de carregar um modelo, verifique o comando `nvidia-smi`. Se a sua GPU já estiver com uso alto (ex: >5GB ocupados por outros apps), você não conseguirá rodar modelos grandes em modo "Full GPU". Feche navegadores e outras aplicações pesadas antes de iniciar o LM Studio.
+
+> [!TIP]
+> **DICA DE OURO:** Se notar que o `pi` está respondendo muito devagar (tokens/s baixos), reduza o **Context Length** ou diminua o número de camadas no **GPU Offload** para garantir que o modelo caiba inteiramente na sua RTX 5060 Ti.

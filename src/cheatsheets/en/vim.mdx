@@ -1,0 +1,112 @@
+---
+title: "Vim Keyboard Shortcuts"
+summary: "Useful Vim shortcuts for navigation, editing, search, and buffers."
+publishedAt: "2026-06-24"
+category: "Editor"
+tags: ["vim", "editor", "productivity", "cheatsheet"]
+---
+
+# Vim Keyboard Shortcuts
+
+> **Tip:** use `:help <topic>` to open Vim's built-in documentation.
+
+## 1. Modes
+
+| Shortcut | Action |
+|---|---|
+| `i` | Enter insert mode before the cursor |
+| `a` | Enter insert mode after the cursor |
+| `o` | Open a new line below |
+| `O` | Open a new line above |
+| `v` | Enter visual mode by character |
+| `V` | Enter visual mode by line |
+| `<C-v>` | Enter visual block mode |
+| `<Esc>` | Return to Normal mode |
+
+## 2. Basic movement
+
+| Shortcut | Action |
+|---|---|
+| `h` | Move left |
+| `j` | Move down |
+| `k` | Move up |
+| `l` | Move right |
+| `w` | Move to the next word's start |
+| `b` | Move to the previous word's start |
+| `e` | Move to the end of the word |
+| `0` | Move to the beginning of the line |
+| `$` | Move to the end of the line |
+| `gg` | Go to the first line |
+| `G` | Go to the last line |
+| `{n}G` | Go to line `n` |
+| `%` | Jump to the matching bracket |
+| `zz` | Center the current line |
+
+## 3. Editing
+
+| Shortcut | Action |
+|---|---|
+| `x` | Delete the character under the cursor |
+| `dw` | Delete a word |
+| `dd` | Delete the current line |
+| `D` | Delete to the end of the line |
+| `yy` | Copy the current line |
+| `yw` | Copy a word |
+| `p` | Paste after the cursor |
+| `P` | Paste before the cursor |
+| `u` | Undo |
+| `<C-r>` | Redo |
+| `.` | Repeat the last change |
+| `J` | Join the current line with the next |
+| `>>` | Indent right |
+| `<<` | Indent left |
+
+## 4. Search and replace
+
+| Shortcut | Action |
+|---|---|
+| `/text` | Search forward |
+| `?text` | Search backward |
+| `n` | Next match |
+| `N` | Previous match |
+| `:%s/old/new/g` | Replace all occurrences |
+| `:noh` | Clear search highlighting |
+
+## 5. Files, buffers and windows
+
+| Shortcut | Action |
+|---|---|
+| `:e file` | Open a file |
+| `:w` | Save |
+| `:q` | Close the window |
+| `:q!` | Quit without saving |
+| `:wq` | Save and quit |
+| `:ls` | List buffers |
+| `:bnext` | Next buffer |
+| `:bprevious` | Previous buffer |
+| `:split` | Split horizontally |
+| `:vsplit` | Split vertically |
+| `<C-w>w` | Switch between windows |
+
+## 6. Visual mode
+
+| Shortcut | Action |
+|---|---|
+| `v` | Select characters |
+| `V` | Select lines |
+| `<C-v>` | Select a rectangular block |
+| `y` | Copy selection |
+| `d` | Delete selection |
+| `c` | Replace selection |
+| `>` | Indent selection right |
+| `<` | Indent selection left |
+
+## 7. Marks and macros
+
+| Shortcut | Action |
+|---|---|
+| `m{letter}` | Create a mark |
+| `'{letter}` | Jump to a mark |
+| `q{letter}` | Start recording a macro |
+| `q` | Stop recording |
+| `@{letter}` | Run a macro |
