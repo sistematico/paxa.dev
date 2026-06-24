@@ -8,6 +8,9 @@ PATH=$PATH:/home/nginx/.local/share/pnpm
 
 echo "📦 Preparando ambiente de deploy..."
 
+echo "⏸️ Parando serviço para liberar o banco de dados..."
+sudo /usr/bin/systemctl stop $SERVICE
+
 [ -e $TMPDIR ] && rm -rf $TMPDIR
 [ -e $WORKDIR ] && cp -af $WORKDIR $TMPDIR
 cd $TMPDIR || exit 1
@@ -17,9 +20,6 @@ cp .env .env.production
 
 echo "📥 Instalando dependências..."
 pnpm install
-
-echo "⏸️ Parando serviço para liberar o banco de dados..."
-sudo /usr/bin/systemctl stop $SERVICE
 
 echo "🗃️ Sincronizando banco de dados..."
 pnpm run push
