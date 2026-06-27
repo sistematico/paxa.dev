@@ -1,0 +1,479 @@
+---
+title: "Triple boot: FreeBSD ao lado do Windows 11 e Arch Linux"
+summary: "Como instalar o FreeBSD em dual NVMe com Windows 11 e Arch Linux, usando systemd-boot como gerenciador de inicialização único."
+publishedAt: "2026-06-27"
+category: "BSD"
+tags: ["freebsd", "linux", "windows 11", "boot", "systemd-boot", "nvme", "zfs"]
+---
+
+# Triple boot: FreeBSD ao lado do Windows 11 e Arch Linux
+
+Este guia explica como instalar o **FreeBSD 14** em uma máquina que já executa **Windows 11** e **Arch Linux**, usando um único gerenciador de inicialização — o **systemd-boot** instalado na partição EFI do Arch.
+
+## Setup de referência
+
+O procedimento foi desenvolvido sobre este hardware e layout de disco:
+
+| Componente | Detalhe |
+|---|---|
+| CPU | Intel Core Ultra 9 285K (Arrow Lake) |
+| RAM | 64 GiB |
+| GPU | NVIDIA RTX 5060 Ti |
+| Firmware | UEFI 2.90, Secure Boot desabilitado |
+| `nvme0n1` | 932 GB — Windows 11 |
+| `nvme1n1` | 932 GB — Arch Linux (LVM) + EFI (3 GB) |
+
+```
+nvme0n1  932G
+├─p1      16M   Microsoft Reserved Partition
+├─p2    930.8G  NTFS   Windows 11
+└─p3     761M   NTFS   Windows Recovery
+
+nvme1n1  932G
+├─p1       3G   vfat   /boot  ← EFI System Partition (ESP)
+└─p2     929G   LVM
+  ├─ arch-root  90G   ext4   /
+  ├─ swap        4G   swap
+  └─ arch-home 834G   ext4   /home
+```
+
+O systemd-boot está instalado na ESP em `nvme1n1p1` e já gerencia o boot do Arch e do Windows 11. O FreeBSD será adicionado como uma terceira entrada nessa mesma ESP.
+
+## Estratégia
+
+1. Reduzir a partição do Windows 11 (`nvme0n1p2`) para liberar espaço.
+2. Instalar o FreeBSD nas partições criadas no espaço livre.
+3. Copiar o bootloader EFI do FreeBSD para a ESP do Arch.
+4. Criar uma entrada no systemd-boot para o FreeBSD.
+
+O FreeBSD ficará em `nvme0n1` ao lado do Windows, sem tocar no disco do Arch.
+
+## 1. Backup
+
+Antes de reparticionar qualquer disco, faça backup dos dados que importam. Redimensionar partições é uma operação sem desfazer.
+
+## 2. Reduzir a partição do Windows 11
+
+O Windows inclui uma ferramenta de gerenciamento de disco que pode redimensionar a partição NTFS sem formatar.
+
+No Windows, abra o **Gerenciamento de Disco** (`diskmgmt.msc`) ou o **Gerenciador de Armazenamento** e clique com o botão direito em `nvme0n1p2` → **Reduzir Volume**.
+
+Informe quanto espaço liberar. Para um sistema FreeBSD funcional com ZFS:
+
+| Uso pretendido | Espaço sugerido |
+|---|---:|
+| Testes e aprendizado | 60 GB |
+| Desktop com ports | 120 GB |
+| Servidor ou workstation | 200 GB ou mais |
+
+O assistente do Windows calcula automaticamente o máximo que pode ser reduzido. Se o valor máximo for menor que o desejado, execute antes a desfragmentação do disco e desative o arquivo de hibernação:
+
+```powershell
+# Terminal PowerShell como administrador
+powercfg -h off
+```
+
+Após o redimensionamento, reinicie o Windows uma vez para que ele verifique o sistema de arquivos.
+
+## 3. Baixar o FreeBSD
+
+No Arch Linux, baixe a imagem de instalação amd64:
+
+```bash
+curl -L -o ~/Downloads/FreeBSD-14.2-RELEASE-amd64-dvd1.iso \
+  https://download.freebsd.org/releases/amd64/amd64/ISO-IMAGES/14.2/FreeBSD-14.2-RELEASE-amd64-dvd1.iso
+```
+
+Verifique a integridade com o hash publicado pelo projeto:
+
+```bash
+curl -L -o ~/Downloads/CHECKSUM.SHA512 \
+  https://download.freebsd.org/releases/amd64/amd64/ISO-IMAGES/14.2/CHECKSUM.SHA512-FreeBSD-14.2-RELEASE-amd64
+
+sha512sum --check --ignore-missing ~/Downloads/CHECKSUM.SHA512
+```
+
+## 4. Gravar o pendrive de instalação
+
+Identifique o dispositivo do pendrive:
+
+```bash
+lsblk
+```
+
+Grave a imagem (substitua `/dev/sdX` pelo dispositivo correto):
+
+```bash
+sudo dd if=~/Downloads/FreeBSD-14.2-RELEASE-amd64-dvd1.iso \
+  of=/dev/sdX bs=4M status=progress oflag=sync
+```
+
+## 5. Iniciar pelo pendrive
+
+Reinicie e entre no menu de boot do firmware (normalmente `F11`, `F12` ou `Del` durante o POST). Selecione o pendrive. Caso o BIOS mostre apenas o systemd-boot do Arch, pressione `F` ou acesse **Reboot into Firmware** dentro do systemd-boot para entrar nas configurações do UEFI e mudar temporariamente a ordem de boot.
+
+## 6. Instalar o FreeBSD
+
+O instalador do FreeBSD é baseado em texto (bsdinstall). O fluxo principal:
+
+### Welcome
+
+Selecione **Install**.
+
+### Keymap
+
+Escolha o mapa de teclado. Para teclados ABNT2 (padrão brasileiro): selecione `Brazil (accent keys)`.
+
+### Set Hostname
+
+Informe um nome de host, por exemplo `freebsd`.
+
+### Distribution Select
+
+Selecione ao menos:
+
+- `base-dbg` (opcional, mas útil para aprendizado)
+- `kernel`
+- `lib32`
+- `ports` (recomendado para compilar software)
+- `src` (código-fonte do sistema base)
+
+### Partitioning — Auto (ZFS)
+
+Selecione **Auto (ZFS)**. O FreeBSD com ZFS oferece snapshots, checksums e recuperação de erros.
+
+Na tela de configuração do ZFS:
+
+- **Pool type**: `stripe` (apenas um disco, sem RAID)
+- **Encrypt**: a seu critério
+- **Pool name**: `zroot` (padrão)
+
+Selecione **Select Disks** e marque `nvme0n1`.
+
+> **Atenção:** O instalador mostrará `nvme0n1` inteiro. Selecione somente esse disco. O FreeBSD usará o **espaço não alocado** (unpartitioned space) que foi criado ao reduzir a partição do Windows. Não selecione `nvme1n1`, que contém o Arch Linux.
+
+Confirme a formatação apenas do espaço livre. Se o instalador exibir um aviso sobre partições existentes em `nvme0n1`, verifique se está operando apenas no espaço não alocado e não sobrescrevendo `nvme0n1p1`, `nvme0n1p2` ou `nvme0n1p3`.
+
+> O instalador do FreeBSD criará automaticamente uma partição EFI pequena em `nvme0n1`. Ela será usada para copiar o bootloader depois — não a utilize como ESP principal do sistema.
+
+### Configuração da rede
+
+O instalador detectará as interfaces de rede. Para Intel I225/I226 (Ethernet), a interface costuma se chamar `igc0`. Configure DHCP para conexão imediata ou configure manualmente.
+
+Para configurar Wi-Fi durante a instalação, selecione a interface wireless e informe o SSID e senha quando solicitado.
+
+### Senha do root
+
+Defina uma senha segura para o usuário `root`.
+
+### Fuso horário
+
+Selecione `America` → `Sao_Paulo` (ou o fuso correspondente à sua localização).
+
+### Serviços no boot
+
+Habilite ao menos:
+
+- `sshd` (acesso remoto)
+- `ntpd` (sincronização de hora)
+- `moused` (suporte a mouse no terminal)
+- `dumpdev` (captura de crash dumps)
+
+### Usuário adicional
+
+Crie um usuário comum e adicione-o ao grupo `wheel` para poder usar `sudo`.
+
+### Finalizar
+
+Selecione **Exit** para concluir a instalação. Quando solicitado, escolha **No** para não abrir um shell antes de reiniciar. Remova o pendrive e reinicie.
+
+## 7. Reiniciar no FreeBSD para verificar
+
+Após a instalação, o FreeBSD terá gravado seu próprio bootloader EFI em `nvme0n1` (na pequena partição EFI criada pelo instalador). O firmware pode inicializar diretamente pelo FreeBSD — isso é esperado.
+
+Verifique se o FreeBSD inicializa corretamente. Após confirmar que está funcionando, siga para a integração com o systemd-boot.
+
+## 8. Integrar o FreeBSD ao systemd-boot
+
+O objetivo é ter o **systemd-boot** (instalado na ESP do Arch em `nvme1n1p1`) como único gerenciador de boot, com entradas para os três sistemas.
+
+systemd-boot suporta **chainload** de outros bootloaders EFI. Ao selecionar FreeBSD no menu, o systemd-boot transfere o controle para o bootloader do FreeBSD, que por sua vez carrega o kernel.
+
+### 8.1. Montar a partição EFI do FreeBSD
+
+No Arch Linux, após reiniciar, identifique a partição EFI criada pelo FreeBSD em `nvme0n1`:
+
+```bash
+lsblk -o NAME,SIZE,FSTYPE,LABEL nvme0n1
+```
+
+O FreeBSD cria uma partição do tipo `vfat` (EFI) normalmente com 260 MB. No exemplo, pode aparecer como `nvme0n1p4` (após as três partições do Windows).
+
+Monte-a temporariamente:
+
+```bash
+sudo mkdir -p /mnt/freebsd-efi
+sudo mount /dev/nvme0n1p4 /mnt/freebsd-efi
+```
+
+Localize o bootloader EFI do FreeBSD:
+
+```bash
+find /mnt/freebsd-efi -name "*.efi"
+```
+
+O arquivo principal costuma estar em:
+
+```text
+/mnt/freebsd-efi/EFI/BOOT/BOOTX64.EFI
+```
+
+ou
+
+```text
+/mnt/freebsd-efi/EFI/freebsd/loader.efi
+```
+
+### 8.2. Copiar o bootloader para a ESP do Arch
+
+A ESP do Arch está montada em `/boot`. Crie um diretório para o FreeBSD:
+
+```bash
+sudo mkdir -p /boot/EFI/freebsd
+```
+
+Copie o arquivo EFI do FreeBSD:
+
+```bash
+sudo cp /mnt/freebsd-efi/EFI/BOOT/BOOTX64.EFI /boot/EFI/freebsd/loader.efi
+```
+
+Se o instalador criou `loader.efi` diretamente:
+
+```bash
+sudo cp /mnt/freebsd-efi/EFI/freebsd/loader.efi /boot/EFI/freebsd/loader.efi
+```
+
+Desmonte a partição do FreeBSD:
+
+```bash
+sudo umount /mnt/freebsd-efi
+```
+
+### 8.3. Criar a entrada no systemd-boot
+
+Crie o arquivo de entrada:
+
+```bash
+sudo nano /boot/loader/entries/freebsd.conf
+```
+
+Conteúdo:
+
+```text
+title   FreeBSD 14
+efi     /EFI/freebsd/loader.efi
+```
+
+Verifique as entradas existentes para confirmar o formato:
+
+```bash
+ls /boot/loader/entries/
+```
+
+### 8.4. Verificar o menu
+
+```bash
+bootctl list
+```
+
+O FreeBSD deve aparecer entre as entradas disponíveis. Reinicie e confirme que o menu exibe as três opções.
+
+## 9. Configuração pós-instalação do FreeBSD
+
+### Instalar o pkg
+
+Na primeira execução após o boot no FreeBSD:
+
+```bash
+pkg update
+```
+
+O sistema perguntará se deseja instalar o gerenciador de pacotes. Confirme.
+
+### Instalar o sudo
+
+```bash
+pkg install sudo
+```
+
+Edite o arquivo de sudoers para liberar o grupo `wheel`:
+
+```bash
+visudo
+```
+
+Descomente a linha:
+
+```text
+%wheel ALL=(ALL:ALL) ALL
+```
+
+### Drivers NVIDIA
+
+O FreeBSD suporta GPUs NVIDIA por meio do pacote `nvidia-driver`:
+
+```bash
+pkg install nvidia-driver
+```
+
+Carregue o módulo:
+
+```bash
+kldload nvidia
+```
+
+Para carregar automaticamente no boot, adicione ao `/etc/rc.conf`:
+
+```bash
+sysrc kld_list+="nvidia"
+```
+
+> Verifique a compatibilidade da versão do driver com a RTX 5060 Ti (GB206) antes de instalar. O suporte a GPUs da série 50xx pode requerer uma versão de driver mais recente do que a disponível nos pacotes binários. Consulte o [handbook do FreeBSD sobre drivers de vídeo](https://docs.freebsd.org/en/books/handbook/x11/) e a página do port `x11/nvidia-driver`.
+
+### Ambiente gráfico (opcional)
+
+Para instalar um ambiente desktop mínimo com KDE Plasma:
+
+```bash
+pkg install xorg kde5 sddm
+sysrc dbus_enable="YES"
+sysrc sddm_enable="YES"
+```
+
+Para instalar o Wayland com GNOME:
+
+```bash
+pkg install gnome wayland
+sysrc dbus_enable="YES"
+sysrc gdm_enable="YES"
+```
+
+### Acesso à rede
+
+Verifique as interfaces:
+
+```bash
+ifconfig
+```
+
+Para configurar DHCP em uma interface (ex.: `igc0`):
+
+```bash
+sysrc ifconfig_igc0="DHCP"
+service netif restart
+```
+
+## 10. Manutenção
+
+### Atualizar o sistema base
+
+```bash
+freebsd-update fetch install
+```
+
+### Atualizar os pacotes
+
+```bash
+pkg upgrade
+```
+
+### Snapshots ZFS
+
+```bash
+# Criar snapshot
+zfs snapshot zroot/ROOT/default@antes-da-atualizacao
+
+# Listar snapshots
+zfs list -t snapshot
+
+# Reverter
+zfs rollback zroot/ROOT/default@antes-da-atualizacao
+```
+
+### Atualizar o bootloader EFI após updates do FreeBSD
+
+Após um `freebsd-update` que atualize o bootloader, repita os passos da seção 8 para copiar a versão nova do `loader.efi` para a ESP do Arch:
+
+```bash
+sudo mount /dev/nvme0n1p4 /mnt/freebsd-efi
+sudo cp /mnt/freebsd-efi/EFI/freebsd/loader.efi /boot/EFI/freebsd/loader.efi
+sudo umount /mnt/freebsd-efi
+```
+
+## 11. Solução de problemas
+
+### FreeBSD não aparece no menu do systemd-boot
+
+Verifique o arquivo de entrada:
+
+```bash
+cat /boot/loader/entries/freebsd.conf
+bootctl list
+```
+
+Confirme que o arquivo `loader.efi` existe no caminho correto:
+
+```bash
+ls -lh /boot/EFI/freebsd/loader.efi
+```
+
+### O Windows sumiu do menu após instalar o FreeBSD
+
+O FreeBSD pode ter registrado seu próprio bootloader como padrão no NVRAM do firmware. Restaure o systemd-boot como padrão:
+
+```bash
+sudo bootctl install
+```
+
+Confira as entradas:
+
+```bash
+bootctl list
+```
+
+A entrada do Windows costuma ser detectada automaticamente pelo systemd-boot por meio do arquivo `EFI/Microsoft/Boot/bootmgfw.efi` presente na ESP.
+
+### Erro ao montar a partição EFI do FreeBSD
+
+Confirme qual partição é a EFI do FreeBSD:
+
+```bash
+sudo fdisk -l /dev/nvme0n1
+```
+
+A partição do tipo `EFI System` com ~260 MB é a criada pelo instalador do FreeBSD.
+
+### ZFS não inicializa
+
+Se o FreeBSD travar no boot com erro de ZFS, acesse o menu do loader do FreeBSD (pressione qualquer tecla nos primeiros segundos) e tente:
+
+```text
+OK set zfs_be_root=zroot
+OK boot
+```
+
+Depois, dentro do FreeBSD, verifique a configuração:
+
+```bash
+zpool status
+zfs list
+```
+
+## Referências
+
+- [FreeBSD Handbook — Instalação](https://docs.freebsd.org/en/books/handbook/bsdinstall/)
+- [FreeBSD Handbook — ZFS](https://docs.freebsd.org/en/books/handbook/zfs/)
+- [FreeBSD Handbook — Xorg e drivers de vídeo](https://docs.freebsd.org/en/books/handbook/x11/)
+- [Arch Wiki — systemd-boot](https://wiki.archlinux.org/title/systemd-boot)
+- [FreeBSD Porter's Handbook](https://docs.freebsd.org/en/books/porters-handbook/)
